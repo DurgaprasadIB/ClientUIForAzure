@@ -33,7 +33,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/dist/${{ variables.angularAppName }}'
+    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/dist/$(ClientPortal)'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
