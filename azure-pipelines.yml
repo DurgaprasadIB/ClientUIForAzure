@@ -10,16 +10,16 @@ pool:
 variables:
   buildConfiguration: 'Release'
   angularAppName: 'your-angular-app-name'
+  nodeVersion: '6.1.5.x'  # Specify the desired Node.js version
 
 steps:
 - checkout: self
   displayName: 'Checkout Repository'
 
-- task: UseNode@2
+- task: NodeTool@0
   inputs:
-    versionSpec: '14.x'
-    checkLatest: true
-  displayName: 'Use Node.js'
+    versionSpec: '$(nodeVersion)'
+  displayName: 'Install Node.js'
 
 - script: |
     cd $(Build.SourcesDirectory)/path/to/your/angular/app
@@ -31,7 +31,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/path/to/your/angular/app/dist/$(IoTapp)'
+    SourceFolder: '$(Build.SourcesDirectory)/path/to/your/angular/app/dist/$(IoTangularUI)'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
@@ -47,11 +47,11 @@ steps:
   inputs:
     IISDeploymentType: 'IISWebsite'
     ActionIISWebsite: 'CreateOrUpdateWebsite'
-    CreateOrUpdateWebsiteName: 'IoT'
+    CreateOrUpdateWebsiteName: 'YourIISWebsiteName'
     PhysicalPath: '$(System.DefaultWorkingDirectory)/drop'
     AddBinding: true
     CreateOrUpdateAppPoolForWebsite: true
-    AppPoolNameForWebsite: 'IoT'
+    AppPoolNameForWebsite: 'YourAppPoolName'
   displayName: 'Create or Update IIS Website'
 
 - task: IISWebAppDeploymentOnMachineGroup@0
