@@ -13,6 +13,8 @@ variables:
 
 steps:
 - checkout: self
+  persistCredentials: true
+  clean: true
   displayName: 'Checkout Repository'
 
 - script: |
@@ -30,6 +32,11 @@ steps:
     dir
     npm run build -- --prod
   displayName: 'Build Angular App'
+
+- script: |
+    echo "Contents of the Angular app directory:"
+    dir $(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist/Ibsmart
+  displayName: 'Debug: List Contents of dist/Ibsmart'
 
 - task: CopyFiles@2
   inputs:
