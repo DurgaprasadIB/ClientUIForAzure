@@ -17,20 +17,18 @@ steps:
 
 - script: |
     echo "Current directory: $(System.DefaultWorkingDirectory)"
-    cd $(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal
+    cd $(System.DefaultWorkingDirectory)/ClientPortal
     echo "Contents of the Angular app directory:"
     dir
     npm install --legacy-peer-deps
-    if %errorlevel% neq 0 exit /b %errorlevel%
   displayName: 'Install Dependencies'
 
 - script: |
     echo "Current directory: $(System.DefaultWorkingDirectory)"
-    cd $(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal
+    cd $(System.DefaultWorkingDirectory)/ClientPortal
     echo "Contents of the Angular app directory:"
     dir
     npm run build -- --prod
-    if %errorlevel% neq 0 exit /b %errorlevel%
   displayName: 'Build Angular App'
 
 - task: CopyFiles@2
