@@ -31,7 +31,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/path/to/your/angular/app/dist/$(IoTangularUI)'
+    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/$(IoTangularUI)'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
