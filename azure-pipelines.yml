@@ -34,20 +34,14 @@ steps:
   displayName: 'Build Angular App'
 
 - script: |
-    echo "Contents of the Angular app directory:"
-    dir $(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist/Ibsmart
-  displayName: 'Debug: List Contents of dist/Ibsmart'
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/ClientUIForAzure/AssetJioUtil/dist/Ibsmart'
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
-  displayName: 'Copy Build Artifacts'
+    echo "Zipping the build artifacts..."
+    cd $(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist
+    zip -r $(Build.ArtifactStagingDirectory)/build-artifacts.zip .
+  displayName: 'Zip Build Artifacts'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
   displayName: 'Publish Build Artifacts'
@@ -67,7 +61,7 @@ steps:
   inputs:
     WebSiteName: 'IoTAdmin'
     VirtualApplication: '/'
-    Package: '$(Build.ArtifactStagingDirectory)/publish'
+    Package: '$(Build.ArtifactStagingDirectory)/build-artifacts.zip'
     XmlVariableSubstitution: true
     TakeAppOfflineFlag: true
   displayName: 'Deploy to IIS Website'
