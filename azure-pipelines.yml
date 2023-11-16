@@ -20,7 +20,7 @@ steps:
     cd $(System.DefaultWorkingDirectory)/ClientPortal
     echo "Contents of the Angular app directory:"
     dir
-    npm install
+    npm install --legacy-peer-deps
   displayName: 'Install Dependencies'
 
 - script: |
@@ -60,7 +60,7 @@ steps:
   inputs:
     WebSiteName: 'IoTClientUI'
     VirtualApplication: '/'
-    Package: '$(System.DefaultWorkingDirectory)/drop'
+    Package: '$(Build.ArtifactStagingDirectory)/publish'
     XmlVariableSubstitution: true
     TakeAppOfflineFlag: true
   displayName: 'Deploy to IIS Website'
