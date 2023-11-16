@@ -17,7 +17,7 @@ steps:
   displayName: 'Install Node Packages'
 
 - script: |
-    cd $(Build.SourcesDirectory)/YourAngularAppFolder
+    cd $(Build.SourcesDirectory)/ClientPortal/src
     npm run build -- --configuration $(buildConfiguration)
   displayName: 'Build Angular App'
 
