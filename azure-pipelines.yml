@@ -33,7 +33,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist/Ibsmart'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
