@@ -33,7 +33,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/dist/$(ClientUIForAzure)'
+    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/dist/$(AngularAPP)'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
