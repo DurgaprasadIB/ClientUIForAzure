@@ -22,7 +22,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cd $(Build.SourcesDirectory)/path/to/your/angular/app
+    cd $(Build.SourcesDirectory)/ClientPortal
     npm install
   displayName: 'Install Dependencies'
 
