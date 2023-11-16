@@ -1,74 +1,41 @@
 trigger:
-- master  
+- master
 
 pool:
-  vmImage: 'windows-latest'  
+  vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'  
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'production'
 
-stages:
-- stage: Build
-  displayName: 'Build Stage'
-  jobs:
-  - job: Build
-    displayName: 'Build Job'
-    steps:
-    - task: NuGetToolInstaller@1
-      displayName: 'Use NuGet 5.x'
-      inputs:
-        versionSpec: '5.x'
-        checkLatest: true
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
 
-    - task: NuGetCommand@2
-      displayName: 'Restore NuGet Packages'
-      inputs:
-        command: 'restore'
-        restoreSolution: '$(solution)'
+- script: npm install
+  displayName: 'Install Node Packages'
 
-    - task: MSBuild@1
-      displayName: 'Build Solution'
-      inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:Configuration=$(buildConfiguration) /p:Platform=$(buildPlatform)'
+- script: npm run build -- --configuration $(buildConfiguration)
+  displayName: 'Build Angular App'
 
-- stage: Deploy
-  displayName: 'Deploy Stage'
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy Job'
-    steps:
-    - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Stop IIS App'
-      inputs:
-        IISDeploymentType: 'IIS'
-        ActionIISApp: 'Stop'
-        EnableIIS: 'true'
-        CreateOrUpdateAppPoolForIIS: true
-        IISAppPool: 'IoTtesting'
-        IISWebSite: 'IoTtestingUI'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/dist'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
+    flattenFolders: true
+  displayName: 'Copy Build Artifacts'
 
-    - task: IISWebAppDeploymentOnMachineGroup@0
-      displayName: 'Deploy to IIS'
-      inputs:
-        IISDeploymentType: 'IIS'
-        ActionIISApp: 'CreateOrUpdate'
-        EnableIIS: 'true'
-        CreateOrUpdateAppPoolForIIS: true
-        IISAppPool: 'IoTtesting'
-        IISWebSite: 'IoTtestingUI'
-        VirtualPath: '/'
-        PhysicalPath: '$(System.DefaultWorkingDirectory)/YourProjectFolder/bin/$(buildConfiguration)'
-        Package: '$(System.DefaultWorkingDirectory)/YourProjectFolder/bin/$(buildConfiguration)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
+    ArtifactName: 'dist'
+    publishLocation: 'Container'
+  displayName: 'Publish Artifact'
 
-    - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Start IIS App'
-      inputs:
-        IISDeploymentType: 'IIS'
-        ActionIISApp: 'Start'
-        EnableIIS: 'true'
-        CreateOrUpdateAppPoolForIIS: true
-        IISAppPool: 'IoTtesting'
-        IISWebSite: 'IoTtestingUI'
+- task: IISWebAppDeploymentOnMachineGroup@0
+  inputs:
+    WebSiteName: 'IoTtestingUI'  # Replace with your IIS website name
+    Package: '$(Build.ArtifactStagingDirectory)/dist'
+    XmlTransformation: true
+    RemoveAdditionalFilesFlag: true
