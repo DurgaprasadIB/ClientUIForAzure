@@ -4,31 +4,78 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- main
+- master  
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-latest'  
 
 variables:
-  solution: '**/*.sln'
+  solution: '**/*.sln'  # Path to your solution file
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@1
+stages:
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: Build
+    displayName: 'Build Job'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core SDK'
+      inputs:
+        version: '3.x'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore'
+      inputs:
+        command: 'restore'
+        projects: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+- stage: Deploy
+  displayName: 'Deploy Stage'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy Job'
+    environment: 'Production' 
+    steps:
+    - task: IISWebAppManagementOnMachineGroup@0
+      displayName: 'Stop IIS App'
+      inputs:
+        IISDeploymentType: 'IIS'
+        ActionIISApp: 'Stop'
+        EnableIIS: 'true'
+        CreateOrUpdateAppPoolForIIS: true
+        IISAppPool: 'IoTtesting'  # Replace with your app pool name
+        IISWebSite: 'IoTtestingUI'  # Replace with your website name
+
+    - task: IISWebAppDeploymentOnMachineGroup@0
+      displayName: 'Deploy to IIS'
+      inputs:
+        IISDeploymentType: 'IIS'
+        ActionIISApp: 'CreateOrUpdate'
+        EnableIIS: 'true'
+        CreateOrUpdateAppPoolForIIS: true
+        IISAppPool: 'IoTtesting'  # Replace with your app pool name
+        IISWebSite: 'IoTtestingUI'  # Replace with your website name
+        VirtualPath: '/'  # Adjust as needed
+        PhysicalPath: '$(System.DefaultWorkingDirectory)/<YourProjectFolder>/bin/$(buildConfiguration)/netcoreapp3.1/publish'  # Replace with the path to your published files
+        Package: '$(System.DefaultWorkingDirectory)/<YourProjectFolder>/bin/$(buildConfiguration)/netcoreapp3.1/publish'
+
+    - task: IISWebAppManagementOnMachineGroup@0
+      displayName: 'Start IIS App'
+      inputs:
+        IISDeploymentType: 'IIS'
+        ActionIISApp: 'Start'
+        EnableIIS: 'true'
+        CreateOrUpdateAppPoolForIIS: true
+        IISAppPool: 'IoTtesting'  # Replace with your app pool name
+        IISWebSite: 'IoTtestingUI'  # Replace with your website name
