@@ -12,7 +12,18 @@ variables:
   angularAppName: 'your-angular-app-name'
 
 steps:
-- script: npm install
+- checkout: self
+  displayName: 'Checkout Repository'
+
+- task: UseNode@2
+  inputs:
+    versionSpec: '14.x'
+    checkLatest: true
+  displayName: 'Use Node.js'
+
+- script: |
+    cd $(Build.SourcesDirectory)/path/to/your/angular/app
+    npm install
   displayName: 'Install Dependencies'
 
 - script: npm run build -- --prod
@@ -20,7 +31,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/dist/$(IoTUI)'
+    SourceFolder: '$(Build.SourcesDirectory)/path/to/your/angular/app/dist/$(IoTapp)'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
@@ -36,7 +47,7 @@ steps:
   inputs:
     IISDeploymentType: 'IISWebsite'
     ActionIISWebsite: 'CreateOrUpdateWebsite'
-    CreateOrUpdateWebsiteName: 'IoTtesting'
+    CreateOrUpdateWebsiteName: 'IoT'
     PhysicalPath: '$(System.DefaultWorkingDirectory)/drop'
     AddBinding: true
     CreateOrUpdateAppPoolForWebsite: true
