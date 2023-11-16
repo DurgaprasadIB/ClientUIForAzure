@@ -9,29 +9,31 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  angularAppName: 'your-angular-app-name'
-  nodeVersion: '14.x'  # Specify the desired Node.js version
+  angularAppName: 'ClientUIForAzure'
 
 steps:
 - checkout: self
   displayName: 'Checkout Repository'
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '$(nodeVersion)'
-  displayName: 'Install Node.js'
-
 - script: |
-    cd $(Build.SourcesDirectory)/ClientPortal
+    echo "Current directory: $(System.DefaultWorkingDirectory)"
+    cd $(System.DefaultWorkingDirectory)/ClientPortal
+    echo "Contents of the Angular app directory:"
+    dir
     npm install
   displayName: 'Install Dependencies'
 
-- script: npm run build -- --prod
+- script: |
+    echo "Current directory: $(System.DefaultWorkingDirectory)"
+    cd $(System.DefaultWorkingDirectory)/ClientPortal
+    echo "Contents of the Angular app directory:"
+    dir
+    npm run build -- --prod
   displayName: 'Build Angular App'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/$(IoTangularUI)'
+    SourceFolder: '$(Build.SourcesDirectory)/ClientPortal/dist/$(ClientUIForAzure)'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
@@ -56,7 +58,7 @@ steps:
 
 - task: IISWebAppDeploymentOnMachineGroup@0
   inputs:
-    WebSiteName: 'YourIISWebsiteName'
+    WebSiteName: 'IoTClientUI'
     VirtualApplication: '/'
     Package: '$(System.DefaultWorkingDirectory)/drop'
     XmlVariableSubstitution: true
