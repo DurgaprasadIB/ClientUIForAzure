@@ -10,7 +10,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   angularAppName: 'your-angular-app-name'
-  nodeVersion: '6.1.5.x'  # Specify the desired Node.js version
+  nodeVersion: '14.x'  # Specify the desired Node.js version
 
 steps:
 - checkout: self
