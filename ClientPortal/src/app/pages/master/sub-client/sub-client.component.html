@@ -1,0 +1,104 @@
+<table id="tblDevices" class="table table-striped" style="width:100%; font-size: 11px;">
+  <thead class="table-head-background">
+    <tr>
+      <th style="width: 150px;">Customer</th>
+      <th style="width: 250px;">#ID</th>
+      <th style="width: 230px;">Device Name</th>
+      <!-- <th style="width: 250px;">Finance Mailid</th> -->
+      <th style="width: 100px;">Ph.no.</th>
+      <th style="width: 150px;" *ngIf="isSuperAdmin">OEM Warranty(H.W)</th>
+      <th style="width: 150px;"*ngIf="isSuperAdmin">OEM Sub.Expiry(S.W)</th>
+      <th style="width: 150px;">Customer Warranty(H.W)</th>
+      <th style="width: 150px;">Customer Sub.Expiry(S.W)</th>
+      <th style="width: 50px;"*ngIf="isSuperAdmin">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of deviceSubscriptionList">
+      <td>{{item.SubClient}}</td>
+      <td>
+        <span *ngIf="item.expired">
+          <i class="fa fa-clock-o" style="padding-left:0px;font-size:18px;cursor:pointer;color:#da555e;"
+            title="Subscription Expired"></i>
+        </span>
+        <span *ngIf="!item.expired">
+          <i class="fa fa-clock-o" style="padding-left:0px;font-size:18px;cursor:pointer;color:#21bf76;" title=""></i>
+        </span>
+        {{item.DeviceId}}
+      </td>
+      <td>{{item.DeviceName}}</td>
+      <!-- <td>{{item.financeMailId}}</td> -->
+      <td>{{item.financeContactNo}}</td>
+      <td *ngIf="isSuperAdmin">{{item.HardwareExpiry}}</td>
+      <td *ngIf="isSuperAdmin">{{item.SoftwareExpiry}}</td>
+      <td>{{item.C_HwExpDate}}</td>
+      <td>{{item.C_SoftwareExpiry}}</td>
+      <td *ngIf="isSuperAdmin">
+        <i class="fa fa-pencil-square-o" (click)="updateSubcription(item)"
+          style="padding-left:0px;font-size:18px;cursor:pointer;" title="update"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-modal id="OEMmodal" #modalOEMdates [width]="600" [modalTitle]="'Subscription'">
+  <ng-container class="app-modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">Customer</div>
+          <div class="col-md-6">{{CustomerDeviceDetails.SubClient}}</div>
+        </div>
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">DeviceId</div>
+          <div class="col-md-6">{{CustomerDeviceDetails.DeviceId}}</div>
+        </div>
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">Device Name</div>
+          <div class="col-md-6">{{CustomerDeviceDetails.DeviceName}}</div>
+        </div>
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">OEM Hardware Expiry</div>
+          <div class="col-md-6">{{CustomerDeviceDetails.HardwareExpiry}}</div>
+        </div>
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">OEM Software Expiry</div>
+          <div class="col-md-6">{{CustomerDeviceDetails.SoftwareExpiry}}</div>
+        </div>
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">Customer Hardware Expiry</div>
+          <div class="col-md-6">
+            <div style="border: solid 1px #c1c1c1;
+            border-radius: 5px;width:90%;">
+              <input [min]="minDate" style="height: 30px;" [owlDateTimeTrigger]="dt12" [owlDateTime]="dt12"
+                name="hardDt" id="hardDt" [(ngModel)]="C_HardwareExpDate" placeholder="Customer Hardware Expiry"
+                class="date-picker-styles" required>
+              <owl-date-time [pickerType]="'calendar'" #dt12></owl-date-time>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top:1%;padding-bottom:1%;">
+          <div class="col-md-6">Customer Software Expiry</div>
+          <div class="col-md-6">
+            <div style="border: solid 1px #c1c1c1;
+            border-radius: 5px;width:90%;">
+              <input [min]="minDate" style="height: 30px;" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="softDt"
+                id="softDt" [(ngModel)]="C_SoftwareExpDate" placeholder="Customer Software Expiry"
+                class="date-picker-styles" required>
+              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-right: 1%;padding-top: 2%;">
+      <div class="col-md-8"></div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <button type="button" class="btn" style="background-color:#7E7C7C;" (click)="reset()">
+          <i class="fa fa-recycle"></i> Clear</button>&nbsp;
+        <button type="button" class="btn btn-success" (click)="saveExpireDates(CustomerDeviceDetails)">
+          <i class="fa fa-save"></i> Save</button>
+      </div>
+    </div>
+  </ng-container>
+</app-modal>

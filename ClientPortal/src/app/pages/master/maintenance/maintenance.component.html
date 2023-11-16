@@ -1,0 +1,772 @@
+<!-- <div>
+  <img src="assets/Images/underConstruction.jpg">
+</div>  -->
+
+<!-- <div class="row" style="padding-left: 2%;">
+
+  <div class="col-md-2" *ngIf="isSchedule" style="padding:0;padding-bottom: 1%;margin-right: 2%;">
+    <div style="background-color: #4ba1de;
+    width: 60%;
+    height: 32px;
+    border-radius: 3px;
+    color: #fff;
+    padding-left: 10%;
+    padding-top: 2.5%;">
+      <a [routerLink]="['/reports/log']" class="viewlog" style="color: #fff;">
+        <i class="fa fa-file-text-o"></i>
+        <span>&nbsp;view logs</span>
+      </a>
+    </div>
+  </div>
+</div> -->
+
+
+
+<div class="row" style="text-align: center;color: white;padding-left: 1.5%;
+padding-right: 1.5%;">
+  <div class="col-md-2" *ngIf="hasIoTMaintenance && isSchedule" style=" padding-right: 2px; padding-left: 0px;">
+    <div class="tabStyle" (click)="showDiv('iotMaint')"
+      style="cursor: pointer; background-color: #3FAA3F;height: 30px;padding-top: 4px;">
+      <i class="fa fa-wrench"></i> IoT-Maint.
+    </div>
+    <div *ngIf="showIoTMain" style="height: 3px;background-color: #3FAA3F;margin-top:1px;">
+    </div>
+  </div>
+  <div class="col-md-2" *ngIf="hasGenMaintenance && isSchedule" style=" padding-right: 2px; padding-left: 0px;">
+    <div class="tabStyle" (click)="showDiv('genMaint')"
+      style="cursor: pointer; background-color: #01b188;height: 30px;padding-top: 4px;">
+      <i class="fa fa-wrench"></i> Gen-Maint.
+    </div>
+    <div *ngIf="showGenMain" style="height: 3px;background-color: #01b188;margin-top:1px;">
+    </div>
+  </div>
+  <div class="col-md-2" style=" padding-left: 0px; ">
+    <div class="tabStyle" (click)="showDiv('tickets')"
+      style="cursor: pointer; background-color: #0090D9;height: 30px;padding-top: 4px;">
+      <i class="fa fa-file-text-o"></i> Tickets
+    </div>
+    <div *ngIf="showTicket" style="height: 3px;background-color: #0090D9;margin-top:1px;">
+    </div>
+  </div>
+  <div class="col-md-2" *ngIf="isSchedule" style=" padding-right: 2px; padding-left: 0px;float: right;">
+    <div class="tabStyle" style="cursor: pointer; background-color: #06D79C;height: 30px;padding-top: 4px;">
+      <a [routerLink]="['/reports/log']" class="viewlog" style="color: #fff;">
+        <i class="fa fa-file-text-o"></i>
+        <span>&nbsp;view logs</span>
+      </a>
+    </div>
+  </div>
+</div>
+<!-- <div *ngIf="showMain" style="padding-top: 0.5%;"> -->
+<!-- <table id="DeviceTable" class="table table-striped" style="width:100%;">
+    <thead class="table-head-background">
+      <tr>
+        <th>Device Id</th>
+        <th>Device Name</th>
+        <th>Status</th>
+        <th>Prev. Maintenance</th>
+        <th>Next Maintenance</th>
+        <th>Alert Date</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dev of deviceList;let i=index">
+        <td>{{ dev.deviceId }} </td>
+        <td>{{ dev.deviceName }} </td>
+        <td>{{ dev.devStatus }} </td>
+        <td>{{ dev.lastDateShow }} </td>
+        <td>{{ dev.nextDateShow }} </td>
+        <td>{{ dev.alertDayShow }} </td>
+        <td>
+          <span style="margin-right: 3%;background-color:#06D79C;color: #fff; border-radius: 5px;height: 25px;
+            padding: 4px;width: 30px;" (click)="editDevice(dev.deviceId)" title="Edit">
+            <i class="fa fa-pencil-square-o" style="width: 30%;"></i>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+   -->
+
+<div>
+  <div *ngIf="showIoTMain" style="padding-top: 0.5%;">
+
+    <table id="DeviceTable" class="table table-striped" style="width:100%;">
+      <thead class="table-head-background">
+        <tr>
+          <th>Device Id</th>
+          <th>Device Name</th>
+          <th>Status</th>
+          <th>Prev. Calibration</th>
+          <th>Next Calibration</th>
+          <th>Alert Date</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dev of deviceList;let i=index">
+          <td>{{ dev.deviceId }} </td>
+          <td>{{ dev.deviceName }} </td>
+          <td>{{ dev.devStatus }} </td>
+          <td>{{ dev.lastDateShow }} </td>
+          <td>{{ dev.nextDateShow }} </td>
+          <td>{{ dev.alertDayShow }} </td>
+          <td>
+            <span style="margin-right: 3%;background-color:#06D79C;color: #fff; border-radius: 5px;height: 25px;
+              padding: 4px;width: 30px;" (click)="editDevice(dev.deviceId)" title="Edit">
+              <i class="fa fa-pencil-square-o" style="width: 30%;"></i>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="showGenMain" style="padding-top: 0.5%;">
+    <div class="col-md-2" style="padding:0;padding-bottom: 1%;margin-right: -4%;">
+      <button type="button" (click)="OpenModal();" value="" id="btnTKDevice" class="btn">
+        <i class="ion-plus-round"></i>
+        <span> General Asset</span>
+      </button>
+    </div>
+    <table id="TKDeviceTable" class="table table-striped" style="width:100%;">
+      <thead class="table-head-background">
+        <tr>
+          <th>Asset Name</th>
+          <th>Asset Details</th>
+          <th>Device Name</th>
+          <th>Installed Date</th>
+          <th>Prev. Maintenance</th>
+          <th>Next Maintenance</th>
+          <th>Alert Date</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dev of assetList;let i=index">
+          <td>{{ dev.assetName }} </td>
+          <td>{{ dev.assetDetails }} </td>
+          <td>{{ dev.deviceName }} </td>
+          <td>{{ dev.installedDateShow }} </td>
+          <td>{{ dev.lastDateShow }} </td>
+          <td>{{ dev.nextDateShow }} </td>
+          <td>{{ dev.alertDayShow }} </td>
+          <td>
+            <span style="margin-right: 3%;background-color:#06D79C;color: #fff; border-radius: 5px;height: 25px;
+              padding: 4px;width: 30px;" (click)="editAsset(dev.assetId)" title="Edit">
+              <i class="fa fa-pencil-square-o" style="width: 30%;"></i>
+            </span>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="showTicket" style="padding-top: 0.5%;">
+    <div class="row" style="padding-bottom: 0.5%;">
+      <div class="col-md-2" *ngIf='hasGenMaintenance'>
+        <label>Asset</label>
+        <ng-select [items]="assetList" [multiple]=true [closeOnSelect]="false" [(ngModel)]='SelectedAssetList'
+          style="color:#212121" bindLabel="assetName" bindValue="assetId" (click)="assetClick()" placeholder="Select"
+          name="assetSelect">
+          <ng-template ng-header-tmp>
+            <div class="selectionButtons">
+              <button type="button" class="btn btn-success" [disabled]="disableAstSelectAll" (click)="AstSelectAll()">
+                <i class="fa fa-check" title="Select All"></i></button>
+              <button type="button" style="margin-left: 5px;" class="btn btn-warning" [disabled]="disableAstUnSelectAll"
+                (click)="AstDeSelectAll()">
+                <i class="fa fa-times" title="Deselect All"></i>
+              </button>
+            </div>
+          </ng-template>
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div *ngIf="SelectedAssetList.length === assetList.length">
+              All (Default)
+            </div>
+            <div *ngIf="SelectedAssetList.length != assetList.length">
+              <div class="ng-value" *ngIf="items.length > 0">
+                <span class="ng-value-label">{{items.length}} Selected...</span>
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="col-md-2">
+
+        <label>Device</label>
+        <ng-select [items]="deviceList" [multiple]=true [closeOnSelect]="false" [(ngModel)]='deviceSelectedList'
+          style="color:#212121" bindLabel="deviceName" bindValue="deviceId" (click)="devListClick()"
+          placeholder="Select" name="deviceSelect">
+          <ng-template ng-header-tmp>
+            <div class="selectionButtons">
+              <button type="button" class="btn btn-success" [disabled]="disableDevSelectAll" (click)="onSelectAll()">
+                <i class="fa fa-check" title="Select All"></i></button>
+              <button type="button" style="margin-left: 5px;" class="btn btn-warning" [disabled]="disableDevUnSelectAll"
+                (click)="onDeSelectAll()">
+                <i class="fa fa-times" title="Deselect All"></i>
+              </button>
+            </div>
+          </ng-template>
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div *ngIf="deviceSelectedList.length === deviceList.length">
+              All (Default)
+            </div>
+            <div *ngIf="deviceSelectedList.length != deviceList.length">
+              <div class="ng-value" *ngIf="items.length > 0">
+                <span class="ng-value-label">{{items.length}} Selected...</span>
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="col-md-2 col-sm-6 col-xs-12">
+        <label>Period</label>
+        <ng-select [items]="DateRangeList" style="    border: solid 1px #c1c1c1;
+border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId" placeholder="Period"
+          (change)="checkDateRange($event)">
+        </ng-select>
+        <ng-template ng-label-tmp let-item="item">
+          {{item.dtName}}
+        </ng-template>
+      </div>
+      <div class="col-md-2">
+        <label>Date Range</label>
+        <div style="border: solid 1px #c1c1c1;
+      border-radius: 5px;width:100%;">
+          <input [max]="maxDate" style="width: 162px; height: 30px;" [disabled]="!isDates" [owlDateTimeTrigger]="dt111"
+            [owlDateTime]="dt111" name="fromDt" id="fromDt" [selectMode]="'range'" [(ngModel)]="fromDate"
+            placeholder="Date Range" class="date-picker-styles" required readonly>
+          <owl-date-time [pickerType]="'calendar'" #dt111></owl-date-time>
+        </div>
+      </div>
+
+      <div class="col-md-2" style="padding-top: 2.2%;">
+        <button type="submit" class="btn" title="Submit" (click)="getTicketReport()"
+          style="font-family: Helvetica;margin-right: 2%;">
+          Submit
+        </button>
+        <button class="btn" type="button" title="Refresh" (click)="getAccTickets()">
+          <i class="fa fa-refresh" aria-hidden="true"></i></button>
+      </div>
+      <div class="col-md-3" style="float: right;
+      padding-bottom: 0.5%;
+      position: absolute;
+      z-index: 98;
+      top: 8%;
+      left: 75.5%;" *ngIf="!isSchedule">
+        <div class="row" style="    border-radius: 7px;
+      background-color: #fff;
+      padding-bottom: 3%;
+      margin-right: 1px;">
+          <div class="col-md-8" style="padding-right: 0px;">
+            <label>Acknowledge Device</label>
+            <ng-select [items]="deviceList" style="border: solid 1px #c1c1c1;
+      border-radius: 5px;" [(ngModel)]="ackDevice" name="ackD" bindLabel="deviceName" bindValue="deviceId"
+              placeholder="Device">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.deviceName}}
+            </ng-template>
+          </div>
+          <div class="col-md-2" style="padding-top: 10%;padding-left: 0px;">
+            <div class="col-md-1">
+              <button class="btn" type="button" title="Acknowledge" (click)="updateAck()">
+                ACK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <table id="ticketTable" class="table table-striped" style="width:100%;">
+          <thead class="table-head-background">
+            <tr>
+              <th>Type</th>
+              <th *ngIf='hasGenMaintenance'>Asset Name</th>
+              <th *ngIf='hasGenMaintenance'>Asset Details</th>
+              <th>Device Name</th>
+              <th>Sensor Name</th>
+              <th>Create Date</th>
+              <th>Acknowledged Date</th>
+              <th *ngIf="!isLiveTickets">Closed Date</th>
+              <th *ngIf="!isLiveTickets">Closed By</th>
+              <th *ngIf="isLiveTickets">Status</th>
+              <th *ngIf="isLiveTickets" style="text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dev of AccticketsList;let i=index">
+              <td>{{ dev.type }} </td>
+              <td *ngIf='hasGenMaintenance'>{{ dev.assetName }} </td>
+              <td *ngIf='hasGenMaintenance'>{{ dev.assetDetails }} </td>
+              <td>{{ dev.deviceName }} </td>
+              <td>{{ dev.sensorName }} </td>
+              <td>{{ dev.createDate }} </td>
+              <td>{{ dev.ackDateShow }} </td>
+              <td *ngIf="!isLiveTickets">{{ dev.closedDate }} </td>
+              <td *ngIf="!isLiveTickets">{{ dev.closedBy }} </td>
+              <td *ngIf="isLiveTickets">{{ dev.statusShow }} </td>
+              <td *ngIf="isLiveTickets" style="text-align: center;width:12%">
+                <div class="row">
+                  <div class="col-md-3" style="padding-left: 1%;padding-right: 1%;">
+                    <span
+                      style="margin-right: 3%;background-color:#06D79C;color: #fff; border-radius: 5px;height: 25px;padding-top: 4px;padding-bottom: 4px;width: 30px;"
+                      (click)="editTicket(dev.ticketId)" title="Edit">
+                      <i class="fa fa-pencil-square-o" style="width: 100%;"></i>
+                    </span>
+                  </div>
+                  <div class="col-md-3" style="padding-left: 1%;padding-right: 1%;"> <span *ngIf='dev.showMap'
+                      style="margin-right: 3%;background-color:#398BF7;color: #fff;border-radius: 5px;height: 25px;padding-top: 4px;padding-bottom: 4px;width: 30px;"
+                      (click)="loadMap(dev.lat,dev.lng)" title="Location">
+                      <i class="fa fa-map-marker" style="width: 100%;"></i>
+                    </span>
+                    <span *ngIf='!dev.showMap'
+                      style="margin-right: 3%;background-color:#797878;color: #fff;border-radius: 5px;height: 25px;padding-top: 4px;padding-bottom: 4px;width: 30px;"
+                      title="Location">
+                      <i class="fa fa-map-marker" style="width: 100%;"></i>
+                    </span>
+                  </div>
+                  <div class="col-md-3" style="padding-left: 1%;padding-right: 1%;"> <span *ngIf='dev.showImage'
+                      style="background-color:#045880;color: #fff;border-radius: 5px;height: 25px;padding-top: 4px;padding-bottom: 4px;width: 30px;"
+                      (click)="loadImages(dev.tktImgLst)" title="Images">
+                      <i class="fa fa-file-image-o" style="width: 100%;"></i>
+                    </span>
+                    <span *ngIf='!dev.showImage'
+                      style="background-color:#797878;color: #fff;border-radius: 5px;height: 25px;padding-top: 4px;padding-bottom: 4px;width: 30px;"
+                      title="Location">
+                      <i class="fa fa-file-image-o" style="width: 100%;"></i>
+                    </span>
+                  </div>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form #mapFrm="ngForm" autocomplete="off">
+  <app-modal #modalMapFrm [modalTitle]="'Location'" [width]="600" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+      <div #mapDiv style="width: 100%;height: 400px;">
+      </div>
+    </ng-container>
+  </app-modal>
+</form>
+
+<form #imgFrm="ngForm" autocomplete="off">
+  <app-modal #modalImgFrm [modalTitle]="'Observation'" [width]="600" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+      <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+          <img src={{mainImgPath}} height="400px" alt="info" />
+        </div>
+      </div>
+      <div class="row" style="padding-top: 1%;">
+        <div class="col-md-12" style="background-color:#e1e4e4;padding-top: 2%;padding-bottom: 2%;">
+          <div class="row">
+            <div class="col-md-1" *ngFor="let item of imageList">
+              <img src={{item}} height="40px" width="30px" (click)="loadMainImg(item)" alt="info" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </app-modal>
+</form>
+
+<form #newdeviceFrm="ngForm" autocomplete="off">
+  <app-modal #modaldevMain [modalTitle]="'Preventive Maintenance'" [width]="700" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+
+      <div class="row" style="padding-bottom: 5%;">
+
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Device ID</div>
+          <b>{{deviceId}}</b>
+        </div>
+
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Device Name</div>
+          <b>{{deviceName}}</b>
+        </div>
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Installed Date</div>
+          <b>{{onboardedDate}}</b>
+        </div>
+
+
+      </div>
+      <div class="row" *ngIf="isSchedule">
+        <div class="col-md-4">
+          <p>Previous Calibration Date</p>
+          <label>
+            <input [max]="minDate" style="width: 130px;    height: 30px;" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
+              name="lastDate" id="lastDate" [(ngModel)]="lastDate" placeholder="Last Date" class="date-picker-styles"
+              readonly>
+            <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+          </label>
+        </div>
+        <div class="col-md-4">
+          <p>Next Calibration Date</p>
+          <label>
+            <input [min]="minDate" style="width: 130px;    height: 30px;" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1"
+              name="nextDate" id="nextDate" [(ngModel)]="nextDate" placeholder="Next Date" class="date-picker-styles"
+              required readonly>
+            <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+          </label>
+        </div>
+        <div class="col-md-4">
+          <p>Alert Before</p>
+          <div class="row">
+            <div class="col-md-3">
+              <input type="text" class="floating-input" name="alertDay" [(ngModel)]="alertDay"
+                (keypress)="allowNumericsOnly($event)" maxlength="2" #alertDate placeholder="0" />
+            </div>
+            <div class="col-md-8" style="padding-left: 0%; padding-top: 3%;">
+              Day(s)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="isSchedule">
+
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Repeat</div>
+          <ng-select [items]="repeatList" [dropdownPosition]="'top'" bindLabel="rpVal" bindValue="rpid"
+            placeholder="Repeater" [(ngModel)]="repeat" id="repId" name="repId">
+            <ng-template ng-label-tmp let-item="item">
+              {{item.rpVal}}
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="col-md-4">
+          <p>Instructions</p>
+          <input type="button" value="Instructions" class="btn btn-primary" (click)="modelAstInst.show()" />
+        </div>
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Assign</div>
+          <ng-select [items]="filterUserList" [dropdownPosition]="'top'" [(ngModel)]="userID" name="userID"
+            style="color:#212121" bindLabel="userName" bindValue="userID" placeholder="Select user">
+            <ng-template ng-label-tmp let-item="item">
+              {{item.userName}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+    </ng-container>
+    <ng-container class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modaldevMain.hide()">
+        <i class="fa fa-close"></i> Close </button> &nbsp;
+      <button type="submit" class="btn btn-success" (click)="saveDevice()">
+        <i class="fa fa-save"></i> Save </button>
+    </ng-container>
+  </app-modal>
+</form>
+
+<form #newNIdeviceFrm="ngForm" autocomplete="off">
+  <app-modal #modalNIdevMain [modalTitle]="'General Maintenance'" [width]="700" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+      <div class="row" style="padding-bottom: 2%;">
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Asset Name</div>
+          <input type="text" class="floating-input" name="NIAssName" [(ngModel)]="NIAssetName" #NIAssName required
+            placeholder=" " />
+        </div>
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Asset Details</div>
+          <input type="text" class="floating-input" name="NIAssDetail" [(ngModel)]="NIAssetDetail" #NIAssDetail required
+            placeholder=" " />
+        </div>
+        <!-- <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Device Name</div>
+          <ng-select [items]="NIdeviceList" [dropdownPosition]="'bottom'" bindLabel="deviceName" bindValue="deviceId"
+            placeholder="Device" [(ngModel)]="NIDeviceId" id="NIdevIDD" #NIdevIDDL name="NIdevIDD">
+            <ng-template ng-label-tmp let-item="item">
+              {{item.deviceName}}
+            </ng-template>
+          </ng-select>
+        </div> -->
+      </div>
+      <div class="row" style="padding-bottom: 2%;">
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Installed Date</div>
+          <label>
+            <input [max]="minDate" style="width: 120%;    height: 30px;" [owlDateTimeTrigger]="dt22"
+              [owlDateTime]="dt22" name="NIInstallDate" id="NIInstallDate" [(ngModel)]="NIInstallDate"
+              placeholder="Installed Date" class="date-picker-styles" readonly>
+            <owl-date-time #dt22 [pickerType]="'calendar'"></owl-date-time>
+          </label>
+        </div>
+        <div class="col-md-4">
+          <p>Prev. Maintenance Date</p>
+          <label>
+            <input [max]="minDate" style="width: 120%;    height: 30px;" [owlDateTimeTrigger]="dt23"
+              [owlDateTime]="dt23" name="NIlastDate" id="NIlastDate" [(ngModel)]="NIlastDate" placeholder="Last Date"
+              class="date-picker-styles" readonly>
+            <owl-date-time #dt23 [pickerType]="'calendar'"></owl-date-time>
+          </label>
+        </div>
+        <div class="col-md-4">
+          <p>Next Maintenance Date</p>
+          <label>
+            <input [min]="minDate" style="width: 120%;    height: 30px;" [owlDateTimeTrigger]="dt11"
+              [owlDateTime]="dt11" name="NInxtDate" id="NInxtDate" [(ngModel)]="NInextDate" placeholder="Next Date"
+              class="date-picker-styles" required readonly>
+            <owl-date-time #dt11 [pickerType]="'calendar'"></owl-date-time>
+          </label>
+        </div>
+      </div>
+      <div class="row" style="padding-bottom: 2%;">
+        <div class="col-md-4">
+          <p>Alert Before</p>
+          <div class="row">
+            <div class="col-md-4">
+              <input type="text" class="floating-input" name="NIalertDay" [(ngModel)]="NIalertDay"
+                (keypress)="allowNumericsOnly($event)" maxlength="2" #NIalertDate placeholder="0" />
+            </div>
+            <div class="col-md-8" style="padding-left: 0%; padding-top: 3%;">
+              Day(s)
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div style="padding-bottom: 5%;">Repeat</div>
+          <ng-select [items]="repeatList" [dropdownPosition]="'bottom'" bindLabel="rpVal" bindValue="rpid"
+            placeholder="Repeater" [(ngModel)]="NIrepeat" id="NIrepId" name="NIrepId">
+            <ng-template ng-label-tmp let-item="item">
+              {{item.rpVal}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <p>Mobile No(s) (Primary)</p>
+          <div class="floating-label" style="margin-top: 0px;">
+            <input type="text" class="floating-input" name="NImobile" [(ngModel)]="NImobileNo" #NImobile required
+              (keypress)='allowNumericsWithComma($event)' placeholder=" " />
+            <img src="./assets/Images/information.svg" title="Multiple MobileNos with comma separated without space"
+              alt="info" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <p>MailID(s) (Primary)</p>
+          <div class="floating-label" style="margin-top: 0px;">
+            <input type="text" class="floating-input" name="NImailid" [(ngModel)]="NImailids" #NImailid required
+              placeholder=" " />
+            <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+              alt="info" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <p>Mobile No(s) (Copy)</p>
+          <div class="floating-label" style="margin-top: 0px;">
+            <input type="text" class="floating-input" name="NICmobile" [(ngModel)]="NICmobileNo" #NICmobile required
+              (keypress)='allowNumericsWithComma($event)' placeholder=" " />
+            <img src="./assets/Images/information.svg" title="Multiple MobileNos with comma separated without space"
+              alt="info" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <p>MailID(s) (Copy)</p>
+          <div class="floating-label" style="margin-top: 0px;">
+            <input type="text" class="floating-input" name="NICmailid" [(ngModel)]="NICmailids" #NICmailid required
+              placeholder=" " />
+            <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+              alt="info" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" style="padding-top: 2.5%;">
+          <input type="button" value="Instructions" class="btn btn-primary" (click)="modelAstInst.show()" />
+
+        </div>
+      </div>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modalNIdevMain.hide()">
+        <i class="fa fa-close"></i> Close </button> &nbsp;
+      <button type="submit" class="btn btn-success" (click)="saveNIDevice()">
+        <i class="fa fa-save"></i> Save </button>
+    </ng-container>
+  </app-modal>
+</form>
+
+<form #instructionAstFrm="ngForm" autocomplete="off">
+  <app-modal #modelAstInst [modalTitle]="'Instrunctions'" [width]="700" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+      <div class="row">
+        <div class="col-md-9">
+          <label>Check List</label>
+          <div class="floating-label">
+            <input type="text" class="floating-input" name="astInst" [(ngModel)]="NIinstruct" #astInst required
+              placeholder=" " />
+          </div>
+        </div>
+        <div class="col-md-3" style="padding-top: 5%;">
+          <i class="fa fa-plus-circle fa-2x" style="color: #3FAA3F;" title="Click Here to Add New Instruction"
+            (click)="addInstruct()"></i>
+        </div>
+      </div>
+      <div class="row" style="height: 300px;padding-left: 3%;padding-right: 3%;">
+        <div class="row" style="padding-left: 2%;padding-right: 2%;font-weight: bold;">
+          <div class="col-md-1">Sl.No</div>
+          <div class="col-md-9">Instruction</div>
+          <div class="col-md-1">Remove</div>
+        </div>
+        <div class="col-md-12" *ngFor="let item of AstInstrs;let idx=index">
+          <div class="row" style="padding-top: 1%;">
+            <div class="col-md-1">{{idx+1}}</div>
+            <div class="col-md-9">{{item.instr}}</div>
+            <div class="col-md-1">
+              <i class="fa fa-trash-o fa-2x" style="color: #cc2424;cursor: pointer;"
+                title="Click Here to Remove Instruction" (click)="removeInstruct(item.instr)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modelAstInst.hide()">
+        <i class="fa fa-arrow-left"></i> Go Back & Save </button>
+    </ng-container>
+  </app-modal>
+</form>
+<form #newTicktFrm="ngForm" autocomplete="off">
+  <app-modal #modalTKdevMain [modalTitle]="'Edit Ticket'" [width]="700" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+      <div class="row" style="padding-bottom: 5%;">
+        <div class="col-md-4" *ngIf="hasAstName">
+          <div style="padding-bottom: 5%;">Asset Name</div>
+          <label>{{TKAssetName}}</label>
+        </div>
+        <div class="col-md-4" *ngIf="hasAstDetails">
+          <div style="padding-bottom: 5%;">Asset Details</div>
+          <label>{{TKAssetDetail}}</label>
+        </div>
+        <div class="col-md-4" *ngIf="hasDeviceName">
+          <div style="padding-bottom: 5%;">Device Name</div>
+          <label>{{TKDeviceName}}</label>
+        </div>
+        <div class="col-md-4" *ngIf="hasSensorName">
+          <div style="padding-bottom: 5%;">Sensor Name</div>
+          <label>{{TKSensorName}}</label>
+        </div>
+      </div>
+      <div class="row" style="padding-bottom: 5%;">
+        <div class="col-md-3">
+          <p>Maintenance Date</p>
+          <label>
+            {{TKnextDate}}
+          </label>
+        </div>
+        <div class="col-md-3">
+          <p>Alert Triggered Date</p>
+          <label>
+            {{TKalertDay}}
+          </label>
+        </div>
+      </div>
+      <div class="row" *ngIf="isAssetTicket">
+        <div class="col-md-6" *ngIf="hasMobileNo">
+          <p>Mobile No(s)</p>
+          <div style="width: 95%; overflow-wrap: break-word;">
+            {{TKmobileNo}}</div>
+        </div>
+        <div class="col-md-6" *ngIf="hasMailid">
+          <p>MailID(s)</p>
+          <div style="width: 95%; overflow-wrap: break-word;">
+            {{TKmailids}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3" style="padding-top: 2.5%;">
+          <p>Instrunctions</p>
+          <input type="button" value="Instructions" class="btn btn-primary" (click)="modelTktInst.show()" />
+        </div>
+        <div class="col-md-3" style="padding-top: 2.5%;">
+          <div style="padding-bottom: 5%;">Status</div>
+          <ng-select [items]="statusList" [dropdownPosition]="'top'" bindLabel="stVal" bindValue="stid"
+            placeholder="Status" [(ngModel)]="TKStatus" id="TkstatId" name="TkstatId">
+            <ng-template ng-label-tmp let-item="item">
+              {{item.stVal}}
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="col-md-3" style="padding-top: 2.5%;">
+          <div style="padding-bottom: 5%;">Assigned to</div>
+          <span style="font-weight: bold;">{{TkUser}}</span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modalTKdevMain.hide()">
+        <i class="fa fa-close"></i> Close </button> &nbsp;
+      <button type="submit" class="btn btn-success" (click)="saveTicket()">
+        <i class="fa fa-save"></i> Save </button>
+    </ng-container>
+  </app-modal>
+</form>
+<form #instructionTktFrm="ngForm" autocomplete="off">
+  <app-modal #modelTktInst [modalTitle]="'Check List'" [width]="700" [maximizable]="true">
+    <ng-container class="app-modal-body" style="min-height: 500px;height:500px;">
+      <div class="row" style="height: 300px;padding-left: 3%;padding-right: 3%;">
+        <div class="row" style="padding-left: 2%;padding-right: 2%;font-weight: bold;">
+          <div class="col-md-1">Sl.No</div>
+          <div class="col-md-4">Instruction</div>
+          <div class="col-md-1">Done</div>
+          <div class="col-md-6">Remark</div>
+        </div>
+        <div class="row" style="height: 230px;overflow-y: auto;">
+          <div class="col-md-12" *ngFor="let item of AstInstrs;let idx=index">
+            <div class="row" style="padding-top: 1%;">
+              <div class="col-md-1">{{idx+1}}</div>
+              <div class="col-md-4">{{item.instr}}</div>
+              <div class="col-md-1">
+                <input type="checkbox" name="chk{{idx}}" [(ngModel)]="item.status" />
+              </div>
+              <div class="col-md-6">
+                <textarea cols="30" rows="2" name="rm{{idx}}" [(ngModel)]="item.remark">
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-md-4">
+            <label style="float: left;">Status</label>
+            <ng-select [items]="statusList" [dropdownPosition]="'top'" bindLabel="stVal" bindValue="stid"
+              placeholder="Status" [(ngModel)]="TKStatus" id="TkstatId" name="TkstatId">
+              <ng-template ng-label-tmp let-item="item">
+                {{item.stVal}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-2">
+            <span style="float: left;">Assigned to</span>
+            <br>
+            <span style="font-weight: bold;float: left;padding-top:7%;">{{TkUser}}</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+      <div class="row">
+        <div class="col-md-12" style="padding-top: 2.5%;">
+          <button type="submit" class="btn btn-success" (click)="saveTicket()">
+            <i class="fa fa-save"></i> Save </button>
+        </div>
+      </div>
+    </ng-container>
+  </app-modal>
+</form>

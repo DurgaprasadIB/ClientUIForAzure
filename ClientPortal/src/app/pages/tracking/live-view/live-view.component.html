@@ -1,0 +1,554 @@
+<!-- <div style="margin-bottom:5px;">
+
+
+
+</div> -->
+<div class="row" style="padding-left: 2%;margin-top: -10px;;margin-bottom: 0.5%;">
+
+    <i class="fa fa-list-ul fa-2x" style="color:#3598DC;    margin-right: 1%;" title="List View"></i>
+    <!-- <i class="fa fa-thumb-tack fa-2x" *ngIf='hasDBpin' (click)="changeView('pin')" title="Dashboard Pin"
+        style="cursor: pointer;margin-right: 1%;"></i> -->
+    <i class="fa fa-map fa-2x" (click)="changeView('map')" title="Map View"
+        style="cursor: pointer;    margin-right: 1%;"></i>
+    <i class="fa fa-th-large fa-2x" *ngIf='hasTemp' (click)="changeView('temp')" title="Temperature View"
+        style="cursor: pointer;    margin-right: 1%;"></i>
+    <i class="fa fa-bolt fa-2x"  *ngIf='hasEnergy'  (click)="changeView('energy')" title="Energy View"
+        style="cursor: pointer;    margin-right: 1%;"></i>
+    <!-- <i class="fa fa-area-chart fa-2x" *ngIf='hasChart' (click)="changeView('chart')" title="Charts View"
+        style="cursor: pointer;"></i> &nbsp; -->
+
+    <!-- <i class="fa fa-camera fa-2x" *ngIf='hasSurv' (click)="changeView('image')" title="Recordings"
+                            style="cursor: pointer;"></i> -->
+
+    <div class="col-md-1" style="float: right;cursor: pointer;padding-right: 15px;
+    text-align: right;padding-top: 0.5%;width:5%" (click)="openSensorShow()">
+        <i class="fa fa-cog fa-2x"></i>
+    </div>
+    <div class="col-md-2" style="float: right;cursor: pointer;padding-right: 15px;
+        text-align: right;padding-top: 0.1%;">
+        <ng-select [items]="clientRegions" [(ngModel)]="selectedRegion" name="region" (change)="changeRegion($event)"
+            bindLabel='regionName' bindValue='regionId' placeholder='Location'>
+        </ng-select>
+        <ng-template ng-label-temp let-item='item'>
+            {{item.regionName}}
+        </ng-template>
+    </div>
+    <!-- <div class="col-md-2" style="float: right;cursor: pointer;padding-right: 15px;
+    text-align: right;padding-top: 0.5%;left:-3.5%;">
+        <ng-select [items]="devStsChartPeriod" [(ngModel)]="selectedDevStatPeriod" name="period"
+            (change)="changeDevStPeriod($event)" bindLabel='periodText' bindValue='pId' placeholder='Period'>
+        </ng-select>
+        <ng-template ng-label-temp let-item='item'>
+            {{item.periodText}}
+        </ng-template>
+    </div> -->
+    <!-- <div class="col-md-2" style="float: right;cursor: pointer;padding-right: 15px;
+    text-align: right;padding-top: 0.5%;left:-3.5%;">
+        <ng-select [items]="devStsSelect" [multiple]=true [closeOnSelect]="false" [(ngModel)]="stateSelectedList"
+            name="State" (change)="changeDevState($event)" bindLabel='periodText' bindValue='pId' placeholder='States'>
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                {{selectedState}}
+            </ng-template>
+        </ng-select>
+    </div> -->
+    <div class="col-md-4" style="float: right; display: none;">
+        <div class="col-md-4" style='padding-right:0px;'>
+            <ng-select [items]="perPage" [(ngModel)]="pageCount" name="period" (change)='resetPaging()' bindLabel="pVal"
+                bindValue="pCnt" [clearable]='false' [searchable]='false' placeholder="Page records">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+                {{item.pVal}}
+            </ng-template>
+        </div>
+        <div class="col-md-4" style="padding-right: 1%;float: left; text-align: center;padding-top: 3%;">
+            {{pageStartView}} - {{pageEnd}} of {{totalRows}}
+        </div>
+        <div class="col-md-4" style="padding-right: 1%;float: left;">
+            <div class="row">
+                <div class="col-md-1" style="margin-right: 10px;">
+                    <div *ngIf='!pageStartDisable' class="pageDiv" style="background-color: #fff;"
+                        (click)='ShiftRecords(-1)'>
+                        <i class="fa fa-angle-double-left fa-2x" style="padding-top: 5%;cursor:pointer;"></i>
+                    </div>
+                    <div *ngIf='pageStartDisable' class="pageDiv">
+                        <i class="fa fa-angle-double-left fa-2x"
+                            style="padding-top: 5%;color: #9a9d9e;cursor:not-allowed;"></i>
+                    </div>
+                </div>
+                <div class="col-md-1" style="margin-left: 10px;">
+                    <div *ngIf='!pageEndDisable' class="pageDiv" style="background-color: #fff;"
+                        (click)='ShiftRecords(+1)'>
+                        <i class="fa fa-angle-double-right fa-2x" style="padding-top: 5%;cursor:pointer;"></i>
+                    </div>
+                    <div *ngIf='pageEndDisable' class="pageDiv">
+                        <i class="fa fa-angle-double-right fa-2x"
+                            style="padding-top: 5%;color: #9a9d9e;cursor:not-allowed;"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row" style="height: 250px; background-color: rgb(252, 250, 250);">
+
+    <div class="col-md-3" style="padding-right: 0px;">
+        <h5><b>Devices</b></h5>
+        <div class="dashboardTile">
+            <div style="text-align: center;font-size: 20px;">
+                <h5 style=" margin-bottom: 10px;  text-align: center; font-weight: bold;"><br>(Live Status-All
+                    Regions)</h5>
+            </div>
+            <div id="deviceStatusChart" style="z-index: 1;  position: absolute;    margin-left: 5%;
+        margin-top: 2%;">
+                <div id="timeline-chart">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <h5><b>Alert Status</b></h5>
+        <div class="dashboardTile" style="padding-left:28%;padding-top: 2%;">
+            <div class="row" style="padding-bottom: 1%;cursor: pointer;align-items: center;" (click)="LiveSensor()">
+                <div class="col-lg-6 col-md-6 statusTile" style="background-color:rgb(91, 192, 219);">
+                    <span style="font-size: smaller;">Reporting</span><br>
+                    <span style="font-size: 21px;">{{SensorreportCntindex}}</span>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 1%;cursor: pointer;" (click)="goodList()">
+                <div class="col-lg-6 col-md-6 statusTile" style="background-color: #00A65A;">
+                    <span style="font-size: smaller;">Good</span><br>
+                    <span style="font-size: 21px;">{{SensorGoodCntindex}}</span>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 1%;cursor: pointer;" (click)="warningList()">
+                <div class="col-lg-6 col-md-6 statusTile" style="background-color: #e7c219;">
+                    <span style="font-size: smaller;">Warning</span><br>
+                    <span style="font-size: 21px;">{{SensorWarnCntindex}}</span>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 1%;cursor: pointer;" (click)="criticalList()">
+                <div class="col-lg-6 col-md-6 statusTile" style="background-color: #e01f26;">
+                    <span style="font-size: smaller;">Critical</span><br>
+                    <span style="font-size: 21px;">{{SensorCriticalCntindex}}</span>
+                    <div *ngIf="isCritical">
+                        <hr class="critical" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h5 style="margin-left: -3%;"><b>Location Status</b></h5>
+        <div class="dashboardTile">
+            <div class="row" style="padding-left: 0px;">
+                <div #mapDivSummary class="MapviewContainer" style="height: 215px;padding-bottom: 20px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12" *ngFor="let liveDetails of _snVals;let i=index">
+        Model : <span style="font-weight: bold;">{{liveDetails.solution}}</span>
+        <table id="newSnrTable_{{i}}" class="table table-striped" style="width:100%;">
+            <thead class="table-head-background">
+                <tr>
+                    <!-- <th *ngFor="let item of liveDetails.live[0].snsr" style="text-align: left;">
+                        {{item}}
+                    </th> -->
+                    <th *ngFor="let item of liveDetails.live[0].snsrValueList" style="text-align: left;">
+                        {{item.Sname}}
+                    </th>
+                    <th style="text-align: left;">Last Updated</th>
+                    <th style="text-align: right;padding-right: 15px;">More</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- <tr *ngFor="let idx of liveDetails.live" style="font-size:small;">
+                    <td style="text-align: left;"
+                        *ngFor="let item2 of liveDetails.live[idx.index].snsrVal;let gr=index">
+                        <table>
+                            <tr>
+                                <td>
+
+                                    <div *ngIf="item2.includes('$')">
+                                        <div *ngIf='item2.split("$")[1].includes(",")'>
+                                            <img src='{{item2.split("$")[1].split(",")[1]}}'
+                                                title='{{item2.split("$")[1].split(",")[0]}}' style="height: 20px;" />
+                                            &nbsp;
+                                            <span *ngIf='item2.split("$")[1].split(",").length==3'>
+                                                <i class="fa fa-clock-o" title="Subscription Expired"
+                                                    style="color: #da555e; font-size: 20px;vertical-align: text-bottom;"></i>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div *ngIf="!item2.includes('|Trend')"
+                                        [innerHTML]='item2.split("_")[0].split("#")[0]+" "+item2.split("_")[0].split("#")[1]'
+                                        style="padding-left:5px;" title="{{idx.deviceId}}">
+                                    </div>
+                                </td>
+
+                                <td *ngIf="gr==0 && idx.status=='inactive'">
+                                    <div style="padding-left:5%">
+                                        <div class="inactive">{{idx.status}}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="text-align: right;padding-right: 15px;">
+                        <i class="fa fa-map-marker" style="cursor: pointer;color: #337AB7;"
+                            (click)="showOnMap(liveDetails.live[idx.index].deviceId)"></i>
+                        &nbsp;
+                        <i class="fa fa-list-alt" style="cursor: pointer;color: #337AB7;"
+                            (click)="showMoreDetails(liveDetails.live[idx.index].snsrVal[0].split('_')[0])"></i>
+                    </td>
+
+                </tr> -->
+
+                <tr *ngFor="let idx of liveDetails.live" style="font-size:small;">
+                    <td style="text-align: left;" *ngFor="let item2 of idx.snsrValueList;let gr=index">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src='{{item2.Icon}}' title='{{item2.Status}}' style="height: 20px;" />
+                                </td>
+                                <td>
+                                    &nbsp;
+                                    <span *ngIf="item2.Sname=='Device Name'" title="{{idx.deviceId}}">
+                                        {{item2.Svalue}}
+                                    </span>
+                                    <span *ngIf="idx.status==0 && item2.Sname=='Device Name'">
+                                        <i class="fa fa-ban" style="color: #DC202D;" title="Inactive"></i>
+                                    </span>
+                                    <span *ngIf="item2.Sname !=='Device Name'">
+                                        {{item2.Svalue}}
+                                    </span>
+                                <td>
+                                <td>
+                                    &nbsp;
+                                    {{item2.UoM}}
+                                </td>
+
+
+                                <!-- <td>
+
+                                    <div *ngIf="item2.includes('$')">
+                                        <div *ngIf='item2.split("$")[1].includes(",")'>
+                                            <img src='{{item2.split("$")[1].split(",")[1]}}'
+                                                title='{{item2.split("$")[1].split(",")[0]}}' style="height: 20px;" />
+                                            &nbsp;
+                                            <span *ngIf='item2.split("$")[1].split(",").length==3'>
+                                                <i class="fa fa-clock-o" title="Subscription Expired"
+                                                    style="color: #da555e; font-size: 20px;vertical-align: text-bottom;"></i>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div *ngIf="!item2.includes('|Trend')"
+                                        [innerHTML]='item2.split("_")[0].split("#")[0]+" "+item2.split("_")[0].split("#")[1]'
+                                        style="padding-left:5px;" title="{{idx.deviceId}}">
+                                    </div>
+                                </td>
+
+                                <td *ngIf="gr==0 && idx.status=='inactive'">
+                                    <div style="padding-left:5%">
+                                        <div class="inactive">{{idx.status}}
+                                        </div>
+                                    </div>
+                                </td> -->
+                            </tr>
+                        </table>
+                    </td>
+                    <td title="{{idx.deviceId}}">
+                        {{idx.LastUpdated}}
+                    </td>
+                    <td style="text-align: right;padding-right: 15px;">
+                        <i class="fa fa-map-marker" *ngIf="liveDetails.live[idx.index].hasLocation==1"
+                            style="cursor: pointer;color: #337AB7;"
+                            (click)="showOnMap(liveDetails.live[idx.index].deviceId)"></i>
+                        &nbsp;
+                        <i class="fa fa-list-alt" style="cursor: pointer;color: #337AB7;"
+                            (click)="showMoreDetails(liveDetails.live[idx.index].snsrValueList[0].Svalue)"></i>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <app-modal #modalLiveSensor [modalTitle]="'Sensors in Live'" (close)="closeSensorShow()" [width]="450"
+        [maximizable]="true">
+        <ng-container class="app-modal-body">
+            <table id="tblSensorShow" class="table table-striped">
+                <thead class="table-head-background">
+                    <tr>
+                        <th>Hardware Type</th>
+                        <th *ngIf="!isSuperAdmin">Sensor</th>
+                        <th *ngIf="isSuperAdmin">Display Name</th>
+                        <th>Show In Live</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of LiveSensorResp;let i=index;">
+                        <td>{{item.ShortCode}}</td>
+                        <td *ngIf="!isSuperAdmin">{{item.SName}}</td>
+                        <td *ngIf="isSuperAdmin">
+                            <input type="text" [(ngModel)]="item.SName" value="{{item.SName}}"
+                                name="{{item.ShortCode}}{{i}}">
+                        </td>
+                        <td>
+                            <input type="checkbox" [checked]="item._ShowInLive" name="chk_{{item.ShortCode}}{{i}}"
+                                (change)="checkChange(item)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <!-- <button class="btn btn-close" class="btn btn-danger" (click)="closeSensorShow()">
+                <i class="fa fa-close"></i> Close </button> &nbsp; -->
+            <button class="btn btn-success" (click)="saveShowLiveSnsr()">
+                <i class="fa fa-save"></i> Save </button>
+        </ng-container>
+    </app-modal>
+
+    <app-modal #modalAllSensor [modalTitle]="showMoreDevice" (close)="closeMoreDetails()" [width]="750"
+        [maximizable]="true">
+        <ng-container class="app-modal-body">
+            <div class="row" style="margin-bottom: 20px;">
+                <!-- <div class="col-md-5">
+                        <p style="font-weight: 600">Device Name</p>
+                        <p style="margin: -10px;padding: 0 10px;">{{showMoreDevice}}</p>
+                    </div> -->
+                <div class="col-md-8">
+                    <span style="font-weight: 600">Last Updated : </span>
+                    <span style="margin: -10px;padding: 0 10px;">{{deviceTime}}</span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="deviceTable" class="table table-striped">
+                        <thead class="table-head-background">
+                            <tr>
+                                <th style="width: 120px;">Sensor Name</th>
+                                <th style="width: 100px;">Value</th>
+                                <th style="width: 120px;">Control</th>
+                                <th style="width: 50px;">Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of moreInfoResp.live;let i= index">
+
+                                <th> {{item.name}}</th>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 25px;">
+                                                <div *ngIf="item.value.includes('$')">
+                                                    <div *ngIf='item.value.split("$")[1].includes(",")'>
+                                                        <img src='{{item.value.split("$")[1].split(",")[1]}}'
+                                                            title='{{item.value.split("$")[1].split(",")[0]}}'
+                                                            height='20px' />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="padding-left: 10px;">
+                                                {{item.value.split('_')[0]}}</td>
+                                            <td style="padding-left: 5px;">{{item.uom}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-4" *ngIf='item.rwType && hasMqtt && item.binaryType'>
+                                            <ui-switch
+                                                *ngIf='item.rwType && hasMqtt && item.binaryType && item.isReporting'
+                                                [checked]="item.valueState" switchColor="#fcfcfc" size="small"
+                                                (change)="command(item.deviceId, item.snsrId,item.value.split('_')[0],item.valueState)">
+                                            </ui-switch>
+                                            <i class="fa fa-toggle-on fa-2x" style="color: #7590A1;"
+                                                *ngIf="!item.isReporting" title="Not Reporting"></i>
+                                        </div>
+                                        <div class="col-md-8"
+                                            *ngIf='!item.dFdtype && item.rwType && hasMqtt && !item.binaryType'>
+                                            <div *ngIf='item.rwType && hasMqtt && !item.binaryType'
+                                                style="width: 133%;">
+                                                <label>Range ({{item.writeRange}})</label>
+                                                <input style="width: 22%;margin-left: 5px;"
+                                                    [attr.disabled]="item.isReporting ? null :'' " type="text"
+                                                    name="cmdVal{{i}}" [(ngModel)]="item.cmdVal" value="cmdVal{{i}}"
+                                                    placeholder="value">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4" style="float: left;text-align: left;"
+                                            *ngIf='item.dFdtype && hasMqtt && !item.binaryType && item.rwType'>
+                                            <ng-select *ngIf="item.isReporting" style="width: 250%;"
+                                                [items]="item.dfdDetails" [(ngModel)]="name" name="dfdName"
+                                                bindLabel="name" bindValue="pos" placeholder="Control"
+                                                (change)="setdFdCommand($event,item)" [clearable]="false"
+                                                [searchable]="false" required>
+                                            </ng-select>
+                                            <ng-template ng-label-tmp let-item="item">
+                                                {{item.name}}
+                                            </ng-template>
+                                        </div>
+                                        <div class="col-md-4" style="float: left;text-align: left;"
+                                            *ngIf='item.rwType && hasMqtt && !item.binaryType'> <i
+                                                *ngIf='item.rwType && !item.dFdtype && hasMqtt && !item.binaryType && item.isReporting'
+                                                class="fa fa-telegram fa-2x" style="color: #00A65A;cursor: pointer;"
+                                                (click)="commandVal(item.deviceId, item.sensorType,item.writeRange,item.cmdVal)"></i>
+                                            <i class="fa fa-telegram fa-2x" style="color: #7590A1;"
+                                                *ngIf="!item.isReporting" title="Not Reporting"></i>
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <i *ngIf='item.showTrend' class="fa fa-line-chart"
+                                        style="color:#337AB7;padding-left:10%;"
+                                        (click)="showTrend(item.deviceId,item.snsrId,item.uom,item.name)"></i>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+
+    <app-modal #modalTrend [modalTitle]="[TrendName]" [width]="745" [maximizable]="true">
+        <ng-container class="app-modal-body">
+            <div style="height: 300px;">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <label>Duration</label>
+                        <ng-select [items]="DateRangeList" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName"
+                            bindValue="dtId" placeholder="Duration" (change)="checkDateRange($event)" required>
+                        </ng-select>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.dtName}}
+                        </ng-template>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Interval</label>
+                        <ng-select [items]="periodRangeFilter" [(ngModel)]="period" name="period" bindLabel="pVal"
+                            bindValue="pId" placeholder="Interval" required>
+                        </ng-select>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.pVal}}
+                        </ng-template>
+                    </div>
+                    <div class="col-md-4" style="padding-top: 3%;" *ngIf="isDates">
+                        <!-- <div class="row">
+                            <div class="col-md-6" style="padding-left: 5px;">
+                                <label>
+                                    <input [max]="maxDate" style="width: 130px;    height: 30px;"
+                                        [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate"
+                                        [(ngModel)]="deviceInsightsobj.fromDate" placeholder="From Date"
+                                        class="date-picker-styles" required readonly>
+                                    <owl-date-time #dt1></owl-date-time>
+                                </label>
+                            </div>
+                            <div class="col-md-6" style="margin-left:-20px;">
+                                <label>
+                                    <input [max]="maxDate" style="width: 130px;    height: 30px;"
+                                        [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" name="toDate" id="toDate"
+                                        [(ngModel)]="deviceInsightsobj.toDate" placeholder="To Date"
+                                        class="date-picker-styles" required readonly>
+                                    <owl-date-time #dt2></owl-date-time>
+                                </label>
+                            </div>
+                        </div> -->
+                        <input [max]="maxDate" [min]="minDate"
+                            style="width: 215px;    height: 35px; border-radius: 3px;" [selectMode]="'range'"
+                            [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate"
+                            [(ngModel)]="deviceInsightsobj.fromDate" placeholder="Date Range" class="date-picker-styles"
+                            readonly>
+                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+
+                    </div>
+                    <div class="col-md-3" style="padding-left: 5px;padding-top: 3%;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn" type="button" (click)="getTrend()">
+                                    GO <i class="fa fa-angle-right"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-6" *ngIf="showTrendDownload">
+                                <div class="dropdownload" style="margin-top:-10px;">
+                                    <i class="btn dropbtn fa fa-download" aria-hidden="true"></i>
+                                    <div class="dropdownload-content" style="cursor: pointer;">
+                                        <span (click)="downloadData('csv')"><i class="fa fa-file-excel-o"></i>
+                                            Download CSV</span>
+                                        <span (click)="downloadData('pdf')"><i class="fa fa-file-pdf-o"></i>
+                                            Download PDF</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div id="trendChart" style="height: 300px;">
+                        </div>
+                        <div>
+                            <div class="row" *ngIf="hasRules" style="margin-top:-20px;padding-left:10%;">
+                                <div class="col-md-2"> <i class="fa fa-circle" style="color:#DC202D;"></i>
+                                    Critical</div>
+                                <div class="col-md-2"> <i class="fa fa-circle" style="color:#FDBB11;"></i>
+                                    Warning</div>
+                                <div class="col-md-2"> <i class="fa fa-circle" style="color:#00A651;"></i>
+                                    Good
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+
+    <app-modal #modelmapTrack [modalTitle]="[MapViewName]" [width]="745" [maximizable]="true"
+        (close)="popupClose($event)">
+        <ng-container class="app-modal-body">
+            <div style="height: 300px;">
+                <div class="row">
+                    {{_latlong}}
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div #mapDivVehicle class="MapviewContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+
+</div>

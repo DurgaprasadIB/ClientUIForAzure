@@ -1,0 +1,26 @@
+<aside class="main-sidebar">
+
+    <section class="sidebar">
+        <ul class="sidebar-menu tree" data-widget="tree">
+          
+            <li [routerLinkActive]="['active']" *ngFor="let subItem of arrayList.menu" >
+                <ng-container *ngIf="subItem.childTitle=='Help'; else elseTemplate" >
+                    <a style="position: fixed;bottom: 0%;padding: 10px 148px 10px  13px;" href="javascript:;" routerLink="{{subItem.link}}"><i class="{{subItem.icon}}"
+                        style="color:#02C27F;">
+                    </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subItem.childTitle}}</a>
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <a href="javascript:;" routerLink="{{subItem.link}}"><i class="{{subItem.icon}}"
+                            style="color:#02C27F;">
+                        </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subItem.childTitle}}</a>
+
+                </ng-template>
+                
+            </li>
+           
+        </ul>
+        <div class="fixed-bottom"></div>
+       
+    </section>
+   
+</aside>

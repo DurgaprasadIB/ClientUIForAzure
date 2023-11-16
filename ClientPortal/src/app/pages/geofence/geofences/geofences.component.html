@@ -1,0 +1,271 @@
+<div style="margin-bottom:5px;">
+  <span style="color:#03243B"> {{'AssetGeofence'|translate}} <i class="fa fa-angle-double-right"></i>
+  </span>&nbsp;{{'Add Geofence'|translate}}
+</div>
+
+<div class="col-md-12" style="padding-left:0; margin-bottom:10px;">
+  <div class="s-QuickSearchBar ">
+    <span class="quick-search-icon">
+      <i></i>
+    </span>
+    <input type="text" #searchFilter (input)="filterData($event.target.value)" class="s-QuickSearchInput text_ListColor"
+      placeholder="{{'Geofence Name'|translate}}" style="width:200px;" />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="list-group hover-Scroll" *ngIf="isRecordsCount">
+      <div *ngIf="isGeofencesCount">
+
+        <div class="timeline-panel msg" [ngClass]="geofence.geofenceID == activeElement ? 'active' : 'none'"
+          *ngFor="let geofence of  grofenceList1">
+          <div class="row" style="margin-left: 0px">
+            <div class="col-lg-12" style="padding: 8px 0px 10px 6px;">
+              <img src="./assets/Images/checkbox-blank-circle-outline.svg" />
+              <span style="line-height: 10px;font-size:22px;"> | </span>
+              <span class="marginleft5px" style="color:black;"> {{geofence.geofenceName ==""?"No Records
+                ":geofence.geofenceName}}</span>
+
+            </div>
+            <div class="col-lg-11" style="padding: 8px 0px 10px 6px;">
+
+              <span style="float:left; cursor: pointer;"><img src="./assets/Images/Map.svg"
+                  (click)="showonMap(geofence.geofenceID,'G')" /></span>
+              <span style="float:left; line-height: 10px;font-size:22px;"> | </span>
+
+              <div style="display:block" attr.id="divEdit{{geofence.geofenceID}}" class="col-lg-4">
+                <span><a (click)="EditGeofence(geofence, 'G')" tabindex="20"
+                    style="margin-right:0.25em;margin-top:0.75em;color: #03243B;">{{'Edit'|translate}}</a></span>
+              </div>
+              <div style="display:none" attr.id="divSave{{geofence.geofenceID}}" class="col-lg-6">
+                <a (click)="ModifyGeofence(geofence, 'G')" tabindex="20" style="margin-right:15px;color:green;">{{'Save'|translate}}</a>
+                <a (click)="CancelGeofence(geofence, 'G')" tabindex="20"
+                  style="color: #007eff;">{{'Cancel'|translate}}</a>
+              </div>
+
+              <span style="float:right"><a (click)="DeleteGeofence(geofence)" tabindex="20"
+                  style="margin-right:0.25em;margin-top:0.75em;color: #f72f48;">{{'Remove'|translate}}</a></span>
+            </div>
+            <div class="selectedDiv" attr.id="div{{geofence.geofenceID}}">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+     
+      <div class="timeline-panel msg" *ngIf="grofenceList1.length==0 && polygonList1.length==0"  >
+        {{'No Records'|translate}}
+      </div>
+
+      <div *ngIf="isPolygonsCount">
+        <div class="timeline-panel msg" [ngClass]="polygon.geofenceID == activeElement ? 'active' : 'none'"
+          *ngFor="let polygon of  polygonList1">
+          <div class="row" style="margin-left: 0px">
+            <div class="col-lg-12" style="padding: 8px 0px 10px 6px;">
+              <img src="./assets/Images/hexagon-outline.svg" />
+              <span style="line-height: 10px;font-size:22px;"> | </span>
+              <span class="marginleft5px" style="color:black;"> {{polygon.geofenceName ==""?"No
+                Records":polygon.geofenceName}}</span>
+            </div>
+            <div class="col-lg-11" style="padding: 8px 0px 10px 6px;">
+              <span style="float:left; cursor: pointer;"><img src="./assets/Images/Map.svg"
+                  (click)="showonMap(polygon.geofenceID, 'P')" /></span>
+              <span style="float:left; line-height: 10px;font-size:22px;"> | </span>
+              <div style="display:block" attr.id="divEdit{{polygon.geofenceID}}" class="col-lg-4">
+                <span><a (click)="EditGeofence(polygon, 'P')" tabindex="20"
+                    style="margin-right:0.25em;margin-top:0.75em;color: #03243B;">{{'Edit'|translate}}</a></span>
+              </div>
+              <div style="display:none" attr.id="divSave{{polygon.geofenceID}}" class="col-lg-6">
+                <a (click)="ModifyGeofence(polygon, 'P')" tabindex="20"
+                  style="margin-right:15px;margin-top:0.75em;color: green;">{{'Save'|translate}}</a>
+                <a (click)="CancelGeofence(polygon, 'P')" tabindex="20"
+                  style="color: #007eff;">{{'Cancel'|translate}}</a>
+              </div>
+              <span style="float:right"><a (click)="DeleteGeofence(polygon)" tabindex="20"
+                  style="margin-right:0.25em;margin-top:0.75em;color: #f72f48;">{{'Remove'|translate}}</a></span>
+            </div>
+            <div class="selectedDiv" attr.id="div{{polygon.geofenceID}}"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="list-group" *ngIf="isNoRecords">
+      <div class="timeline-panel msg1">
+        <div class="row">
+          <div class="col-lg-10">
+            <div class="col-lg-10" style="padding: 8px 0px 10px 6px;">
+              {{'No Records'|translate}}
+            </div>
+            <div class="col-lg-10" style="padding: 8px 0px 10px 6px;">
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Google MapCode-->
+  <div class="col-md-8" style="padding-left:0;">
+    <div class="map-layout">
+      <input id="txtLoc" class="controls form-control "
+        style="width: 250px; height: 30px;font-family: helvetica; font-weight: normal;margin:5px 5px 5px 10px;z-index:2147483648 !important;"
+        type="text" placeholder="{{'Search location'|translate}}" />
+      <div #mapDiv class="addgeofence-map">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- new design code ends-->
+<app-modal #modalRoot [modalTitle]="[NewGeofence]" [width]="500" [maximizable]="true" (close)="onCloseModal()">
+  <ng-container class="app-modal-body">
+    <!-- Body Starts Here "'New Geofence'"-->
+
+    <form #newGeoFrm="ngForm" (ngSubmit)="newGeoFrm.form.valid" autocomplete="off">
+
+      <div class="row margintop10px">
+        <div class="col-md-12 css16">
+          <div class="floating-label">
+            <input type="text" class="floating-input" name="geofenceName" [(ngModel)]="geofenceobj.geofenceName"
+              maxlength="30" placeholder=" " alphaNumerics acceptFirstCharacter #geofenceName="ngModel"
+              [ngClass]="{ 'is-invalid': newGeoFrm.submitted && geofenceName.invalid }" required>
+            <label class="labClass">{{'Geofence Name'|translate}}</label>
+            <img src="./assets/Images/information.svg" title="{{'UsmtitleName'|translate}}"
+              alt="info" />
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Body ends Here-->
+  </ng-container>
+  <ng-container class="app-modal-footer">
+
+    <button type="button" class="btn btn-danger" (click)="modalRoot.hide();" tabindex="20">
+      <i class="fa fa-close"></i> {{'Close'|translate}}</button>
+    &nbsp;
+    <button type="submit" class="btn btn-success" tabindex="21" (click)="Save(newGeoFrm.value.geofenceName)">
+      <i class="fa fa-save"></i> {{'Save'|translate}}</button>
+
+  </ng-container>
+</app-modal>
+
+
+
+
+
+
+
+<style>
+  .ui-modal-body {
+    height: 400px;
+    width: 100%;
+  }
+
+  .nb-theme-corporate .btn {
+    color: #ffffff;
+    text-transform: capitalize;
+    letter-spacing: 0.8px;
+    font-weight: 500;
+    font-family: 'Helvetica';
+    border: 2px solid transparent;
+    -webkit-transition: none;
+    transition: none;
+    width: 90px;
+    height: 32px;
+    background-color: #4D9DE0;
+    cursor: pointer;
+  }
+
+  a:hover {
+    border-bottom: 1px solid #3598dc;
+    text-decoration: none;
+    color: green;
+  }
+
+  a {
+    cursor: pointer
+  }
+
+  .msg1 {
+    padding: 5px;
+    border-left: 5px solid transparent;
+    border-bottom: 1px solid grey;
+  }
+
+  .timeline-panel {
+    color: #000 !important;
+    background-color: #f2f1f0 !important;
+    /* border-left: 6px solid #3598dc !important; */
+    height: auto;
+  }
+
+  .msg {
+    width: 100%;
+    padding: 5px;
+    border-left: 5px solid transparent;
+    position: relative;
+    border-bottom: 1px solid grey;
+    margin: 0 0 3px 0;
+  }
+
+  .pointer {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid transparent;
+    border-top-color: lightgrey;
+    border-left-color: lightgrey;
+    position: absolute;
+    top: 12px;
+    /* left: -11px; */
+    transform: rotate(-45deg);
+    background: lightgrey;
+  }
+
+  .pac-container {
+    z-index: 2147483648 !important;
+    /* z-index: 1100 !important;
+    display: block !important; */
+
+  }
+
+  .addgeofence-map {
+    border: 1px solid #E0E0E0;
+    height: 76vh;
+    width: 100%;
+    /* z-index: 2147483648 !important; */
+  }
+
+  @media screen and (min-height:700px) {
+
+    .hover-Scroll,
+    .addgeofence-map {
+      height: 78vh;
+    }
+  }
+
+
+  .map-layout {
+    display: inline-block;
+    width: 100%;
+    z-index: 2147483648 !important;
+  }
+
+  @media screen and (max-width:1199px) {
+    .map-layout {
+      width: 95%;
+    }
+  }
+
+  .active {
+    border-left: 5px solid #4ea1dc;
+  }
+</style>

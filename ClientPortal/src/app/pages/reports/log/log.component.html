@@ -1,0 +1,130 @@
+<div style="padding: 10px;">
+  <form #frmLogDetails="ngForm" (ngSubmit)="GetlogDetails()">
+
+    <div class="row">
+      <div class="col-md-12" style="padding:5px 15px;">
+        <div style="background-color: #FFF; border-radius: 5px;padding: 10px;">
+          <div class="row">
+            <div class="col-md-2 col-sm-6 col-xs-12">
+              <label>Log Type</label>
+              <ng-select [items]="logTypeList" style="border: 1px solid #ccc;border-radius: 4px;" [(ngModel)]="logType"
+                name="logType" bindLabel="name" bindValue="id" placeholder="Select" (change)="logtypechanged()">
+              </ng-select>
+              <ng-template ng-label-tmp let-item="item">
+                {{item}}
+              </ng-template>
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12" *ngIf="logType == 1">
+              <label>Device</label>
+              <ng-select [items]="DeviceList" [multiple]=true [closeOnSelect]="false" [(ngModel)]='deviceSelectedList'
+                style="color:#212121" bindLabel="deviceName" bindValue="sensorId" placeholder="Select"
+                name="deviceSelect">
+                <ng-template ng-header-tmp>
+                  <div class="selectionButtons">
+                    <button type="button" class="btn btn-success" [disabled]="disabeleRegSelectAll"
+                      (click)="onSelectAll()">
+                      <i class="fa fa-check" title="Select All"></i></button>
+                    <button type="button" style="margin-left: 5px;" class="btn btn-warning"
+                      [disabled]="disableRegUnSelectAll" (click)="onDeSelectAll()">
+                      <i class="fa fa-times" title="Deselect All"></i>
+                    </button>
+                  </div>
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div *ngIf="deviceSelectedList.length === DeviceList.length">
+                    All (Default)
+                  </div>
+                  <div *ngIf="deviceSelectedList.length != DeviceList.length">
+                    <div class="ng-value" *ngIf="items.length > 0">
+                      <span class="ng-value-label">{{items.length}} Selected...</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12" *ngIf="logType == 0">
+              <label>User</label>
+              <ng-select [items]="UserList" [closeOnSelect]="true" [(ngModel)]='selectedUser' style="color:#212121"
+                bindLabel="userName" bindValue="userName" placeholder="Select" name="userSel">
+              </ng-select>
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+              <label>Period</label>
+              <ng-select [items]="DateRangeList" style="    border: solid 1px #c1c1c1;
+            border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId"
+                placeholder="Period" (change)="checkDateRange($event)">
+              </ng-select>
+              <ng-template ng-label-tmp let-item="item">
+                {{item.dtName}}
+              </ng-template>
+            </div>
+            <div class="col-md-2">
+              <label>Date Range</label>
+              <div style="border: solid 1px #c1c1c1;
+                          border-radius: 5px;width: 98%;">
+                <input [max]="maxDate" style="width: 145px; height: 30px;" [disabled]="!isDates"
+                  [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate" [selectMode]="'range'"
+                  [(ngModel)]="logObJ.fromDate" placeholder="Date Range" class="date-picker-styles" required readonly>
+
+                <!-- <input [max]="maxDate" class="shadow-input" [disabled]="!isDates" name="fromDate" id="fromDate"
+                                  [(ngModel)]="logObJ.fromDate" [selectMode]="'range'" [owlDateTime]="dt1" 
+                                  #fromDate>
+                              <input type="text" style="width: 145px; height: 30px;" [owlDateTimeTrigger]="dt1" 
+                              placeholder="Date Range" [value]="logObJ.fromDate | dateFormatCustomPipe:cldDateFormat"
+                                  class="date-picker-styles" readonly> -->
+
+                <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+              </div>
+            </div>
+
+            <div class="col-md-4" style="padding-top: 2%;">
+              <button type="submit" class="btn" title="Submit" style="font-family: Helvetica;margin-right:5px;">
+                Submit
+              </button>
+              <button class="btn" style="margin-right: 5px;" type="button" title="Reset" (click)="ResetData()">
+                <i class="fa fa-refresh" aria-hidden="true"></i></button>
+              <div class="dropdownload" style="    position: absolute;
+              z-index: 10;
+              margin-top: -10px;" *ngIf="dataset.length>0">
+                <i class="btn dropbtn fa fa-download" aria-hidden="true"></i>
+                <div class="dropdownload-content">
+                  <span (click)="exportPDF()">Download PDF</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div style="background-color: #FFF; border-radius: 5px;padding: 10px;height: 65vh;overflow-y: auto;">
+
+    <div class="tableFixHead">
+      
+      <table id="logTable" class="table table-striped" style="width:100%;">
+        <thead class="table-head-background">
+          <tr>
+            <th style="width: 150px;">User Name</th>
+            <th style="width: 120px;">Device Name</th>
+            <th style="width: 60px;">Module</th>
+            <th style="width: 300px;">Action</th>
+            <th style="width: 120px;">Log Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngFor="let item of dataset">
+            <td> {{item.userMailID}} </td>
+            <td> {{item.deviceName}} </td>
+            <td> {{item.module}} </td>
+            <td> {{item.actionPerformed}} </td>
+            <td> {{item.logDateTimeShow}} </td>
+          </tr> -->
+        </tbody>
+      </table>
+
+    </div>
+
+
+  </div>
+</div>

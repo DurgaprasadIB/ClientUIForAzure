@@ -1,0 +1,83 @@
+<div style="margin-bottom:5px;">
+
+    <div class="row">
+
+        <div class="col-md-2" style="float:left; margin-bottom: 10px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="float: left;padding-bottom:2px;">
+                        <i class="fa fa-list-ul fa-2x" (click)="changeView('live')" title="List View"
+                            style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-area-chart fa-2x" style="color:#3598DC;" title="Charts View"></i> &nbsp;
+                        <i class="fa fa-camera fa-2x" *ngIf='hasSurv' (click)="changeView('image')" title="Recordings"
+                            style="cursor: pointer;"></i>
+                        <i class="fa fa-thumb-tack fa-2x" (click)="changeView('pin')" title="Dashboard Pin"
+                            style="cursor: pointer;"></i> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background-color: #EDEEF4;height: 550px;overflow-y: auto;">
+    <div class="col-md-6" [style.height]="divexHeight+'px'">
+        <div id="exChart1">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+
+    <div class="col-md-6" [style.height]="divexHeight2+'px'">
+        <div id="exChart2">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight3+'px'">
+        <div id="exChart3">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight4+'px'">
+        <div id="exChart4">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight5+'px'">
+        <div id="exChart5">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight6+'px'">
+        <div id="exChart6">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight7+'px'">
+        <div id="exChart7">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight8+'px'">
+        <div id="exChart8">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight9+'px'">
+        <div id="exChart9">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+    <div class="col-md-6" [style.height]="divexHeight10+'px'">
+        <div id="exChart10">
+            <div id="timeline-chart"></div>
+        </div>
+
+    </div>
+</div>

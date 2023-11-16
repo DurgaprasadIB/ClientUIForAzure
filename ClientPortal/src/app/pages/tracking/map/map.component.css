@@ -1,0 +1,339 @@
+
+
+	.widget {
+		/* width: 15.2%; */
+        padding: 5px;
+		cursor: pointer;
+		
+	}
+	.widgetPeople {	
+		cursor: pointer;
+		padding: 5px 8px 5px 0;
+	}
+	.widgetPeople.states-mdl {       
+        cursor: pointer;
+	}
+
+	.widget.states-mdl {
+        margin: 0 1.4%;
+        cursor: pointer;
+	}
+
+	.widget.states-thrd {
+		margin-right: 2%;
+	}
+	/* .jioTable-default-trail{
+		width: 100%;
+		overflow: auto;
+		height: auto;
+	  } */
+	
+	.stats-left.good {
+		float: left;
+		width: 70%;
+		background-color: #00a65a;
+		text-align: center;
+	    height: 77px;
+    padding-top: 22px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+	}
+
+	.stats-left.ok {
+		float: left;
+		width: 70%;
+		background-color: #00a65a;
+		text-align: center;
+		height: 77px;
+		padding-top: 22px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+	}
+
+	.stats-left.warning {
+		float: left;
+		width: 70%;
+		background-color: #e01f26;
+		text-align: center;
+		height: 77px;
+		padding-top: 22px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+	}
+
+	.stats-left.noGps {
+		float: left;
+		width: 70%;
+		background-color: #6b7d86;
+		text-align: center;
+		height: 77px;
+		padding-top: 22px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+	}
+	.stats-left.critical {
+		white-space: nowrap;
+		float: left;
+		width: 70%;
+		background-color: #2f353b;
+		text-align: center;
+		height: 77px;
+		padding-top: 22px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+	}
+	.stats-left.all {
+		float: left;
+		width: 70%;
+		background-color: #3598dc;
+		text-align: center;
+		height: 77px;
+		padding-top: 22px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+	}
+
+	.states-mdl .stats-left.ok {
+		background-color: #fbaf17;
+	}
+
+	.states-mdl .stats-right.ok {
+		border: none;
+		border-right: 2px solid #fbaf17;
+	}
+
+
+	.states-last .stats-left {
+		background-color: #03243B;
+		border: none;
+	}
+
+	.states-last.stats-right {
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #00a65a;
+	}
+
+	.states-thrd .stats-left {
+		background-color: #052963;
+	}
+
+	.widget.states-last .stats-right {
+		border: none;
+		border-right: 2px solid #03243B;
+	}
+
+	.stats-right.good {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 26px 0em;
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #00a65a;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}
+
+	.stats-right.ok {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 26px 0em;
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #fbaf17;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}
+
+	.stats-right.warning {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 26px 0em;
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #e01f26;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}
+
+	.stats-right.noGps {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 26px 0em;
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #6b7d86;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}
+	.stats-right.critical {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 26px 0em;
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #2f353b;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}	
+	.stats-right.all {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 26px 0em;
+		background-color: #eee;
+		border: none;
+		border-right: 2px solid #3598dc;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+		-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	}
+
+	.stats-left h5 {
+		color: #fff;
+		font-size: 1em;
+	}
+
+	.stats-left h4 {
+		/* font-size: 2em; */
+		color: #fff;
+		margin-top: 10px;
+		font-weight: 400;
+	}
+
+	.stats-right label {
+		font-size: 10px;
+		color: #3E3D3D;
+    }
+    hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 5px solid #3598dc;
+        margin-top: 10px;
+        padding: 0;
+    }
+    hr.good {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 5px solid #00a65a;
+        margin-top: 10px;
+        padding: 0;
+    }
+    hr.ok {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 5px solid #fbaf17;
+        margin-top: 10px;
+        padding: 0;
+    }
+    hr.warning {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 5px solid #e01f26;
+        margin-top: 10px;
+        padding: 0;
+    }
+    hr.noGps {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 5px solid #6b7d86;
+        margin-top: 10px;
+        padding: 0;
+    }
+    hr.critical {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 5px solid #2f353b;
+        margin-top: 10px;
+        padding: 0;
+	}
+	.btn-421px{
+		float:left;
+	}
+	/* @media screen and (max-width:421px){
+		.btn-421px{
+			margin: 10px 0;
+		}
+	} */
+	.mapView-showbtn{
+	  
+	/* float: right;  */
+	/* margin-bottom: 8px; */
+	display: block;
+	float: left;
+	}
+	/* @media screen and (max-width:768px){
+		.mapView-showbtn{
+			float: left;
+			margin-left: 3px;
+			margin-top: 5px;
+			}
+	} */
+	@media screen and (max-width:768px){
+		.jioTable-default{
+			width: 90%;
+		}
+
+	}
+	@media screen and (min-width:992px) and (max-width:1323px){
+		.mapView-showbtn{
+		margin: 4px;
+			}
+	}
+	@media screen and (max-width:524px){
+		.mapView-showbtn{
+		margin: 5px 5px 0 5px;
+			}
+	}
+
+	.MapviewContainer{
+		height:73vh;
+		width:100% ;
+	}
+	@media screen and (min-height:700px){
+		.MapviewContainer{
+			height:70vh;
+			margin-top: 38px;
+		}
+	  }
+

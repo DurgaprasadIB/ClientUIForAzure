@@ -1,0 +1,754 @@
+/* You can add global styles to this file, and also import other style files */
+/* Table */
+
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+.jioTable-default {
+    width: 98%;
+    overflow: hidden;
+    height: auto;
+    margin-left: 16px;
+}
+
+@media screen and (max-width:1324px) {
+    .jioTable-default {
+        overflow-x: scroll;
+        width: 98%;
+    }
+}
+
+@media screen and (max-width:1324px) {
+
+    .jioTable-default,
+    .jioTable-default1 {
+        margin-left: 5px !important;
+    }
+}
+
+.jioTable-default1 {
+    width: 98%;
+    overflow: hidden;
+    height: auto;
+    margin-left: 4px;
+}
+
+@media screen and (max-width:1324px) {
+    .jioTable-default1 {
+        overflow-x: scroll;
+        width: 98%;
+    }
+}
+
+/* new user button */
+
+@media screen and (max-width:500px) {
+    .newuserButton {
+        margin-top: 40px;
+    }
+
+    .newuserButton-10px {
+        margin-top: 40px;
+        margin-left: -5px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.5em;
+}
+
+::-webkit-scrollbar-button {
+    background: #ccc;
+}
+
+::-webkit-scrollbar-track-piece {
+    background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(110, 110, 110);
+    border-radius: 12px !important;
+}
+
+/* mozilla */
+::-moz-scrollbar {
+    width: 0.5em;
+    height: 0.5em;
+}
+
+::-moz-scrollbar-button {
+    background: #ccc;
+}
+
+::-moz-scrollbar-track-piece {
+    background: #eee;
+}
+
+::-moz-scrollbar-thumb {
+    background: rgb(110, 110, 110);
+    border-radius: 12px !important;
+}
+
+/* end */
+
+
+.sidebar-collapse .jioUser-name {
+    display: none !important;
+}
+
+.sidebar-collapse .down a img {
+    width: 70% !important;
+    margin: 5px auto !important;
+}
+
+.sidebar-collapse .down {
+    padding: 0 !important;
+}
+
+.sidebar-collapse .logo:hover {
+    text-decoration: none;
+}
+
+.sidebar-menu {
+    white-space: nowrap;
+    /* overflow: hidden; */
+    overflow-y: hidden !important;
+    height: 575px !important;
+}
+
+.sidebar-menu:hover {
+    overflow-y: auto !important;
+}
+
+
+.sidebar-menu:hover::-webkit-scrollbar {
+    width: 0.6em;
+    height: 0.6em;
+}
+
+.sidebar-menu:hover::-webkit-scrollbar-button {
+    background: #ccc;
+}
+
+.sidebar-menu:hover::-webkit-scrollbar-track-piece {
+    background: #eee;
+}
+
+.sidebar-menu:hover::-webkit-scrollbar-thumb {
+    background: #7c7c7c;
+    border-radius: 12px !important;
+}
+
+
+
+.sidebar-menu:hover::-moz-scrollbar {
+    width: 0.6em;
+    height: 0.6em;
+}
+
+.sidebar-menu:hover::-moz-scrollbar-button {
+    background: #ccc;
+}
+
+.sidebar-menu:hover::-moz-scrollbar-track-piece {
+    background: #eee;
+}
+
+.sidebar-menu:hover::-moz-scrollbar-thumb {
+    background: #7c7c7c;
+    border-radius: 12px !important;
+}
+
+
+
+
+@media (min-width: 768px) {
+    .sidebar-mini.sidebar-collapse .main-sidebar .sidebar-menu {
+        overflow-y: unset !important;
+        height: unset !important;
+    }
+}
+
+.main-sidebar {
+    font-family: 'PT Sans';
+}
+
+/* Slik grid table */
+
+.sidebar-collapse .slickgrid-container.ui-widget {
+    width: auto !important;
+    overflow: hidden !important;
+    outline: 0px !important;
+    /* height: 201px !important; */
+}
+
+.gridPane {
+    width: auto !important;
+}
+
+.slick-gridmenu {
+    z-index: 10001 !important;
+}
+
+/* .sidebar-collapse .grid-canvas{
+    width: unset !important;
+} */
+.slickgrid-container {
+    width: auto !important;
+}
+
+@media screen and (max-width:1300px) {
+    .slickgrid-container {
+        width: 1200px !important;
+    }
+}
+
+.slickgrid-container .grid-canvas {
+    background: white;
+    /* width: 1150px !important; */
+    z-index: 0;
+}
+
+body .slickgrid-container .slick-header-columns .slick-header-column.ui-state-default {
+    line-height: 35px !important;
+
+}
+
+.slickgrid-container .grid-canvas .slick-cell {
+    padding: 5px 7.5834px;
+    font-size: 0.9em !important;
+    font-family: sans-serif !important;
+}
+
+.slickgrid-container .slick-header-columns .slick-header-sortable .slick-column-name {
+    margin-left: 0;
+    font-size: 14px !important;
+}
+
+/* .slick-viewport{
+    overflow:  hidden !important;
+} */
+.ui-modal-overlay {
+    z-index: 999 !important;
+}
+
+.ui-modal {
+    z-index: 1000 !important;
+}
+
+.pop-input-margin {
+    margin-top: 10px;
+}
+
+/* On hover input */
+/* .floating-input:focus ~ .labClass, .floating-input:not(:placeholder-shown) ~ .labClass {
+    top:-18px !important;
+    font-size: 14px;
+    color: #d6d6d6 !important;
+}
+.floating-input:focus ~ .labClass {
+    top:-18px;
+    font-size: 14px;
+    color: #d6d6d6 !important;
+} */
+
+/* pagination */
+
+.slick-pagination {
+    width: 98% !important;
+    padding-top: 4px !important;
+}
+
+.slick-pagination .slick-pagination-nav .slick-page-number input {
+    background-color: #03243B !important;
+    height: 26px !important;
+    width: 26px !important;
+    padding: 2px;
+    display: inline-block;
+    border: none !important;
+    /* border-bottom: 1px solid; */
+    box-shadow: none !important;
+    text-align: center !important;
+    margin: 0 5px !important;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+    -webkit-transition: all .2s linear;
+    -o-transition: all .2s linear;
+    transition: all .2s linear;
+    -webkit-border-radius: .125rem;
+    border-radius: .125rem;
+    color: #fff;
+}
+
+.slick-pagination .slick-pagination-settings select {
+    height: 26px !important;
+    width: auto !important;
+}
+
+.slick-pagination .slick-pagination-nav .slick-page-number {
+    vertical-align: top;
+    margin-top: 0px !important;
+    display: inline-block;
+    padding: 0 5px;
+}
+
+.slick-pagination .slick-pagination-nav .pagination .page-item.disabled a[class*="icon-seek-"] {
+    /* color: #000000 !important; */
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+/* .slick-pagination .slick-pagination-nav .pagination .page-item a[class*="icon-seek-"] {
+    border-color: 1px solid #acacac;
+    color: #03243B !important;
+    text-decoration: none;
+    font-family: "FontAwesome";
+    -webkit-text-stroke: 0.4px;
+} */
+/* btn hover */
+.btn.focus,
+.btn:focus,
+.btn:hover {
+    color: #fff !important;
+    text-decoration: none;
+    background: #3375ad;
+}
+
+.slick-page-number .form-control span {
+    display: none !important;
+}
+
+.slick-pagination .slick-pagination-nav .pagination .page-link {
+    font-size: 15px;
+    border: none !important;
+    height: 32px;
+}
+
+.swal2-container {
+    z-index: 10010 !important;
+}
+
+.swal2-content {
+    font-size: 14px !important;
+    color: #00a65a !important;
+}
+
+.slickgrid-container .slick-column-name {
+    font-size: 14px !important;
+}
+
+.content-wrapper {
+    min-height: 550px !important;
+}
+
+::placeholder {
+    color: rgb(202, 202, 202) !important;
+}
+
+::-webkit-input-placeholder {
+    color: rgb(202, 202, 202) !important;
+}
+
+.swal2-actions button {
+    margin: 5px !important;
+    width: 100px;
+}
+
+.custom-control-description {
+    position: relative;
+    bottom: 3px;
+    left: 5px;
+}
+
+.dataTables_wrapper {
+    margin: 0 14px !important;
+}
+
+/* Excel upload popup */
+
+.download-button-a {
+    text-decoration: none;
+    background: #4D9DE0;
+    /* padding: 8px 10px; */
+    position: relative;
+    top: 0;
+    float: right;
+    color: white;
+    padding: 8px 15px;
+    margin: 0;
+    border-radius: 0;
+}
+
+.download-button-a:hover {
+    text-decoration: none;
+    border-bottom: none;
+    color: antiquewhite;
+    background: #4db473;
+}
+
+.download-button-a:focus {
+    text-decoration: none;
+    border-bottom: none;
+    color: antiquewhite;
+    background: #4db473;
+}
+
+.excel-format {
+    box-sizing: border-box;
+    position: relative;
+    top: 7px;
+    left: 14px;
+}
+
+.upload-file {
+    /* display: inline-block; */
+    border: 1px solid grey;
+    padding: 6px 10px;
+    border-radius: 0 !important;
+}
+
+.record-picker {
+    margin: 0;
+    padding: 0 0 1px 0;
+    min-height: 200px !important;
+    max-height: 200px !important;
+    overflow: hidden;
+}
+
+div.record-picker {
+    overflow-y: hidden !important;
+}
+
+div.record-picker:hover {
+    overflow-y: auto !important;
+}
+
+.border-less-table td {
+    padding: 5px;
+}
+
+.horizontal-rule {
+    margin: 2px 0 !important;
+}
+
+table.dataTable tbody th,
+table.dataTable tbody td {
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    white-space: normal !important;
+}
+
+.ng-select.ng-select-opened>.ng-select-container {
+    background-color: #fff0 !important;
+}
+
+thead th {
+    /* background: #03243B; */
+    color: white;
+    background: #02121E;
+    /* rgb(162, 167, 170); */
+}
+
+
+.input-sm {
+    border-radius: 0 !important;
+}
+
+.skin-blue .sidebar-menu .treeview-menu>li.active>a,
+.skin-blue .sidebar-menu .treeview-menu>li>a:hover {
+    /* color: #03243B !important; */
+    background: #1f2025 !important;
+    margin: 0 !important;
+    font-weight: 500;
+}
+
+.dropdown-menu>li>a:focus,
+.dropdown-menu>li>a:hover {
+    color: #ffffff !important;
+    /* background-color: #909196 !important; */
+    background-color: #018AD9 !important;
+}
+
+.fa-spin {
+    color: #03243B;
+}
+
+label {
+    font-weight: 500 !important;
+}
+
+.md-4-coloumn {
+    background: whitesmoke;
+    width: 32% !important;
+    padding: 11px;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.innerHeading {
+    background: #03243B;
+    color: white;
+    padding: 5px;
+    margin: -10px -15px 15px -15px;
+}
+
+thead.owl-dt-calendar-header th {
+    background: transparent !important;
+    color: unset !important;
+}
+
+/* floating input */
+/* .inputFloat{
+    border: 0px;
+    border-bottom: 1px solid #cccccc;
+    outline: none;
+    background: transparent;
+    width: 100%;
+  
+  }
+  .inputFloat:focus{
+    border-bottom: 2px solid #03243B;
+  }
+   .inputFloat+.inputLable{
+     color: white;
+     position: absolute;
+     bottom: -3px;
+     color: black;
+     pointer-events: none;
+     transition: 0.3s linear;
+     left:20px;
+     -ms-transition: 0.3s linear;
+  
+     font-size: 17px;
+   }
+  
+   .inputFloat:focus+.inputLable{
+     top: 20px;
+     font-size: 12px;
+     color: grey;
+   }
+  
+   .inputFloat:valid+.inputLable{
+    top: 20px;
+    font-size: 12px;
+    -ms-top: -16px;
+   } */
+
+.inputFloat {
+    border: 0px;
+    border-bottom: 2px solid black;
+    outline: none;
+    background: transparent;
+    color: black;
+    width: 10cm;
+
+}
+
+.inputFloat:focus {
+    border-bottom: 2px solid blue;
+}
+
+.inputFloat+.inputLable {
+    color: white;
+    position: relative;
+    top: -3px;
+    color: black;
+    pointer-events: none;
+    transition: 0.3s linear;
+    left: -80%;
+    -ms-transition: 0.3s linear;
+    font-size: 17px;
+}
+
+.inputFloat:focus+.inputLable {
+    top: -22px;
+    font-size: 12px;
+    color: grey;
+    -ms-top: -16px;
+    left: -78%;
+}
+
+.inputFloat:valid+.inputLable {
+    top: -22px;
+    font-size: 12px;
+    -ms-top: -16px;
+    left: -78%;
+}
+
+/* end of floating input */
+
+.closebuttonImage {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    background: #fefefe;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* download dropdown btn */
+
+
+.dropdownload {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdownload-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 50;
+    right: 5px;
+}
+
+.dropdownload-content span {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none !important;
+    display: block;
+}
+
+.dropdownload-content span:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.dropdownload:hover .dropdownload-content {
+    display: block;
+}
+
+.dropbtn {
+    margin-top: 10px;
+}
+
+/* End of download dropdown btn */
+
+.owl-dt-container-buttons {
+    display: none !important;
+}
+
+.removePadding {
+    padding: 0px !important;
+}
+
+.pagingText {
+    text-align: right;
+}
+
+
+/*  custom checkbox css starts */
+
+.container-check {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container-check input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checktick {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border: 2px solid #4D9DE0;
+}
+
+.container-check input:checked~.checktick {
+    background-color: #4D9DE0;
+}
+
+.checktick:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container-check input:checked~.checktick:after {
+    display: block;
+}
+
+
+.container-check .checktick:after {
+    left: 5px;
+    top: 1px;
+    width: 7px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/*  custom checkbox css end */
+
+.form-check label {
+    padding-left: 10px !important;
+}
+
+.ng-dropdown-panel .scroll-host {
+    text-align: left;
+}
+
+.gm-style-iw-d {
+    overflow: auto !important;
+}
+
+.gm-style-iw gm-style-iw-c {
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+
+}
+
+/* ////// map info window css */
+
+.gm-style .gm-style-iw-t::after {
+    top: 13px !important;
+}
+
+.gm-style .gm-style-iw-c {
+    padding: 0px !important
+}
+
+#iw-container .iw-title {
+    padding: 7px !important;
+}
+
+.gm-style-iw-t {
+    right: 7px !important;
+    bottom: 39px !important;
+}
+
+#iw-container .iw-title {
+    background-color: #018AD9 !important;
+}
+
+/* ////// map info window css end */
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+    z-index: 0 !important;
+}

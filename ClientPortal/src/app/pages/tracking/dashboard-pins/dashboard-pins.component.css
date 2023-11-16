@@ -1,0 +1,25 @@
+.ActiveItem{
+    font-weight: bold;
+    font-size: initial;
+}
+
+.rpItem{
+    width: 100%;
+   box-sizing: border-box;
+   margin-left: 10px;
+   padding: 2px;
+   font-size: 95%;padding-right:0px;cursor: pointer;color: #743FAA;
+}
+
+.collpaseArrow{
+    cursor: pointer;
+    float: right;
+    margin-bottom: 6px;
+}
+
+.expandArrow{
+    position: absolute;
+    top: 5px;
+    cursor: pointer;
+    z-index: 99;
+}

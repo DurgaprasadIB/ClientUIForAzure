@@ -1,0 +1,32 @@
+<div style="margin-bottom:5px;">
+
+    <div class="row">
+
+        <div class="col-md-2" style="float:left; margin-bottom: 10px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="float: left;padding-bottom:2px;">
+                        <i class="fa fa-list-ul fa-2x" (click)="changeView('Live')" title="List View" style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-area-chart fa-2x" (click)="changeView('Chart')" title="Chart View" style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-video-camera fa-2x" title="Recordings" style="color:#3598DC;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3" style="overflow-y: auto;height: 500px;">
+
+        <div class="col-md-12 videoDivList" *ngFor="let item of videoFileList">
+            <div style="cursor: pointer;" (click)="playVideo(item)">
+                {{item}}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+
+        <iframe [src]="url" frameborder="0" allowfullscreen width="100%" height="500px">
+    </iframe>
+    </div>
+</div>

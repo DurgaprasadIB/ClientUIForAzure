@@ -1,0 +1,399 @@
+a {
+    -webkit-transition: .25s all;
+    transition: .25s all;
+   }
+   .card {
+     padding-left:auto;
+     padding-right:auto;
+     border-radius: 6px;
+     /* min-height:200px; */
+     /* margin-top:15px; */
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    -webkit-transition: .25s box-shadow;
+    transition: .25s box-shadow;
+    font-size: 12px;
+   }
+   .card:focus, .card:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+   }
+   .card-inverse .card-img-overlay {
+    background-color: rgba(51, 51, 51, 0.85);
+    border-color: rgba(51, 51, 51, 0.85);
+   }
+   .card-img-top{
+     margin-top:10px;
+   }
+   .card-header{
+    background-color: #03243B;
+    height: 30px;
+    padding: 6px 0px 0px 15px;
+    color: white;
+    border-top-left-radius: 6px;
+    border-top-right-radius:6px;
+       /* width: 50px; */
+   }
+   .icon-set{
+    float: right;
+    /* padding: 6px; */
+    padding: 0px 6px 0px 0px;
+   }
+   .icon-set i,span{
+       padding: 0px 5px;
+   }
+   .card-block{
+       background-color: #fff;
+       padding: 10px;
+    
+        /* padding-left: 5px;
+       padding-right: 5px;
+       padding-bottom: 5px;
+       padding-top: 5px;  */
+   } 
+    .card-block1{
+       background-color: #fff;
+    
+        /* padding-left: 5px;
+       padding-right: 5px;
+       padding-bottom: 5px;
+       padding-top: 5px;  */
+   }
+   .card-footer{
+    background: whitesmoke;
+    padding: 8px 0;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+   }
+   .col-md-4{
+       white-space: nowrap;
+   }
+   .centerText{
+       text-align: center;
+       margin-top: 5px;
+   }
+
+   /* .col-xs-12{
+     text-align:center;
+     margin-left:auto;
+     margin-right:auto;
+   }
+   .row{
+     margin-left:auto;
+     margin-right:auto;
+   } */
+   @media screen and (max-width:400px) {
+    .on-menu-display,.off-menu-display,.disc-menu-display{
+        width: 50px !important; 
+        height: 50px !important;
+        font-size: 8px;
+        padding: 10px 0 0 0 !important;
+    }
+    .centerText{
+      font-size: 10px;
+    }
+     
+    }
+ .on-menu-display{
+    padding: 7px 2px;
+    display: inline-block;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    color: white;
+ }
+ .alert-menu-display{
+    padding: 7px 5px;
+    display: inline-block;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    border:1px solid #ea4c89;
+ }
+ .siteMap{
+    height:320px;
+    width:100%;
+ }
+@media screen and (min-height:700px){
+    .siteMap{
+        height: 64vh !important;
+        width:100%;
+     }
+}
+.headingStyles{
+  padding: 10px 0 0 15px;
+  box-sizing: border-box;
+}
+.headingContent,.fa-car, .fa-map-marker {
+  font-size: 15px;
+}
+hr.all {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #3598dc;
+        margin-top: -1px;
+        padding: 0;
+        width: 30px;
+        margin-bottom: 0;
+    }
+    hr.moving {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #00a65a;
+        margin-top: -1px;
+        padding: 0;
+        width: 30px;
+        margin-bottom: 0;
+    }
+    hr.idle {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #fbaf17;
+        margin-top: -1px;
+        padding: 0;
+        width: 30px;
+        margin-bottom: 0;
+
+    }
+    hr.stopped {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #e01f26;
+        margin-top: -1px;
+        padding: 0;
+        width: 30px;
+        margin-bottom: 0;
+    }
+    hr.noGps {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #6b7d86;
+        margin-top: -1px;
+        padding: 0;
+        width: 30px;
+        margin-bottom: 0;
+    }
+    hr.noPolling {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 2px solid #2f353b;
+        margin-top: -1px;
+        padding: 0;
+        width: 30px;
+        margin-bottom: 0;
+    }
+    
+    hr.movingFMS {
+        border-bottom: 3px solid #00a65a;
+        width: 100%;
+    }
+    hr.idleFMS {
+        border-bottom: 3px solid #fbaf17;
+        width: 100%;
+    }
+    hr.stoppedFMS {
+        border-bottom: 3px solid #e01f26;
+        width: 100%;
+    }
+    hr.noGpsFMS {
+        border-bottom: 3px solid #6b7d86;
+        width: 100%;
+    }
+    hr.noPollingFMS {
+        border-bottom: 3px solid #2f353b;
+        width: 100%;
+    }
+    hr.AllFMS {
+        border-bottom: 3px solid #3598dc;
+        width: 100%;
+    }
+    hr.occupiedFMS {
+        border-bottom: 3px solid green;
+        width: 100%;
+    }
+    hr.notoccupiedFMS {
+        border-bottom: 3px solid rgb(255, 217, 0);
+        width: 100%;
+    }
+    hr{
+      margin-top: 10px;
+    }
+    .grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-gap: 10px;
+	}
+	@media screen and (max-width:998px){
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-gap: 10px;
+		}
+
+	}
+	@media screen and (max-width:768px){
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 10px;
+		}
+
+	}
+	.siteBox{
+		border-radius: 4px;
+        box-shadow: 1px 1px 5px #bbbbbb;
+    }
+    .siteBox:hover{
+        box-shadow: 1px 1px 6px #797979;
+        cursor: pointer;
+    }
+    /* .siteBox:active{
+        box-shadow: 2px 2px 4px #00a65a;
+        cursor: pointer;
+	} */
+	.count-circle{
+	    display: inline-block;
+        border-radius: 50%;
+        margin: 10px;
+        color: white;
+        height: 50px;
+        width: 50px;
+        text-align: center;
+        padding-top: 16px;
+	}
+	.status-string{
+		display: inline-block;
+    }
+ 
+  .card{
+   border: 1px solid #e2e2e2;
+   box-shadow: 5px 5px 5px #e0e0e0;
+   border-radius: 4px;
+ }
+ .out-box{
+   /* border:1px solid;*/
+   height: 50px;
+   margin: 8px 2px;
+   box-shadow: 1px 1px 5px #e4e4e4;
+   color: white;
+ }
+ .out-box:hover
+ ,.out-box:active
+ {
+   /* box-shadow: 5px 5px 5px #b1b1b1; */
+   box-shadow: 6px 6px 2px 0px #616161;   
+   cursor: pointer;
+ }
+ .in-box{
+  display: inline-block; 
+  color: #333;
+  background-color: #eee;
+  height: 50px;
+  width: 30%;
+  text-align: center;
+  padding-top: 16px;
+}
+ .out-box1{
+   /* border:1px solid;*/
+   height: 50px;
+   margin: 10px 2px;
+   box-shadow: 1px 1px 5px #e4e4e4;
+   color: #333;
+   background-color: #eee;
+ }
+ .out-box1:hover{
+   /* box-shadow: 5px 5px 5px #b1b1b1; */
+   box-shadow: 6px 6px 2px 0px #616161;
+   cursor: pointer;
+ }
+ .in-box1{
+  display: inline-block;
+  height: 50px;
+  width: 30%;
+  text-align: center;
+  padding-top: 15px;
+  color: #333;
+  background-color: #eee;
+  font-size: 16px;
+}
+.in-box-movingColor{
+ border-left: 1px solid #00a65a;
+}
+.in-box-idleColor{
+ border-left: 1px solid #fbaf17;
+}
+.in-box-stopColor{
+ border-left: 1px solid #e01f26;
+}
+.in-box-nogpsColor{
+ border-left: 1px solid #6b7d86;
+}
+.in-box-nopollingColor{
+ border-left: 1px solid #2f353b;
+}
+.in-box-allColor{
+ border-left: 1px solid #3598dc;
+}
+.in-box-occupied{
+  border-left: 1px solid green;
+}
+.in-box-notoccupied{
+  border-left: 1px solid rgb(255, 217, 0);
+}
+
+
+.out-box-movingColor{
+  background: #00a65a;
+ }
+ .out-box-idleColor{
+  background: #fbaf17;
+ }
+ .out-box-stopColor{
+  background: #e01f26;
+ }
+ .out-box-nogpsColor{
+  background: #6b7d86;
+ }
+ .out-box-nopollingColor{
+  background: #2f353b;
+ }
+ .out-box-allColor{
+  background: #3598dc;
+ }
+ .out-box-occupied{
+   background-color: green;
+ }
+ .out-box-notoccupied{
+   background-color: rgb(255, 217, 0);
+   color: black;
+ }
+
+
+.content1{
+  display: inline-block;
+}
+.selected {
+    /* box-shadow: 5px 5px 5px #505050;     */
+    /* box-shadow: 0px 5px 5px #505050; */
+    /* border-radius: 0px 0px 30px; */
+    box-shadow: 6px 6px 2px 0px #616161;
+  }
+
+  @media screen and (max-width: 1330px) and (min-width: 991px){
+    .content1 {
+      padding: 0;
+  }
+  }
+  @media screen and (max-width: 1126px) and (min-width:991px){
+    .content1 span{
+     font-size: 10px !important;
+     
+  }
+  .small-screen{
+    padding-left: 0;
+  }
+  }

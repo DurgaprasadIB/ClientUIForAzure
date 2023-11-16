@@ -1,0 +1,212 @@
+
+th{
+  background-color: #154c87;
+}
+tbody tr:hover {
+  background-color: rgb(2, 184, 245);
+}
+a:hover {
+  color: white;
+}
+h{
+  background-color: rgb(133, 59, 59);
+}
+/* tbody tr{
+  border: 1px solid black;
+} */
+tr{
+  cursor: pointer;
+}
+
+.sidebar {
+  height: 630px !important;
+width: 0;
+position: fixed;
+z-index: 1;
+top: 0;
+left: 0;
+
+overflow-x: hidden;
+transition: 0.5s;
+padding-top: 52px;
+}
+.sidebar-menu {
+white-space: nowrap;
+/* overflow: hidden; */
+overflow-y: hidden !important;
+height: 630px !important;
+}
+/* .sidebar a {
+
+text-decoration: none;
+font-size: 13px;
+color: #818181;
+display: block;
+transition: 0.3s;
+cursor: pointer;
+word-wrap: break-word;
+} */
+
+/* .sidebar a:hover {
+color: #f1f1f1;
+} */
+
+.sidebar .closebtn {
+position: absolute;
+top: 0;
+right: 25px;
+font-size: 10px;
+margin-left: 50px;
+}
+
+.btn {
+font-size: 20px;
+cursor: pointer;
+background-color: #111;
+color: white;
+padding-top: -20px;
+border: none;
+}
+.openbtn {
+margin-left: 15px;
+margin-top: 3px;
+font-size: 20px;
+cursor: pointer;
+background-color: #111;
+color: white;
+
+border: none;
+padding-top: 1px;
+}
+
+.openbtn:hover {
+background-color: #444;
+}
+
+#main {
+transition: margin-left .5s;
+/* padding: 16px; */
+margin-left: 10px;
+margin-top: -14px;
+
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 550px) {
+/* .sidebar {padding-top: 10px;}
+.sidebar {font-size: 15px;} */
+}
+@media screen and (max-width: 800px) {
+.left, .main, .right {
+  width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
+}
+.sidebar {padding-top: 10px;}
+.sidebar a {font-size: 15px;}
+}
+
+.tree, .section ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 60px;
+}
+.tree {
+  background: #021D2F;
+  /* border: 1px solid #d2d2d2; */
+  color: white;
+ margin-top: 60px;
+}
+.tree li {
+  /* border-bottom: 1px solid #d2d2d2; */
+  padding: 5px;
+}
+.tree li:last-child {
+  border: 0;
+}
+
+/* (B) SUB-SECTIONS */
+/* (B1) TOGGLE SHOW/HIDE */
+.section ul { display: none; }
+.section label:hover { display: block; }
+.section label:hover ~ ul { display: block; }
+.section label:hover ~ li { display: block; }
+/* (B2) HIDE CHECKBOX */
+.section input[type=checkbox] { display: none;transform: rotate(270deg); }
+.section input[type=checkbox]:hover { transform: rotate(270deg); }
+
+/* (B3) ADD EXPAND/COLLAPSE ICON  */
+.section { 
+  position: relative; 
+  padding-left: 35px !important;
+  overflow-y: scroll;
+}
+.section label:after {
+  content:"\000AB";
+  position: absolute;
+  top: 5px; left: 0;
+
+  text-align: right;
+  font-size: 20px;
+  /* color: rgb(163, 158, 158);; */
+  transition: all 0.5s;
+  transform: rotate(180deg);
+
+}
+
+.section label{
+color: rgb(163, 158, 158);
+}
+.section label:hover {
+color: white;
+display: block;
+
+
+}
+.section a:hover {
+  color: white;
+  }
+   .ul:hover {
+    color: white;
+    
+    }
+.section input[type="checkbox"]:hover+label::after{ 
+  color: #23c37a;
+  transform: rotate(270deg);
+}
+/* .section input[type="checkbox"]:hover+label::after > .sub-level label::after{ 
+  color: #23c37a;
+  transform: rotate(270deg);
+}
+.sub-level a::after{ 
+  color: #23c37a;
+  transform: rotate(270deg);
+} */
+
+/* .sub-level label::after{ 
+
+  color: #23c37a;
+  transform: rotate(270deg);
+} */
+
+
+/* (B4) SUB-SECTION ITEMS */
+.section ul { margin-top: 0px; }
+.section ul li { color: #f6efef;cursor: pointer;
+
+}
+.tree { list-style: none; padding: 0; margin: 0; }
+#subsec li{
+color: white;
+display: block;
+}
+ul.sub-level {
+  display: none;
+}
+li:hover .sub-level {
+  background: #021D2F;
+  display: block;
+
+}
+/* li:hover .sub-level{ 
+  color: #23c37a;
+  transform: rotate(270deg);
+} */

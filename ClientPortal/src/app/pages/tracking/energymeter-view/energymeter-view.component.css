@@ -1,0 +1,21 @@
+.horizontal-line{
+    width: 95%;
+    height: 2px;
+    background-color: red;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.heading {
+    font-size: 10px; /* Small font size */
+    color: gray;    /* Gray color */
+  }
+
+  .Actualtext {
+    font-size: 14px; /* Big font size */
+    color: black;   /* Black color */
+    font-weight: bold; /* Add some spacing between LastDate and DateTime */
+  }
+  .disabled {
+    opacity: 0.5; /* Adjust the opacity to visually indicate the icon is disabled */
+    pointer-events: none; /* Prevent clicks on the disabled icon */
+  }

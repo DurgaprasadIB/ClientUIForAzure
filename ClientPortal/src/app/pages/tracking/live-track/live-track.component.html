@@ -1,0 +1,151 @@
+
+
+<div class="page-bar text-pageheader" style="margin-left: -25px;margin-top: -5px;">
+    <ul class="page-breadcrumb" style="list-style-type: none;">
+        <li>
+            <span style="color:#03243B"> People <i class="fa fa-angle-double-right"></i> </span>
+            <b> Live Track</b>
+        </li>
+    </ul>
+</div>
+
+<form #newLiveFrm="ngForm" (ngSubmit)="Generate(newLiveFrm.value)">
+
+    <div class="row col-lg-6 col-md-6 col-sm-5 col-xs-6 col-lg-offset-2 col-md-offset-3 col-sm-offset-5 col-xs-offset-0  divStrip">
+
+  
+        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 media-992px">
+            <div class="row">
+                <div class="col-md-9">
+                    <ng-select [items]="trackerList" name="ddTracker" bindLabel="assetNo" bindValue="deviceNo" style="height:32px;"
+                        placeholder="Select Tracker Name" (change)="changeTracker($event)" [(ngModel)]='nrSelect' required>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.assetNo}}
+                        </ng-template>
+                    </ng-select>
+                </div>
+                <div class="col-md-3">
+
+                    <button type="submit" [disabled]="!isTrack"  id="btnAsset" class="btn">
+                        <span> Track</span>
+                      </button>
+                    <!-- <button type="submit" class="trackBtn" tabindex="6">
+                        Track
+                    </button> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <select id="ddlTimer" (change)="selectChangeHandler($event)" class="dropdown arrow " style="display: inline-block; height: 30px;">
+
+                <option value="00">Off</option>
+                <option value="05">5 sec</option>
+                <option selected="selected" value="10">10 sec</option>
+                <option value="15">15 sec</option>
+                <option value="30">30 sec</option>
+                <option value="45">45 sec</option>
+                <option value="60">60 sec</option>
+                <option value="120">120 sec</option>
+            </select>
+            <!-- <span> <img src="./assets/Images/timer.svg" style="height:34px;width:34px;margin-top: 0px;"></span> -->
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="float: right;padding-top: 6px;" *ngIf="isShowListIcon">
+            <img src="./assets/Images/list-info.svg" style="margin-top: 0px;cursor: pointer;" (click)="ShowSideDiv()">
+        </div>
+
+
+
+    </div>
+
+    <div class="sideStrip" *ngIf="isShowRecordPeople">
+        <div>
+            <div class="onclick-memu">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-2">
+                        <img src="./assets/Images/Map.svg" title='Location' height='30' width='30'>
+                    </div>
+                    <!-- <span style="color:#424242; float: right; width: 80%;">
+                        {{LatestData.loc}}
+                    </span> -->
+                    <div class="col-md-10 col-sm-10 col-xs-10">
+                        <div>
+                            <span style="color:#424242;">
+                                {{LatestData.loc}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="onclick-memu">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-2">
+                        <img src="./assets/Images/timer.svg" title='Time' height='30' width='30'>
+                    </div>
+                    <!-- <span style="color:#424242; float: right; width: 80%;    padding-top: 10px;">
+                        {{LatestData.tms1}}
+                    </span> -->
+                    <div class="col-md-10 col-sm-10 col-xs-10">
+                        <div style="margin: 6px auto 0px auto;">
+                            <span style="color:#424242;">
+                                {{tms}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="onclick-memu">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-2">
+                        <img src={{gpsImage}} title='Gps' height='30' width='30'>
+                    </div>
+                 
+                    <div class="col-md-10 col-sm-10 col-xs-10">
+                        <div style="margin:6px auto 0px auto;">
+                            <span style="color:#424242;">
+                                {{LatestData.pos}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="onclick-memu">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-2">
+                        <img src={{ignitionImage}} title='Ignition' height='30' width='30'>
+                    </div>
+                
+                    <div class="col-md-10 col-sm-10 col-xs-10">
+                        <div style="margin: 6px auto 0px auto;">
+                            <span style="color:#424242;">
+                                {{LatestData.igs}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="onclick-memu">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2 col-xs-2">
+                        <img src="./assets/Images/Speed.svg" title='Speed' height='30' width='30'>
+                    </div>
+                   
+                    <div class="col-md-10 col-sm-10 col-xs-10">
+                        <div style="margin: 6px auto 0px auto;">
+                            <span style="color:#424242;">
+                                {{LatestData.spd}} (kmph)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    
+</form>
+<div #mapDiv class="liveTrackmap">
+
+</div>

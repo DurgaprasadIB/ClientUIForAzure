@@ -1,0 +1,47 @@
+<div style="margin-bottom:5px;">
+
+    <div class="row">
+
+        <div class="col-md-2" style="float:left; margin-bottom: 10px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="float: left;padding-bottom:2px;">
+                        <i class="fa fa-list-ul fa-2x" (click)="changeView('live')" title="List View"
+                            style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-area-chart fa-2x" *ngIf='hasChart' (click)="changeView('Chart')"
+                            title="Chart View" style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-camera fa-2x" title="Images" style="color:#3598DC;"></i>
+                        <i class="fa fa-thumb-tack fa-2x" (click)="changeView('pin')" title="Dashboard Pin"
+                            style="cursor: pointer;"></i> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8"
+        style="overflow-y: auto;height: 83vh;padding-left:2%;padding-right:2%;padding-top:1%;padding-bottom: 1%;">
+        <div class="row videoDivList">
+            <div *ngFor="let item of videoFileList">
+                <div class="col-md-4" style="cursor: pointer;" (click)="showImage(item.path)">
+                    <div style="padding:10%;">
+                        <img [src]="item.path" class="rotateimg90" height='75px' [title]="item.name">
+                    </div>
+                    <p>{{item.name}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div>
+            <i class="fa fa-search-minus fa-2x" (click)="zoomOut()" style="cursor: pointer;"></i>&nbsp;
+            <i class="fa fa-search-plus fa-2x" (click)="zoomIn()" style="cursor: pointer;"></i>&nbsp;
+            <i class="fa fa-home fa-2x" (click)="original()" style="cursor: pointer;"></i>
+
+        </div>
+        <div class="shadow"
+            style="margin-top:10px; padding:10%;background-color: #02121E;border-radius: 5px;height: 300px;overflow-y: auto;">
+            <img [src]="url" class="rotateimg90" [style.height]="zoom+'%'">
+        </div>
+    </div>
+</div>

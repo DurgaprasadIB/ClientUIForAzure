@@ -1,0 +1,14 @@
+<footer class="main-footer" *ngIf="showFooter">
+  <div class="pull-right hidden-xs">
+    Version {{webVersion}} | {{supportMail}}
+  </div>
+  <!-- Copyright © 2021 <strong><a href="{{contactWebURL}}" target="_blank">{{companyName}}®</a>.</strong> All rights
+    reserved. -->
+  <div class="pull-left hidden-xs">
+    Copyright © {{thisYear}} <a href="{{contactWebURL}}" target="_blank" rel="noopener">{{companyName}}®</a>. All rights
+    reserved. <a href="{{contactWebURL}}" target="_blank" rel="noopener">
+      <img src={{loginBottomLogo}}  style="cursor: pointer;height: 20px;
+    margin-top: 1px;">
+    </a>
+  </div>
+</footer>

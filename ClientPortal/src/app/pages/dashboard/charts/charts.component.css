@@ -1,0 +1,194 @@
+/* .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    -moz-display: grid;
+    -moz-grid-template-columns: repeat(3, 1fr);
+    -moz-grid-gap: 10px;
+    -webkit-display: grid;
+    -webkit-grid-template-columns: repeat(3, 1fr);
+    -webkit-grid-gap: 10px;
+    -ms-display: grid;
+    -ms-grid-template-columns: repeat(3, 1fr);
+    -ms-grid-gap: 10px;
+    
+} */
+/* .span-col-2{
+  grid-column: span 2 / auto;
+  -webkit-grid-column: span 2 / auto;
+  -moz-grid-column: span 2 / auto;
+  -ms-grid-column: span 2 / auto;
+} */
+.grid{
+  margin-top: 20px;
+}
+.grid .chartBox{
+    background-color: whitesmoke;
+    border-radius: 3px;
+    box-shadow: 3px 3px 5px #cccccc;
+    padding: 5px;
+
+}
+
+.loaderOverlay{
+  position: absolute;
+  z-index:99;
+  /* background: #2929299c; */
+  height: 97%;
+  width: 98%;
+  text-align: center;
+}
+
+/* .innerGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    -webkit-display: grid;
+    -webkit-grid-template-columns: repeat(4, 1fr);
+    -moz-display: grid;
+    -moz-grid-template-columns: repeat(4, 1fr);
+    -ms-display: grid;
+    -ms-grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    padding: 0 10px;
+    font-size: 12px;
+} */
+
+.grid-box{
+    border-radius: 4px;
+    box-shadow: 1px 1px 5px #bdbdbd;
+    cursor: pointer;
+    height: 65px;
+    margin: 9px 7px 8px 7px;
+    display: inline-block;
+    width: 23%;
+  }
+  .grid-box:hover{
+    box-shadow: 3px 3px 5px #bdbdbd;
+  }
+  .greenBox{
+    /* background: #00a65a; */
+    height: 65px;
+    width: 60px;
+    display: inline-block;
+    padding: 18px 0px 0 0px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    text-align: center;
+    color:white;
+  }
+  .content-box{
+    display: inline-block;
+    text-align: right;
+    float: right;
+    padding-right: 8px;
+    padding-top: 5px; 
+  }
+
+.dropdownStyle{
+    display: inline-block;
+    float: right;
+    width: 40%;
+}
+.titleStyle{
+    display: inline-block;
+    font-size: 16px;
+    color: rgb(102, 102, 102);
+    font-family: Helvetica, Arial, sans-serif;
+    opacity: 1;
+}
+.headerDiv{
+    padding: 5px 10px 0px 10px;
+}
+
+
+
+.paragraph{
+  white-space: nowrap; 
+  width: 90px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  pointer-events:none;
+}
+
+
+.paragraph:after {
+  content:"";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  z-index: 1;
+  pointer-events:initial;
+}
+
+.paragraph:hover:after{
+  cursor: pointer;
+}
+
+.tooltip {
+  width: auto;
+  visibility: hidden;
+  background-color: #fff;
+  padding: 10px;
+  -webkit-box-shadow: 0 0 50px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 0 50px 0 rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.paragraph:hover + .tooltip {
+  visibility: visible;
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+.PencildropdownStyle{
+
+}
+@media screen and (max-width:1316px){
+  .grid-box{
+    width: 30%;
+  }
+}
+@media screen and (max-width:768px){
+  .grid-box{
+    width: 98% !important;
+  }
+}
+@media screen and (max-width:998px){
+  .grid-box{
+    width: 44%;
+  }
+}
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  z-index: 999;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.fa-calendar{
+  color: #4d9de0;
+  font-size: 18px;
+  position: relative;
+  top: 4px;
+  right: 10px;
+  cursor: pointer;
+
+}

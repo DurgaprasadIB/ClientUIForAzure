@@ -1,0 +1,40 @@
+@media screen and (max-width:399px){
+    .btn-with-ion-plus-round{
+        margin-left: -10px;
+    }
+    .btn-with-ion-plus-round button{
+        margin-top: 10px;
+    }
+}
+.coloumnSec {
+    padding: 12px;
+    background: #fff;
+    box-shadow: 5px 5px 5px #c1c1c1;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  .coloumnSec .floating-label {
+    margin: 20px 0;
+  }
+  .coloumnSec1 {
+    padding: 12px;
+    background: #fff;
+    box-shadow: 5px 5px 5px #c1c1c1;
+    height: 437px;
+    border-radius: 5px;
+  }
+
+  .coloumnSec1 .floating-label {
+    margin: 20px 0;
+  }
+
+  .addButton{
+    position: absolute;
+    top: 24px;
+    right: 15px;
+}
+.right-left-button{
+    margin-top: 149px;
+    background-color: #4D9DE0 ;
+}

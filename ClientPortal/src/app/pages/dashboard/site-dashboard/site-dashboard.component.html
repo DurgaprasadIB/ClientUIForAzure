@@ -1,0 +1,369 @@
+<div class="page-bar text-pageheader" style="margin-left: -25px;">
+    <ul class="page-breadcrumb" style="list-style-type: none;">
+        <li>
+            <span style="color:#03243B"> Dashboard <i class="fa fa-angle-double-right"></i> </span>
+            <b>Site</b>
+        </li>
+    </ul>
+</div>
+<!-- <section class="content1-header">
+
+</section> -->
+<div class="row" *ngIf="isNotFMS">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <span>Vehicle Status</span>
+                <span class="icon-set">
+                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                    <span class="glyphicon glyphicon-pushpin"></span>
+                    <span class="glyphicon glyphicon-filter"></span>
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </span>
+            </div>
+            <div class="card-block">
+                <div class="row  text-center">
+                    <div class="col-md-4 col-sm-4 col-xs-4" (click)="onMoving()">
+                        <span class="on-menu-display"
+                            style="background-color: #00a65a;cursor: pointer;">{{VehicleMovingCnt}}</span>
+
+                        <div class="centerText">Moving</div>
+                        <div *ngIf="isMoving">
+                            <hr class="moving">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4" (click)="onIdle()">
+                        <span class="on-menu-display"
+                            style="background-color: #fbaf17;cursor: pointer;">{{VehicleIdleCnt}}</span>
+                        <div class="centerText">Idle</div>
+                        <div *ngIf="isIdle">
+                            <hr class="idle">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4" (click)="onStop()">
+                        <span class="on-menu-display"
+                            style="background-color: #e01f26;cursor: pointer;">{{VehicleStopCnt}}</span>
+                        <div class="centerText">Stop</div>
+                        <div *ngIf="isStopped">
+                            <hr class="stopped">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row text-center" style="margin-top:15px;">
+                    <div class="col-md-4 col-sm-4 col-xs-4" (click)="onNoGPS()">
+                        <span class="on-menu-display"
+                            style="background-color: #6b7d86;cursor: pointer;">{{VehicleNogpsCnt}}</span>
+                        <div class="centerText">No GPS</div>
+                        <div *ngIf="isNoGps">
+                            <hr class="noGps">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4" (click)="onNoPOll()">
+                        <span class="on-menu-display"
+                            style="background-color: #2f353b;cursor: pointer;">{{VehicleNoPollCnt}}</span>
+                        <div class="centerText">No Polling</div>
+                        <div *ngIf="isNoPolling">
+                            <hr class="noPolling">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4" (click)="onTotal()">
+                        <span class="on-menu-display"
+                            style="background-color: #3598dc;cursor: pointer;">{{VehicletotalCnt}}</span>
+                        <div class="centerText">All</div>
+                        <div *ngIf="isAll">
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <span>Alerts</span>
+                <span class="icon-set">
+                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                    <span class="glyphicon glyphicon-pushpin"></span>
+                    <span class="glyphicon glyphicon-filter"></span>
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </span>
+            </div>
+
+            <div class="card-block">
+                <div class="row  text-center">
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <span class="alert-menu-display">{{TamperCnt}}</span>
+                        <div class="centerText">Tamper</div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <span class="alert-menu-display">{{SOSCnt}}</span>
+                        <div class="centerText">SOS</div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <span class="alert-menu-display">{{OverSpeedCnt}}</span>
+                        <div class="centerText">Over speed</div>
+                    </div>
+
+                </div>
+
+                <div class="row text-center" style="margin-top:15px;">
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <span class="alert-menu-display">{{GeofenceCnt}}</span>
+                        <div class="centerText">Geofence</div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <span class="alert-menu-display">{{TripCnt}}</span>
+                        <div class="centerText">Trip</div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <span class="alert-menu-display">{{RouteDeviatedCnt}}</span>
+                        <div class="centerText">Route Deviated</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row" *ngIf="isFMS" id="FMSdiv">
+    <div>
+        <div class="col-md-6" style="    padding-right: 8px;">
+            <div class="card" style="border-top-left-radius:8px;border-top-right-radius:8px;">
+                <div class="card-header">
+                    <i class="fa fa-car"></i> 
+                    <span class="headingContent">Vehcile Status</span> 
+                </div>
+                <!-- <hr> -->
+                <div class="row" style="padding: 0 15px 15px 15px;">
+                    <!-- [ngClass]="active"; -->
+                    <div class="col-md-4" (click)="onMoving()">
+                        <div class="out-box out-box-movingColor" [ngClass]="{'selected': isMoving == true}">
+                            <div class="in-box in-box-movingColor">
+                                {{VehicleMovingCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>Moving</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" (click)="onIdle()">
+                        <div class="out-box out-box-idleColor"  [ngClass]="{'selected': isIdle == true}">
+                            <div class="in-box in-box-idleColor">
+                                {{VehicleIdleCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>Idle</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" (click)="onStop()">
+                        <div class="out-box out-box-stopColor"  [ngClass]="{'selected': isStopped == true}">
+                            <div class="in-box in-box-stopColor">
+                                {{VehicleStopCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>Stop</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" (click)="onNoGPS()">
+                        <div class="out-box out-box-nogpsColor"  [ngClass]="{'selected': isNoGps == true}">
+                            <div class="in-box in-box-nogpsColor">
+                                {{VehicleNogpsCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>No GPS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" (click)="onNoPOll()">
+                        <div class="out-box out-box-nopollingColor" [ngClass]="{'selected': isNoPolling == true}">
+                            <div class="in-box in-box-nopollingColor">
+                                {{VehicleNoPollCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>No Polling</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" (click)="onTotal()">
+                        <div class="out-box out-box-allColor" [ngClass]="{'selected': isAll == true}">
+                            <div class="in-box in-box-allColor">
+                                {{VehicletotalCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>All</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6" style="    padding-left: 8px;">
+            <div class="card" style="border-top-left-radius:8px;border-top-right-radius:8px;height: 179px;">
+                <div class="card-header">
+                    <i class="fa fa-car"></i> <span class="headingContent">Trips</span> 
+                </div>
+                <!-- <hr> -->
+                <div class="row" style="padding: 0 15px 15px 15px;">
+                    <div class="col-md-6" (click)="onOccupied()">
+                        <div class="out-box1 out-box-occupied" [ngClass]="{'selected': isOccupied == true}"
+                        style="color:white;">
+                            <div class="in-box1 in-box-occupied">
+                                {{OccupiedCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>Occupied</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 small-screen" (click)="onNotOccupied()">
+                        <div class="out-box1 out-box-notoccupied" [ngClass]="{'selected': isNotOccupied == true}">
+                            <div class="in-box1 in-box-notoccupied">
+                                {{NotOccupiedCnt}}
+                            </div>
+                            <div class="content1">
+                                <span>Not Occupied</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="grid" *ngIf="isFMS">
+    <div class="siteBox" (click)="onMoving()">
+        <div class="count-circle" style="background-color: #00a65a;">
+            {{VehicleMovingCnt}}
+        </div>
+        <div class="status-string">
+            Moving
+        </div>
+        <div *ngIf="isMoving" style="margin-top:-4px;">
+            <hr class="movingFMS">
+        </div>
+
+    </div>
+    <div class="siteBox" (click)="onIdle()">
+        <div class="count-circle" style="background-color: #fbaf17;">
+            {{VehicleIdleCnt}}
+        </div>
+        <div class="status-string">
+            Idle
+        </div>
+        <div *ngIf="isIdle" style="margin-top:-4px;">
+            <hr class="idleFMS">
+        </div>
+    </div>
+    <div class="siteBox" (click)="onStop()">
+        <div class="count-circle" style="background-color: #e01f26;">
+            {{VehicleStopCnt}}
+        </div>
+        <div class="status-string">
+            Stop
+        </div>
+        <div *ngIf="isStopped" style="margin-top:-4px;">
+            <hr class="stoppedFMS">
+        </div>
+    </div>
+    <div class="siteBox" (click)="onNoGPS()">
+        <div class="count-circle" style="background-color: #6b7d86;">
+            {{VehicleNogpsCnt}}
+        </div>
+        <div class="status-string">
+            No GPS
+        </div>
+        <div *ngIf="isNoGps" style="margin-top:-4px;">
+            <hr class="noGpsFMS">
+        </div>
+    </div>
+    <div class="siteBox" (click)="onNoPOll()">
+        <div class="count-circle" style="background-color: #2f353b;">
+            {{VehicleNoPollCnt}}
+        </div>
+        <div class="status-string">
+            No Poling
+        </div>
+        <div *ngIf="isNoPolling" style="margin-top:-4px;">
+            <hr class="noPollingFMS">
+        </div>
+    </div>
+    <div class="siteBox" (click)="onTotal()">
+        <div class="count-circle" style="background-color: #3598dc;">
+            {{VehicletotalCnt}}
+        </div>
+        <div class="status-string">
+            All
+        </div>
+        <div *ngIf="isAll" style="margin-top:-4px;">
+            <hr class="AllFMS">
+        </div>
+    </div>
+    <div class="siteBox" (click)="onOccupied()">
+        <div class="count-circle" style="background-color: green;">
+            {{OccupiedCnt}}
+        </div>
+        <div class="status-string">
+            Occupied
+        </div>
+        <div *ngIf="isOccupied" style="margin-top:-4px;">
+            <hr class="occupiedFMS">
+        </div>
+    </div>
+    <div class="siteBox" (click)="onNotOccupied()">
+        <div class="count-circle" style="background-color: rgb(255, 217, 0); color:black;">
+            {{NotOccupiedCnt}}
+        </div>
+        <div class="status-string">
+            Not occupied
+        </div>
+        <div *ngIf="isNotOccupied" style="margin-top:-4px;">
+            <hr class="notoccupiedFMS">
+        </div>
+    </div>
+</div> -->
+
+
+<div style="margin-top:10px;">
+    <div class="card" style="width:100%;border-top-left-radius:8px;border-top-right-radius:8px;">
+        <div class="card-header">
+            <i class="fa fa-map-marker"></i>
+            <span class="headingContent">Live Tracking</span>
+            <span class="icon-set">
+                <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                <span class="glyphicon glyphicon-pushpin"></span>
+                <span class="glyphicon glyphicon-filter"></span>
+                <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </span>
+        </div>
+        <div class="card-block1">
+            <div #mapDiv class="siteMap">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <script>
+    // Add active class to the current button (highlight it)
+    debugger;
+    var header = document.getElementById("FMSdiv");
+    var btns = header.getElementsByClassName("div");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            debugger;
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }
+</script> -->

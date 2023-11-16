@@ -1,0 +1,16 @@
+{
+    "Title": "అనువాద డెమో",
+    "WelcomeMessage": "అంతర్జాతీయ డెమో అప్లికేషన్ కు స్వాగతం",
+    "SampleText": "ఇది డెమో కోసం ప్రదర్శించడానికి నమూనా టెక్స్ట్",
+    "LogOut": "లాగ్అవుట్",
+    "RoleMaster": "మాస్టర్",
+    "RoleName": "పాత్రలు",
+    "NewRole": "కొత్త పాత్ర",
+    "removeRole": "తొలగించు",
+    "removePermission": "అనుమతులు",
+    "roleTextName":"పాత్ర పేరు",
+    "roleTextDescription":"వివరణ",
+    "roleClose":"క్లోజ్",
+    "roleSave":"సేవ్",
+    "NewUser":"కొత్త వాడుకరి"
+}

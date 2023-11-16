@@ -1,0 +1,1260 @@
+<div class="row" style="text-align: center;color: white;margin-bottom: 2px;">
+  <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+    <div (click)="showDiv('scheduled')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+      <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+      Reports
+    </div>
+    <div *ngIf="showSCONReports" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+    </div>
+  </div>
+  <div class="col-md-2" *ngIf='hasLogReports' style=" padding-left: 2px; padding-right: 2px">
+    <div (click)="showDiv('LogReports')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+      <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+      Log Reports
+    </div>
+    <div *ngIf="showLogReports" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+    </div>
+  </div>
+  <div class="col-md-2" *ngIf='hasCharts' style=" padding-left: 2px; padding-right: 2px">
+    <div (click)="showDiv('chart')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+      <span class="fa fa-line-chart" style="margin-right: 3%;"></span>
+      Charts
+    </div>
+    <div *ngIf="showCharts" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+    </div>
+  </div>
+  <div class="col-md-3" style="float: right;
+  padding-top: 1%;">
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" *ngIf="isSuperAdmin && hasPdfTemplate" (click)="openPDFTemplate();"
+          title="PDF logo Template" id="btnPdfTemp" class="btn">
+          <i class="fa fa-cog"></i>
+          <span> PDF Logo</span>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" *ngIf="showReportButton" (click)="openFilter('New');" title="New Report" id="btnReport"
+          class="btn">
+          <i class="ion-plus-round"></i>
+          <span> Report</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="padding-left:0.5%;padding-right:0.5%;font-size: small;">
+  <div *ngIf="showCharts" style="padding-top: 0.5%;">
+    <div class="row">
+      <div class="col-md-2" style="height: 480px;overflow-y: auto;" *ngIf="!collapsedMenu">
+        <i class="fa fa-arrow-left collpaseArrow" aria-hidden="true" (click)="collapsedMenu = true"></i>
+
+        <div *ngFor="let item of allsavedReports;let i=index">
+          <div class="col-md-12" style="padding-left: 10px;
+          margin-bottom: 10px;">
+            <div class="row">
+              <div class="rpItem" [title]="item.reportName"
+                (click)="getReport(item.reportId,item.mathfunctions,item.reportName,'')" style="color:#743FAA ;">
+                <div [ngClass]="{'ActiveItem' : item.reportId === selectedItemID}">
+                  {{item.displayName}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div [ngClass]="{'col-md-10' : !collapsedMenu, 'col-md-12': collapsedMenu}"
+        style="padding-right: 2.5%; background-color: #FFF;height: 500px;">
+        <i class="fa fa-arrow-right expandArrow" aria-hidden="true" (click)="collapsedMenu=false;"
+          *ngIf="collapsedMenu"></i>
+
+        <div class="row" style="padding-top:2px;">
+          <div class="col-md-1" style="float: right;">
+            <div class="row">
+              <div class="col-md-1" style="padding-left:0px;">
+                <div *ngIf="showNPbtn && !isPrevDisabled" style="width: 20px;
+                padding-left: 6px;background-color: black;color: white;cursor:pointer;" title="previous"
+                  (click)="plotPrev()">
+                  <i class="fa fa-angle-left"></i>
+                </div>
+              </div>
+              <div class="col-md-1" style="padding-left:10px;">
+                <div *ngIf="showNPbtn && !isNextDisabled" style="width: 20px;
+                padding-left: 6px;background-color: black;color: white;cursor:pointer;" title="next"
+                  (click)="plotNext()">
+                  <i class="fa fa-angle-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!isTrendType">
+          <div class="col-md-4">
+            <div id="RChart1" (click)="zoomRChart('1')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="RChart2" (click)="zoomRChart('2')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="RChart3" (click)="zoomRChart('3')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="RChart4" (click)="zoomRChart('4')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="RChart5" (click)="zoomRChart('5')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="RChart6" (click)="zoomRChart('6')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="isTrendType" style=" background-color: #FFF;">
+          <div class="col-md-4">
+            <div id="trChart1" (click)="zoomChart('1')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="trChart2" (click)="zoomChart('2')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="trChart3" (click)="zoomChart('3')" style="height: 200px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="trChart4" (click)="zoomChart('4')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div id="trChart5" (click)="zoomChart('5')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+          <!-- style="border: solid 1px #EDEEF4;margin-bottom: 5px;" -->
+          <div class="col-md-4">
+            <div id="trChart6" (click)="zoomChart('6')" style="height: 200px;margin-left: -20px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="showSCONReports">
+    <div class="col-lg-2" style="padding-left: 1%;
+    padding-right: 0%;text-align: center;">
+      <!-- <div style="height: 15px;"> <i *ngIf="showSCReports" class="fa fa-file-text-o"></i></div> -->
+      <div class="reportTypeTab" (click)="showSchedule()"
+        style="margin-left: 1.2%;cursor: pointer;    height: 22px; padding-top: 2px;"
+        [ngStyle]="{'font-weight':scheduleReportFont,'background-color':scheduleReportBG}">Schedule
+      </div>
+    </div>
+    <div class="col-lg-2" style="padding-left: 1%;
+    padding-right: 0%;text-align: center;">
+      <!-- <div style="height:15px;"> <i *ngIf="showOnDemandReports" class="fa fa-file-text-o"></i></div> -->
+      <div class="reportTypeTab" (click)="showOnDemand()" style="margin-left: 0.2%;cursor: pointer;    height: 22px;
+    padding-top: 2px;" [ngStyle]="{'font-weight':onDemandReportFont,'background-color':onDemandReportBG}">On-Demand
+        <!-- &nbsp;&nbsp;<i class="fa fa-refresh" (click)="CheckOnDemandReport()"> </i> -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div *ngIf="showSCReports">
+      <!-- <div class="row"> -->
+      <!-- [ngStyle]="{'height':scheduleReportSize}" -->
+      <div class="col-md-12" style="    padding-left: 1.2%;">
+        <div style="height: 430px;overflow-y: auto;">
+          <table id="schrTable" class="table tabsensor le-striped" style="table-layout: fixed;">
+            <thead class="table-head-background">
+              <tr>
+                <th style="width: 150px;overflow: hidden;">Name</th>
+                <th style="width: 75px;">Device(s)</th>
+                <th style="width: 75px;">Sensor(s)</th>
+                <th style="width: 200px;">Frequency</th>
+                <th style="width: 150px;">Duration</th>
+                <th style="width: 150px;">Created By</th>
+                <th style="width: 130px;">Last Updated</th>
+                <th style="width: 60px;z-index: 10;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rep of reportListForTableSchedule">
+                <td style="width: 200px;overflow: hidden;" title="{{rep.reportName}}">
+                  {{rep.reportName}}
+                </td>
+                <td>
+                  {{rep.deviceCount}} <i class="fa fa-microchip" title="{{rep.deviceNames}}"
+                    style="color: #34949d;"></i>
+                </td>
+                <td>
+                  {{rep.sensorCount}} <i class="fa fa-circle" title="{{rep.sensorNames}}" style="color: #34949d;"></i>
+
+
+                <td>
+                  {{rep.freqInTable}} {{rep.timeToSend}}
+                </td>
+                <td>
+                  {{rep.period}}
+                </td>
+                <td>
+                  {{rep.updatedBy}} </td>
+                <td>
+                  {{rep.lastUpdated}}
+                </td>
+                <td>
+                  <div class="dropdownload" style="margin-right: 5px;">
+                    <i class="btn dropbtn fa fa-ellipsis-v" aria-hidden="true" style="margin-top:0px;"></i>
+                    <div class="dropdownload-content" style="top:0;right:15px;background-color: #fff;min-width: 150px;">
+                      <span>
+                        <i class="fa fa-download" *ngIf="rep.blockDownload" title="Download Not Allowed"
+                          style="font-size:18px;cursor:not-allowed;color:#46484a;">&nbsp;&nbsp;</i>
+                        <i class="fa fa-download" *ngIf="!rep.blockDownload"
+                          (click)="getReportFile(rep.reportFile)" title="Download"
+                          style="font-size:18px;cursor:pointer;color:#398BF7;">&nbsp;&nbsp;</i>
+                        <i class="fa fa-pencil-square-o"
+                          *ngIf="rep.showEdit && rep.timeToSend.length>0 && rep.showDownload"
+                          (click)="getSavedReports(rep.reportId,rep.dynamicType)" title="Edit"
+                          style="font-size:18px;cursor:pointer;color:#745AF2;">&nbsp;&nbsp;</i>
+                        <i class="fa fa-trash-o" *ngIf="rep.showDelete && rep.showDownload"
+                          (click)="deleteReport(rep.reportId,rep.reportName,'')" title="Remove"
+                          style="font-size:18px;cursor:pointer;color:#E55350;">&nbsp;&nbsp;</i>
+                          
+                        <i class="fa fa-bars" *ngIf="rep.blockDownload"  title="History Not Allowrd"
+                        style="font-size:18px;cursor:pointer;cursor:not-allowed;color:#46484a;"></i>
+                        <i class="fa fa-bars" *ngIf="!rep.blockDownload" (click)="showRepoList(rep.reportId)" title="History"
+                          style="font-size:18px;cursor:pointer;color:#46d262;"></i>
+                      </span>
+                      <!-- <span *ngIf="rep.showEdit && rep.timeToSend.length>0 && rep.showDownload"
+                        (click)="getSavedReports(rep.reportId,rep.dynamicType)" title="Edit">
+                        <i class="fa fa-pencil-square-o" style="font-size:18px;cursor:pointer;color:#745AF2;"></i>
+                        Edit</span>
+                      <span *ngIf="rep.showDelete && rep.showDownload"
+                        (click)="deleteReport(rep.reportId,rep.reportName,'')" title="Delete">
+                        <i class="fa fa-trash-o" style="font-size:18px;cursor:pointer;color:#E55350;"></i>
+                        Delete
+                      </span>
+                      <span (click)="showRepoList(rep.reportId)" title="History">
+                        <i class="fa fa-bars"
+                          style="background-color:#46d262;font-size:18px;cursor:pointer;color:white;"></i>
+                        History
+                      </span> -->
+                    </div>
+                  </div>
+                  <!-- <div class="col-md-3">
+                  <div *ngIf="rep.showDownload"
+                    style="background-color:#398BF7;border-radius: 5px;padding-left: 6px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -25px;">
+                    <i class="fa fa-download" style="font-size:18px;cursor:pointer;color:white;"
+                      (click)="getReportPDF(rep.reportId,'',rep.reportName,'')" title="Download"></i>
+                  </div>
+                  <div *ngIf="!rep.showDownload"
+                    style="border-radius: 5px;padding-left: 8px;height: 25px;padding-top: 3px;width: 30px;margin-right: 3px;margin-left: -25px;">
+                    <i class="fa fa-spinner fa-spin" style="color:#398BF7;" title="pending"></i>
+                  </div>
+                </div> -->
+                  <!-- <div class="col-md-3">
+                  <div *ngIf="rep.showEdit && rep.timeToSend.length>0 && rep.showDownload"
+                    style="background-color:#745AF2;border-radius: 5px;padding-left: 7px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -40px;">
+                    <i class="fa fa-pencil-square-o" style="font-size:18px;cursor:pointer;color:white;"
+                      (click)="getSavedReports(rep.reportId,rep.dynamicType)" title="Edit"></i>
+                  </div>
+                  <div *ngIf="!rep.showEdit || rep.timeToSend.length==0 || !rep.showDownload"
+                    style="background-color:gray;border-radius: 5px;padding-left: 7px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -40px;">
+                    <i class="fa fa-pencil-square-o" style="font-size:18px;cursor:no-drop;color:white;"
+                      title="Edit | No Access"></i>
+                  </div>
+                </div> -->
+                  <!-- <div class="col-md-3">
+                  <div *ngIf="rep.showDelete && rep.showDownload"
+                    style="background-color:#E55350;border-radius: 5px;padding-left: 7px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -55px;">
+                    <i class="fa fa-trash-o" style="font-size:18px;cursor:pointer;color:white;"
+                      (click)="deleteReport(rep.reportId,rep.reportName,'')" title="Delete"></i>
+                  </div>
+                  <div *ngIf="!rep.showDelete || !rep.showDownload"
+                    style="background-color:gray;border-radius: 5px;padding-left: 7px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -55px;">
+                    <i class="fa fa-trash-o" style="font-size:18px;cursor:no-drop;color:white;"
+                      title="Delete | No Access"></i>
+                  </div>
+                </div> -->
+                  <!-- <div class="col-md-3">
+                  <div
+                    style="background-color:#46d262;border-radius: 5px;padding-left: 7px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -70px;">
+                    <i class="fa fa-bars" style="font-size:18px;cursor:pointer;color:white;"
+                      (click)="showRepoList(rep.reportId)" title="History"></i>
+                  </div>
+                </div> -->
+                  <div class="col-md-3" *ngIf="rep.showThis" style="    z-index: 10;
+                position: absolute;
+                left: 66%;
+                top: 35%;
+                background-color: #fff;
+                border: solid 0.5px;
+                border-radius: 3px;
+                height: 70px;">
+                    <span style="font-weight: bold;">{{rep.reportName}} : </span><label>Date Range</label>
+                    <i class="fa fa-window-close" style="float: right;margin-top: 1%;color: crimson;cursor: pointer;"
+                      (click)="showRepoList(rep.reportId)"></i>
+                    <div class="row">
+                      <div class="col-md-10">
+                        <input [max]="maxDate" [min]="minDate" style="width: 215px;    height: 30px;"
+                          [selectMode]="'range'" [owlDateTimeTrigger]="dt11" [owlDateTime]="dt11" name="fromDatelist"
+                          id="fromDatelist" [(ngModel)]="fromDatelist" placeholder="Date Range"
+                          class="date-picker-styles" style="height: 30px; " readonly>
+                        <owl-date-time [pickerType]="'calendar'" #dt11></owl-date-time>
+                      </div>
+                      <div class="col-md-2">
+                        <i class="fa fa-eye" style="cursor:pointer;" (click)="selectedDuration(rep.reportId)"></i>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- </div> -->
+    </div>
+    <div *ngIf="showOnDemandReports">
+      <!-- <div class="row"> -->
+      <!-- *ngIf="reportListForTableOnDemand.length>0" -->
+      <div class="col-md-12" style="    padding-left: 1.2%;">
+        <div style="height: 430px;overflow-y: auto;">
+          <table id="onDrTable" class="table table-striped" style="table-layout: fixed;">
+            <thead class="table-head-background">
+              <tr>
+                <th style="width: 200px;overflow: hidden;">Name</th>
+                <th style="width: 100px;">Device(s)</th>
+                <th style="width: 100px;">Sensor(s)</th>
+                <th style="width: 250px;">Duration</th>
+                <th style="width: 150px;">Created By</th>
+                <th style="width: 130px;z-index: 1;">Last Updated</th>
+                <th style="width: 70px;z-index: 1;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rep of reportListForTableOnDemand">
+                <td style="width: 200px;overflow: hidden;" title="{{rep.reportName}}">
+                  {{rep.reportName}}
+                </td>
+                <td>
+                  {{rep.deviceCount}} <i class="fa fa-microchip" title="{{rep.deviceNames}}"
+                    style="color: #34949d;"></i>
+                  <!-- <span *ngIf="rep.deviceCount>1">
+                    {{rep.deviceCount}} <i class="fa fa-share-alt" title="{{rep.deviceNames}}"
+                      style="color: #34949d;"></i>
+                  </span>
+                  <span *ngIf="rep.deviceCount==1">
+                    {{rep.deviceNames}}
+                  </span> -->
+                </td>
+                <td>
+                  {{rep.sensorCount}} <i class="fa fa-circle" title="{{rep.sensorNames}}" style="color: #34949d;"></i>
+
+                  <!-- <span *ngIf="rep.sensorCount>1">
+                    {{rep.sensorCount}} <i class="fa fa-circle" title="{{rep.sensorNames}}" style="color: #34949d;"></i>
+
+                  </span>
+                  <span *ngIf="rep.sensorCount==1">
+                    {{rep.sensorNames}}
+                  </span> -->
+                </td>
+                <td>
+                  {{rep.period}}
+                </td>
+                <td>
+                  {{rep.updatedBy}}
+                </td>
+                <td>
+                  {{rep.lastUpdated}}
+                </td>
+                <td>
+                  <div *ngIf="rep.isOnDemand==1">
+                    <div class="col-md-12" style="padding-left: 0;font-size: 10px;color:#248770;">
+                      Report generation in progress..
+                    </div>
+                  </div>
+                  <div *ngIf="rep.isOnDemand==0">
+                    <div class="dropdownload" *ngIf="rep.showDownload" style="margin-right: 5px;">
+                      <i class="btn dropbtn fa fa-ellipsis-v" aria-hidden="true" style="margin-top:0px;"></i>
+                      <div class="dropdownload-content"
+                        style="top:0;right:15px;background-color: #fff;min-width: 150px;">
+                        <span>
+                          <i class="fa fa-download" style="font-size:18px;cursor:pointer;color:#398BF7;"
+                            (click)="getReportPDF(rep.reportId,'',rep.reportName,'')" title="Download">&nbsp;&nbsp;</i>
+                          <i class="fa fa-trash-o" *ngIf="rep.showDelete && rep.showDownload"
+                            (click)="deleteReport(rep.reportId,rep.reportName,'')" title="Remove"
+                            style="font-size:18px;cursor:pointer;color:#E55350;">&nbsp;&nbsp;</i>
+                        </span>
+
+                        <!-- <div class="col-md-4">
+                      <div *ngIf="rep.showDownload"
+                        style="background-color:#398BF7;border-radius: 5px;padding-left: 6px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -13px;">
+                        <i class="fa fa-download" style="font-size:18px;cursor:pointer;color:white;"
+                          (click)="getReportPDF(rep.reportId,'',rep.reportName,'')" title="Download"></i>
+                      </div>
+                      <div *ngIf="!rep.showDownload"
+                        style="border-radius: 5px;padding-left: 8px;height: 25px;padding-top: 3px;width: 30px;margin-right: 3px;margin-left: -13px;">
+                        <i class="fa fa-spinner fa-spin" style="color:#398BF7;" title="pending"></i>
+                      </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-4">
+                      <div *ngIf="rep.showDelete && rep.showDownload"
+                        style="background-color:#E55350;border-radius: 5px;padding-left: 7px;height: 25px;padding-top: 4px;width: 30px;margin-right: 3px;margin-left: -70px;">
+                        <i class="fa fa-trash-o" style="font-size:18px;cursor:pointer;color:white;"
+                          (click)="deleteReport(rep.reportId,rep.reportName,'')" title="Delete"></i>
+                      </div>                     
+                    </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- {{rep.icon2}}{{rep.icon3}}{{rep.icon4}}{{rep.icon5}} -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- </div> -->
+    </div>
+    <div *ngIf="showLogReports">
+      <div class="col-md-12" style="    padding-left: 1.2%;">
+        <table id="logTable" class="table table-striped" style="width:1100px;">
+          <thead class="table-head-background">
+            <tr>
+              <th style="width: 150px;">Name</th>
+              <!-- <th style="width: 200px;">Frequency</th>
+              <th>Time</th> -->
+              <th style="width: 100px;">Updated By</th>
+              <th style="width: 150px;">Last Updated</th>
+              <th style="width: 10px;">Action</th>
+              <th style="width: 52px;"></th>
+              <th style="width: 30px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modal #modalChart [modalTitle]="[maxViewTitle]" [width]="800" style="top:0px;" [maximizable]="true">
+  <ng-container class="app-modal-body" style="background-color: white;">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="trChartMax" style="height: 450px;margin-left: -20px;">
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</app-modal>
+<app-modal #modalPdfTemp [modalTitle]="'PDF template'" [width]="800" style="top:0px;height: 600px;"
+  [maximizable]="true">
+  <ng-container class="app-modal-body" style="background-color: white;">
+    <div class="row" style="padding-bottom: 3%;padding-top:2%">
+      <div class="col-md-4" style="padding-left:2%;cursor: pointer;" (click)="selectedView='1'">
+        <img src="assets/Images/NoLogo.png" width="90%" height="80px" [ngClass]="{'divHig':selectedView==='1'}">
+        <p style="padding-top: 4%; padding-left: 2%;font-size: larger;">No Header Logo</p>
+      </div>
+      <div class="col-md-4" (click)="selectedView='2'" style="cursor: pointer;">
+        <img src="assets/Images/MyCompLogoRight.png" width="90%" height="80px"
+          [ngClass]="{'divHig':selectedView==='2'}">
+        <p style="padding-top: 4%; padding-left: 2%;font-size: larger;">My Company Logo on Right</p>
+      </div>
+      <div class="col-md-4" (click)="selectedView='3'" style="cursor: pointer;">
+        <img src="assets/Images/MyCompLogoLeft.png" width="90%" height="80px" [ngClass]="{'divHig':selectedView==='3'}">
+        <p style="padding-top: 4%; padding-left: 2%;font-size: larger;">My Company Logo on Left</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4" (click)="selectedView='4'" style="cursor: pointer;">
+        <img src="assets/Images/ClientLogoLeft.png" width="90%" height="80px" [ngClass]="{'divHig':selectedView==='4'}">
+        <p style="padding-top: 4%; padding-left: 2%;font-size: larger;">Client Logo on Left</p>
+      </div>
+      <div class="col-md-4" (click)="selectedView='5'" style="cursor: pointer;">
+        <img src="assets/Images/ClientLogoRight.png" width="90%" height="80px"
+          [ngClass]="{'divHig':selectedView==='5'}">
+        <p style="padding-top: 4%; padding-left: 2%;font-size: larger;">Client Logo on Right</p>
+      </div>
+      <div class="col-md-4" (click)="selectedView='6'" style="cursor: pointer;">
+        <img src="assets/Images/BothLogos.png" width="90%" height="80px" [ngClass]="{'divHig':selectedView==='6'}">
+        <p style="padding-top: 2%; padding-left: 2%;font-size: larger;margin-bottom: 0px;">Client Logo on Left &</p>
+        <p style="padding-left: 2%;font-size: larger;">My Company Logo on Right</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4" (click)="selectedView='7'" style="cursor: pointer;">
+        <img src="assets/Images/MyComLeftandClientRight.png" width="90%" height="80px"
+          [ngClass]="{'divHig':selectedView==='7'}">
+        <p style="padding-top: 4%; padding-left: 2%;font-size: larger;margin-bottom: 0px;">Client Logo on Right &</p>
+        <p style="padding-left: 2%;font-size: larger;">My Company Logo on Left</p>
+      </div>
+    </div>
+
+  </ng-container>
+  <ng-container class="app-modal-footer">
+    <!-- <button type="button" class="btn btn-danger" (click)="modalPdfTemp.hide()">
+      <i class="fa fa-close"></i> Close </button> &nbsp; -->
+    <button type="submit" class="btn btn-success" (click)="saveTemplate()">
+      <i class="fa fa-save"></i> Save </button>
+  </ng-container>
+</app-modal>
+<app-modal #modalFilter [modalTitle]="[createReportModal]" [width]="1000" style="height: 300px;">
+  <ng-container class="app-modal-body" style="background-color: white;">
+    <div style="padding-left: 1%;
+    padding-right: 1%;">
+      <div class="row" *ngIf="isCreate" style="margin-left: 0px;">
+        <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+          <div (click)="showReportFilter('Device')" class="tabStyle"
+            style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-line-chart" style="margin-right: 3%;"></span>
+            Device Report
+          </div>
+          <div *ngIf="isDeviceReport" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+          </div>
+        </div>
+        <div class="col-md-2" *ngIf='hasLogReports' style=" padding-left: 2px; padding-right: 2px">
+          <div (click)="showReportFilter('log')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+            Log Report
+          </div>
+          <div *ngIf="islogReport" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+          </div>
+        </div>
+        <div class="col-md-2" *ngIf='hasRegReports' style=" padding-left: 2px; padding-right: 2px">
+          <div (click)="showReportFilter('regReport')" class="tabStyle"
+            style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+            CDD Region Report
+          </div>
+          <div *ngIf="isRegionReport" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isDeviceReport">
+        <div class="row" style="display: none;">
+          <div class="col-md-6">
+            <div class="floating-label">
+              <label class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Rmode" [value]="false" [(ngModel)]="mode" checked
+                  (change)="onDemand();" />
+                <div style="margin-top: -24px; padding-left: 20px;">On Demand</div>
+              </label> &nbsp;&nbsp;
+              <label class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Rmode" [value]="true" [(ngModel)]="mode"
+                  (change)="onScheduled();" />
+                <div style="margin-top: -24px; padding-left: 20px;">Scheduled</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-sm-6 col-xs-12" style="padding-top: 0.5%;padding-bottom: 0.5%;"
+            *ngIf='isSensorReading'>
+            <div style="padding: 2% 5% 2% 5%; background-color: #fff; border-radius: 5px;">
+              <label>Report Format <span style="color: red;">*</span>
+                <span style="color: rgb(0, 153, 255);" *ngIf="radioSelected!=='PDF' && radioSelected!=='Excel'"> Charts
+                  are
+                  not available</span>
+              </label>
+              <div class="row">
+                <div class="col-md-3" *ngFor="let item of reportFormatList">
+                  <input type="radio" [(ngModel)]="radioSelected" name="list_name" value="{{item.value}}"
+                    (change)="onItemChange(item)" />
+                  <span style="    padding-left: 2%;
+            position: absolute;
+            padding-top: 4%;">{{item.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-12" style="padding-top: 0.5%;padding-bottom: 0.5%;">
+            <div style="padding: 2% 5% 2% 5%; background-color: #fff; border-radius: 5px;"> <label>Report Type</label>
+              <div class="row">
+                <div class="col-md-4" *ngFor="let item of reportTypeList">
+                  <input type="radio" [(ngModel)]="radioRPSelected" name="RPlist_name" value="{{item.value}}"
+                    (change)="onRPItemChange(item)" />
+                  <span style="    padding-left: 2%;
+            position: absolute;
+            padding-top: 4%;">{{item.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Region <span style="color: red;">*</span></label>
+            <ng-select [items]="regionsList" [dropdownPosition]="'bottom'" bindLabel="regionName" bindValue="regionId"
+              placeholder="Region" [(ngModel)]='regionId' (change)="getDevices('')" name="_regionId">
+              <ng-template ng-label-tmp let-item="item">
+                {{item.regionName}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Model <span style="color: red;">*</span></label>
+            <ng-select [items]="modelList" [dropdownPosition]="'bottom'" bindLabel="modelName" bindValue="modelId"
+              placeholder="Model" [(ngModel)]='modelId' (change)="getSensorList('')" name="_modelId">
+              <ng-template ng-label-tmp let-item="item">
+                {{item.modelName}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Device <span style="color: red;">*</span></label>
+            <ng-select [items]="FilterDeviceList" [multiple]=true [closeOnSelect]="false"
+              [(ngModel)]='deviceSelectedList' style="color:#212121" bindLabel="deviceName" bindValue="deviceId"
+              (change)="selectDev()" placeholder="Select" name="deviceSelect">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div *ngIf="deviceSelectedList.length === FilterDeviceList.length">
+                  All (Default)
+                </div>
+                <div *ngIf="deviceSelectedList.length !== FilterDeviceList.length">
+                  <div class="ng-value" style="  width:1px; word-wrap: break-word;">
+                    <!-- <span class="ng-value-label">{{items.length}} Selected...</span> -->
+                    <span class="ng-value-label">{{selectedDevice}}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Sensor <span style="color: red;">*</span></label>
+            <ng-select [items]="SensorList" [multiple]=true [closeOnSelect]="false" [(ngModel)]='sensorSelectedList'
+              style="color:#212121" bindLabel="keyName" bindValue="key" (change)="getMathFun();" placeholder="Select"
+              name="deviceSelect">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div *ngIf="sensorSelectedList.length === SensorList.length">
+                  All (Default)
+                </div>
+                <div *ngIf="sensorSelectedList.length !== SensorList.length">
+                  <div class="ng-value" style="  width:1px; word-wrap: break-word;">
+                    <span class="ng-value-label">{{selectedSensor}}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 1%;">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Sensor Function <span style="color: red;">*</span></label>
+            <ng-select [items]="SensorMathFiltered" style="    border: solid 1px #c1c1c1;
+            border-radius: 5px;" [(ngModel)]="mathSelectedList" name="mathSelect" bindLabel="functionName"
+              bindValue="mathId" placeholder="Select" (change)="sensorFunction()">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.functionName}}
+            </ng-template>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isETimeInterval">
+            <label>Time Interval <span style="color: red;">*</span></label>
+            <ng-select [items]="filteredEnergyPeriodRange"  [(ngModel)]="ETimeinterval" name="Energy Time interval"
+              bindLabel="pVal" bindValue="pId" placeholder="Time Interval" (change)="checkEnergyTimeRange()">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.pVal}}
+            </ng-template>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isScheduled && !isETimeInterval">
+            <label>Duration <span style="color: red;">*</span></label>
+            <ng-select [items]="DateRangeList" style="    border: solid 1px #c1c1c1;
+border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId" placeholder="Select"
+              (change)="checkDateRange($event)">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.dtName}}
+            </ng-template>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isScheduled && isETimeInterval">
+            <label>Duration <span style="color: red;">*</span></label>
+            <ng-select [items]="DateRangeEnergyList" style="    border: solid 1px #c1c1c1;
+border-radius: 5px;" [(ngModel)]="dateEnergyRange" name="dateEnergyRange" bindLabel="dtName" (change)="checkDateRangeEnergy($event)" bindValue="dtId" placeholder="Select">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.dtName}}
+            </ng-template>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isHourly && !isScheduled && isETimeInterval">
+            <div><label>Date<span style="color: red;">*</span></label></div>
+            <input type="date" id="datepicker" style="height: 36px;border:1px solid #ccc; border-radius: 4px; width: 150px;margin-right: 10px;" [max]="maxDateH" [min]="minDateH" name="datepicker" [(ngModel)]="hourlyDate">
+          </div>
+          <div class="col-md-3" *ngIf="isMonthly && !isScheduled && isETimeInterval">
+            <label for="startMonth">Start Month:</label>
+            <input type="month" id="startMonth" [max]="maxDateM" [min]="minDateM" [(ngModel)] = "startMonth" style="height: 36px;border:1px solid #ccc; border-radius: 4px; width: 150px;" name="startMonth">
+          </div>
+          <div class="col-md-3" *ngIf="isMonthly  && !isScheduled && isETimeInterval">
+            <label for="endMonth">End Month:</label>
+            <input type="month" id="endMonth" [max]="maxDateM" [min]="minDateM" [(ngModel)] = "endMonth" style="height: 36px;border:1px solid #ccc; border-radius: 4px; width: 150px;" name="endMonth">
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isDates && !isETimeInterval">
+            <label>Date Range<span style="color: red;">*</span></label>
+            <input [max]="maxDate" [min]="minDate" style="width: 215px;    height: 30px;" [selectMode]="'range'"
+              [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate" [(ngModel)]="fromDate"
+              placeholder="Date Range" class="date-picker-styles" readonly (blur)="Morethan_30days()">
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="!isScheduled &&  isEDaily && isETimeInterval">
+            <label>Date Range<span style="color: red;">*</span></label>
+            <input [max]="maxDate" [min]="minDateE" style="width: 215px;    height: 30px;" [selectMode]="'range'"
+              [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate" [(ngModel)]="fromEnergyDate"
+              placeholder="Date Range" class="date-picker-styles" readonly (blur)="Morethan_30days()">
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf=" isTimes && isSensorReading &&  !isETimeInterval">
+            <!--*ngIf=" isTimes && isSensorReading"-->
+            <label>Time Range (24hrs format)<span style="color: red;">*</span></label>
+            <div class="floating-input" style="border-bottom:none;padding-top: 3px;">
+              <input type="text" style="width: 13%;" name="reportFHr" maxlength="2"
+                (keypress)="checkNumericsFHr($event)" autocomplete="off" (paste)="onPasteFHr($event,'FHr')" [(ngModel)]="reportFHR" placeholder="HH">
+              : 00
+              ~
+              <input type="text" style="width: 13%;" name="reportTHr" maxlength="2"
+                (keypress)="checkNumericsTHr($event)" autocomplete="off" (paste)="onPasteFHr($event,'')" [(ngModel)]="reportTHR" placeholder="HH">
+              : 00
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 1%;">
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf='isSensorReading && !is31Days && !isETimeInterval'>
+            <label>Time Interval <span style="color: red;">*</span></label>
+            <ng-select [items]="filteredPeriodRange" [disabled]="is31Days" [(ngModel)]="interval" name="interval"
+              bindLabel="pVal" bindValue="pId" placeholder="Time Interval">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.pVal}}
+            </ng-template>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" style="padding-top: 2%;" *ngIf='isSensorReading && !is31Days &&  !isETimeInterval'>
+            <div class="checkbox">
+              <label><input type="checkbox" tabindex="7" name="devDU" [(ngModel)]="devDataua" data-md-icheck
+                  [disabled]="is31Days"> Data
+                Unavailable Summary
+              </label>
+            </div>
+          </div>
+          <div class="col-md-1 col-sm-6 col-xs-12" style="padding-top: 2%;" *ngIf='isSensorReading && !is31Days &&  !isETimeInterval'>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" tabindex="8" name="devMKT" [(ngModel)]="devMKT" data-md-icheck
+                  [disabled]="is31Days"> MKT
+              </label>
+            </div>
+          </div>
+          <div class="col-md-1 col-sm-6 col-xs-12" style="padding-top: 2%;" *ngIf='isSensorReading && !is31Days &&  !isETimeInterval'>
+            <div class="checkbox">
+              <label><input type="checkbox" tabindex="8" name="devAlert" [(ngModel)]="devAlert" data-md-icheck
+                  [disabled]="is31Days">
+                Alerts
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12" style="padding-top: 2%;" *ngIf="hasAudit && !is31Days">
+            <div class="checkbox">
+              <label><input type="checkbox" tabindex="9" name="devAudit" [(ngModel)]="devAudit" data-md-icheck
+                  [disabled]="is31Days">
+                Audit Log
+              </label>
+            </div>
+          </div>
+
+        </div>
+        <div class="row" style="padding-top: 1%;">
+          <div class="col-md-3 col-sm-6 col-xs-12" style="padding-top:1%;">
+            <div class="checkbox">
+              <label><input type="checkbox" tabindex="9" name="showGenTime" [(ngModel)]="generatedTime" data-md-icheck>
+                Report Generated Time
+              </label>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Report Name <span style="color: red;">*</span><i class="fa fa-check"
+                *ngIf="reportName.length>0 && validName" title="Valid Report Name" style="color:#3FAA3F"></i>
+              <i class="fa fa-times" *ngIf="reportName.length>0 && !validName" title="Report Name Already Exists"
+                style="color:red;"></i>
+            </label>
+            <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" [disabled]="disableReportName" name="reportName"
+                (keyup)="checkReportname()" (keypress)="checkSpecialChar($event)" [(ngModel)]="reportName"
+                placeholder="Report Name">
+              <img src="./assets/Images/information.svg" title="Only alphanumerics are allowed" alt="info" />
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12"
+            *ngIf="(radioSelected =='PDF' || radioSelected =='JPEG') && isSensorReading == true && !isETimeInterval">
+            <label>Chart Type
+            </label>
+            <div class="row">
+              <div class="col-md-4" *ngFor="let item of chartTypeList">
+                <input type="radio" [(ngModel)]="chTypeSelected" name="chType_name" value="{{item.value}}"
+                  (change)="onTypeChange(item)" [disabled]="is31Days" />
+                <span style="    padding-left: 2%;
+            position: absolute;
+            padding-top: 4%;">{{item.name}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-3 col-sm-6 col-xs-12" style="padding-top: 1%;">
+            <div class="checkbox">
+              <label><input type="checkbox" tabindex="9" name="scheduleReport" [(ngModel)]="isScheduled" data-md-icheck>
+                Schedule Report
+              </label>
+            </div>
+          </div> -->
+        </div>
+        <div class="row" style="padding-right: 1%;padding-top: 0px;">
+          <div class="col-md-9 col-sm-6 col-xs-12" style="padding-top: 0.5%;">
+            <div class="row" style="padding-right: 1%;" *ngIf="isScheduled">
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <label>Frequency <span style="color: red;">*</span></label>
+                <ng-select [items]="frequencyRange" [disabled]="disableFrequency" [(ngModel)]="frequency"
+                  (change)="setFrequency()" name="freName" bindLabel="fVal" bindValue="frequency"
+                  placeholder="Frequency">
+                </ng-select>
+                <ng-template ng-label-tmp let-item="item">
+                  {{item.fVal}}
+                </ng-template>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="!isDaily">
+                <label>Day <span style="color: red;">*</span></label>
+                <img *ngIf="is15Days" src="./assets/Images/information.svg"
+                  title="15Days Report Cycle will be started from selected Day" alt="info" />
+                <ng-select [items]="dayRange" [(ngModel)]="day" name="dayName" bindLabel="dVal" bindValue="dId"
+                  placeholder="Day">
+                </ng-select>
+                <ng-template ng-label-tmp let-item="item">
+                  {{item.dVal}}
+                </ng-template>
+              </div>
+              <div class="col-md-3 col-sm-2 col-xs-12">
+                <label>Time (24hrs format)<span style="color: red;">*</span></label>
+                <div class="floating-input" style="border-bottom:none;padding-top: 0px;">
+                  <input type="text" style="width: 22%;" name="reportHr" maxlength="2"
+                    (keypress)="checkNumericsHr($event)" [(ngModel)]="reportHR" placeholder="HH">
+                  :
+                  <input type="text" style="width: 22%;" name="reportMM" maxlength="2"
+                    (keypress)="checkNumericsMin($event)" [(ngModel)]="reportMM" placeholder="MM">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 1%;" *ngIf="isScheduled">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>To MailID(s) <span style="color: red;">*</span></label>
+            <ng-select [items]="reportUserMailIds" [multiple]=true [closeOnSelect]="false" [(ngModel)]='toMailids'
+              style="color:#212121" bindLabel="mailid" bindValue="mailid" placeholder="Select" name="toMail">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div *ngIf="toMailids.length === reportUserMailIds.length">
+                  All (Default)
+                </div>
+                <div *ngIf="toMailids.length !== reportUserMailIds.length">
+                  <div class="ng-value" style="  width:1px; word-wrap: break-word;">
+                    <span class="ng-value-label">{{toMailids.length}} Selected</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+
+            <!-- <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" style="width: 89%;" name="toMail" [(ngModel)]="toMailids"
+                placeholder="To">
+              <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                alt="info" />
+            </div> -->
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>CC MailID(s)</label>
+            <ng-select [items]="reportUserMailIds" [multiple]=true [closeOnSelect]="false" [(ngModel)]='ccMailids'
+              style="color:#212121" bindLabel="mailid" bindValue="mailid" placeholder="Select" name="ccMail">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div *ngIf="ccMailids.length === reportUserMailIds.length">
+                  All (Default)
+                </div>
+                <div *ngIf="ccMailids.length !== reportUserMailIds.length">
+                  <div class="ng-value" style="  width:1px; word-wrap: break-word;">
+                    <span class="ng-value-label">{{ccMailids.length}} Selected</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+
+            <!-- <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" name="ccMail" style="width: 89%;" [(ngModel)]="ccMailids"
+                placeholder="CC">
+              <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                alt="info" />
+            </div> -->
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-12">
+            <label>BCC MailID(s)</label>
+            <ng-select [items]="reportUserMailIds" [multiple]=true [closeOnSelect]="false" [(ngModel)]='bccMailids'
+              style="color:#212121" bindLabel="mailid" bindValue="mailid" placeholder="Select" name="bccMail">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div *ngIf="bccMailids.length === reportUserMailIds.length">
+                  All (Default)
+                </div>
+                <div *ngIf="bccMailids.length !== reportUserMailIds.length">
+                  <div class="ng-value" style="  width:1px; word-wrap: break-word;">
+                    <span class="ng-value-label">{{bccMailids.length}} Selected</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+
+            <!-- <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" name="bccMail" style="width: 89%;" [(ngModel)]="bccMailids"
+                placeholder="BCC">
+              <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                alt="info" />
+            </div> -->
+          </div>
+        </div>
+        <div class="row" style="padding-right: 1%;padding-top: 2%;">
+
+
+          <div class="col-md-5 col-sm-6 col-xs-12">
+            <button type="button" class="btn" style="background-color:#7E7C7C;" (click)="reset()">
+              <i class="fa fa-recycle"></i> Clear</button>&nbsp;
+            <button type="button" class="btn btn-primary" *ngIf="!isScheduled" (click)="saveReport()">
+              <i class="fa fa-file-archive-o"></i> Request Report</button>&nbsp;
+            <button type="button" class="btn btn-success" *ngIf="isScheduled" (click)="saveReport()">
+              <i class="fa fa-save"></i> Save</button>
+          </div>
+        </div>
+      </div>
+      <!-- *ngIf="showRadio" -->
+      <div class="row" *ngIf="islogReport" style="padding-left: 1%; padding-right: 1%; margin-left: 0px;">
+        <div *ngIf="islogReport" style="height: 300px;">
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <label>Log Type</label>
+              <ng-select [items]="logTypeList" style="border: 1px solid #ccc;border-radius: 4px;" [(ngModel)]="logType"
+                name="logType" bindLabel="name" bindValue="id" placeholder="Select" (change)="logtypechanged()">
+              </ng-select>
+              <ng-template ng-label-tmp let-item="item">
+                {{item}}
+              </ng-template>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="logType == 1">
+              <label>Device</label>
+              <ng-select [items]="DeviceList" [multiple]=true [closeOnSelect]="false" [(ngModel)]='deviceSelectedList'
+                style="color:#212121" bindLabel="deviceName" bindValue="sensorId" placeholder="Select"
+                name="deviceSelect">
+                <ng-template ng-header-tmp>
+                  <div class="selectionButtons">
+                    <button type="button" class="btn btn-success" [disabled]="disabeleRegSelectAll"
+                      (click)="onSelectAll()">
+                      <i class="fa fa-check" title="Select All"></i></button>
+                    <button type="button" style="margin-left: 5px;" class="btn btn-warning"
+                      [disabled]="disableRegUnSelectAll" (click)="onDeSelectAll()">
+                      <i class="fa fa-times" title="Deselect All"></i>
+                    </button>
+                  </div>
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div *ngIf="deviceSelectedList.length === DeviceList.length">
+                    All (Default)
+                  </div>
+                  <div *ngIf="deviceSelectedList.length != DeviceList.length">
+                    <div class="ng-value" *ngIf="items.length > 0">
+                      <span class="ng-value-label">{{items.length}} Selected...</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="logType == 0">
+              <label>User</label>
+              <ng-select [items]="LogUserList" [closeOnSelect]="true" [(ngModel)]='selectedUser' style="color:#212121"
+                bindLabel="userName" bindValue="userName" placeholder="Select" name="userSel">
+              </ng-select>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <label>Period</label>
+              <ng-select [items]="LogDateRangeList" style="    border: solid 1px #c1c1c1;
+            border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId"
+                placeholder="Period" (change)="checkDateRange($event)">
+              </ng-select>
+              <ng-template ng-label-tmp let-item="item">
+                {{item.dtName}}
+              </ng-template>
+            </div>
+
+          </div>
+          <div class="row" style="padding-right: 1%;padding-top: 1%;">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <label>Report Name <span style="color: red;">*</span><i class="fa fa-check"
+                  *ngIf="reportName.length>0 && validName" title="Valid Report Name" style="color:#3FAA3F"></i>
+                <i class="fa fa-times" *ngIf="reportName.length>0 && !validName" title="Report Name Already Exists"
+                  style="color:red;"></i>
+              </label>
+              <div class="floating-label" style="margin-top: 0px;">
+                <input type="text" class="floating-input" [disabled]="disableReportName" name="reportName"
+                  (keyup)="checkReportname()" (keypress)="checkSpecialChar($event)" [(ngModel)]="reportName"
+                  placeholder="Report Name">
+                <img src="./assets/Images/information.svg" title="Only alphanumerics are allowed" alt="info" />
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" style="display: none;">
+              <label>Frequency <span style="color: red;">*</span></label>
+              <ng-select [items]="LogfrequencyRange" [disabled]="disableFrequency" [(ngModel)]="frequency"
+                (change)="setFrequency()" name="freName" bindLabel="fVal" bindValue="frequency" placeholder="Frequency">
+              </ng-select>
+              <ng-template ng-label-tmp let-item="item">
+                {{item.fVal}}
+              </ng-template>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="!isDaily" style="display: none;">
+              <label>Day <span style="color: red;">*</span></label>
+              <ng-select [items]="dayRange" [(ngModel)]="day" name="dayName" bindLabel="dVal" bindValue="dId"
+                placeholder="Day">
+              </ng-select>
+              <ng-template ng-label-tmp let-item="item">
+                {{item.dVal}}
+              </ng-template>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12" style="display: none;">
+              <label>Time (24hrs format)<span style="color: red;">*</span></label>
+              <div class="floating-input" style="border-bottom:none;padding-top: 0px;">
+                <input type="text" style="width: 22%;" name="reportHr" maxlength="2"
+                  (keypress)="checkNumericsHr($event)" [(ngModel)]="reportHR" placeholder="HH">
+                :
+                <input type="text" style="width: 22%;" name="reportMM" maxlength="2"
+                  (keypress)="checkNumericsMin($event)" [(ngModel)]="reportMM" placeholder="MM">
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 1%;" style="display: none;">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <label>To MailID(s) <span style="color: red;">*</span></label>
+              <div class="floating-label" style="margin-top: 0px;">
+                <input type="text" class="floating-input" style="width: 89%;" name="toMail" [(ngModel)]="toMailids"
+                  placeholder="To">
+                <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                  alt="info" />
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <label>CC MailID(s)</label>
+              <div class="floating-label" style="margin-top: 0px;">
+                <input type="text" class="floating-input" name="ccMail" style="width: 89%;" [(ngModel)]="ccMailids"
+                  placeholder="CC">
+                <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                  alt="info" />
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-2 col-xs-12">
+              <label>BCC MailID(s)</label>
+              <div class="floating-label" style="margin-top: 0px;">
+                <input type="text" class="floating-input" name="bccMail" style="width: 89%;" [(ngModel)]="bccMailids"
+                  placeholder="BCC">
+                <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                  alt="info" />
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 1%;">
+          </div>
+          <div class="row" style="padding-top: 1%;">
+            <div class="col-md-5" style="float: right;padding-left: 5%;">
+              <button type="button" class="btn btn-success" *ngIf="!isDates" (click)="saveLogReport()">
+                <i class="fa fa-save"></i> Save</button>
+            </div>
+            <div class="col-md-7"></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="isRegionReport" style="padding-left: 1%;height: 200px; padding-right: 1%;">
+        <div class="row">
+          <div class="col-md-6" style="display: none;">
+            <div class="floating-label">
+              <label class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Rmode" [value]="false" [(ngModel)]="mode" checked
+                  (change)="onDemand();" />
+                <div style="margin-top: -24px; padding-left: 20px;">On Demand</div>
+              </label> &nbsp;&nbsp;
+              <label class="form-check-inline">
+                <input class="form-check-input" type="radio" name="Rmode" [value]="true" [(ngModel)]="mode"
+                  (change)="onScheduled();" />
+                <div style="margin-top: -24px; padding-left: 20px;">Scheduled</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-6 col-xs-12" style="padding-top: 0.5%;padding-bottom: 0.5%;">
+            <div style="padding: 2% 5% 2% 5%; background-color: #fff; border-radius: 5px;"> <label>Report Type</label>
+              <div class="row">
+                <div class="col-md-4" *ngFor="let item of reportTypeList">
+                  <input type="radio" [(ngModel)]="radioRPSelected" name="RPlist_name" value="{{item.value}}"
+                    (change)="onRPItemChange(item)" />
+                  <span style="    padding-left: 2%;
+            position: absolute;
+            padding-top: 4%;">{{item.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Region <span style="color: red;">*</span></label>
+            <ng-select [items]="regionsList" [dropdownPosition]="'bottom'" bindLabel="regionName" bindValue="regionId"
+              placeholder="Region" [(ngModel)]='regionId' (change)="getDevicesFromReg($event)" name="_regionId2">
+              <ng-template ng-label-tmp let-item="item">
+                {{item.regionName}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Device <span style="color: red;">*</span></label>
+            <ng-select [items]="FilterDeviceList" [multiple]=true [closeOnSelect]="false"
+              [(ngModel)]='regDeviceSelectedList' style="color:#212121" bindLabel="deviceName" bindValue="sensorId"
+              (change)="selectRegDev($event)" placeholder="Select" name="deviceSelectReg">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                {{selectedDevice}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Sensor <span style="color: red;">*</span></label>
+            <ng-select [items]="RegSensorList" [multiple]=true [closeOnSelect]="false"
+              [(ngModel)]='regSensorSelectedList' style="color:#212121" bindLabel="snrName" bindValue="snrId"
+              placeholder="Select" (change)="regSensor($event)" name="regDeviceSelect">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                {{selectedSensor}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isScheduled">
+            <label>Duration <span style="color: red;">*</span></label>
+            <ng-select [items]="DateRangeListReg" style="    border: solid 1px #c1c1c1;
+border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId" placeholder="Select"
+              (change)="checkDateRange($event)">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.dtName}}
+            </ng-template>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 1%;">
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isDates">
+            <label>Date Range</label>
+            <input [max]="maxDate" [min]="minDate" style="width: 215px;    height: 30px;" [selectMode]="'range'"
+              [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate" [(ngModel)]="fromDate"
+              placeholder="Date Range" class="date-picker-styles" readonly>
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isScheduled">
+            <label>Frequency</label>
+            <ng-select [items]="frequencyRange" [(ngModel)]="frequency" (change)="setFrequency()" name="freName"
+              bindLabel="fVal" bindValue="frequency" placeholder="Frequency">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.fVal}}
+            </ng-template>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isScheduled && !isDaily">
+            <label>Day</label>
+            <img *ngIf="is15Days" src="./assets/Images/information.svg"
+              title="15Days Report Cycle will be started from selected Day" alt="info" />
+            <ng-select [items]="dayRange" [(ngModel)]="day" name="dayName" bindLabel="dVal" bindValue="dId"
+              placeholder="Day">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.dVal}}
+            </ng-template>
+          </div>
+          <div class="col-md-2 col-sm-2 col-xs-12" *ngIf="isScheduled">
+            <label>Time (24hrs format)</label>
+            <div class="floating-input" style="border-bottom:none;padding-top: 0px;">
+              <input type="text" style="width: 22%;" name="reportHr" maxlength="2" (keypress)="checkNumericsHr($event)"
+                [(ngModel)]="reportHR" placeholder="HH">
+              :
+              <input type="text" style="width: 22%;" name="reportMM" maxlength="2" (keypress)="checkNumericsMin($event)"
+                [(ngModel)]="reportMM" placeholder="MM">
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 1%;" *ngIf="isScheduled">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>To MailID(s)</label>
+            <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" style="width: 89%;" name="toMail" [(ngModel)]="toMailids"
+                placeholder="To">
+              <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                alt="info" />
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isScheduled">
+            <label>CC MailID(s)</label>
+            <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" name="ccMail" style="width: 89%;" [(ngModel)]="ccMailids"
+                placeholder="CC">
+              <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                alt="info" />
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-2 col-xs-12" *ngIf="isScheduled">
+            <label>BCC MailID(s)</label>
+            <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" name="bccMail" style="width: 89%;" [(ngModel)]="bccMailids"
+                placeholder="BCC">
+              <img src="./assets/Images/information.svg" title="Multiple Email Ids with comma separated without space"
+                alt="info" />
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 2%;">
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <label>Report Name <span style="color: red;">*</span>
+            </label>
+            <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" [disabled]="disableReportName" name="reportName"
+                (keyup)="checkReportname()" (keypress)="checkSpecialChar($event)" [(ngModel)]="reportName"
+                placeholder="Report Name">
+              <img src="./assets/Images/information.svg" title="Only alphanumerics are allowed" alt="info" />
+            </div>
+          </div>
+          <div class="col-md-5 col-sm-6 col-xs-12">
+            <button type="button" class="btn" style="background-color:#7E7C7C;" (click)="reset()">
+              <i class="fa fa-recycle"></i> Clear</button>&nbsp;
+            <!-- <button type="button" class="btn btn-success" (click)="saveRegReport()">
+              <i class="fa fa-save"></i> Save</button> -->
+            <button type="button" class="btn btn-primary" *ngIf="!isScheduled" (click)="saveRegReport()">
+              <i class="fa fa-file-archive-o"></i> Request Report</button>&nbsp;
+            <button type="button" class="btn btn-success" *ngIf="isScheduled" (click)="saveRegReport()">
+              <i class="fa fa-save"></i> Save</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-container>
+
+</app-modal>
+<app-modal #modalReportDates modalTitle="Available Reports" [width]="800" style="top:0px;">
+
+  <ng-container class="app-modal-body" style="background-color: white;height: 500px;overflow-x: auto;">
+    <div class="col-md-2" *ngFor="let rep of reportsFromDates;" style="    text-align: center;">
+      <div style="padding-bottom: 5%;padding-top: 5%;" (click)="openReport(rep.reportFile)">
+        <img src="assets/Images/file.png" style="margin-left: 0px;" height="70px" />
+        <div>{{rep.reportDate}}
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</app-modal>

@@ -1,0 +1,446 @@
+<div class="row" style="text-align: center;color: white;margin-bottom: 1%; margin-left: 0px;">
+    <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+        <div class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-users" style="margin-right: 3%;"></span>
+            User Management
+        </div>
+        <div *ngIf="showUserManagement" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+        </div>
+    </div>
+    <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+        <div (click)="goRole()" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-sitemap" style="margin-right: 3%;"></span>
+            Role Management
+        </div>
+        <div *ngIf="showroleManagement" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+        </div>
+    </div>
+</div>
+<div class="col-md-1" style="padding:0">
+    <button type="button" (click)="OpenModal('Create'); modalRoot.show()" value="Add NewUser" id="btnAsset" class="btn">
+        <i class="ion-plus-round"></i>
+        <span> User</span>
+    </button>
+</div>
+<table id="userTable" class="table table-striped">
+    <thead class="table-head-background">
+        <tr>
+            <th style="width:100px;">Name</th>
+            <th style="width:150px;">Mail Id</th>
+            <th style="width:120px;">Phone</th>
+            <th style="width:100px;">Assigned Devices</th>
+            <th style="width:150px;" class="no-sort">Alert Pref.</th>
+            <th style="width:50px;" class="no-sort">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of filterAryList">
+            <td>
+                <!-- <span class="fa fa-id-badge fa-lg" style="color: #06b58a;" title="You"></span> -->
+                {{item.name}} {{item.lastname}}
+                <label *ngIf="item.self">(you)</label>
+            </td>
+            <td>
+                {{item.mailId}}
+            </td>
+            <td>
+                {{item.countryCode}} {{item.mobileNumber}}
+            </td>
+            <td>
+                {{item.totalDevices}} <i class="fa fa-server" title="{{item.deviceNames}}" style="color: #34949d;"></i>
+            </td>
+            <td>
+                <div class="row">
+                    <div class="col-md-3" style="padding-left:5px;padding-right:5px;">
+                        <div *ngIf="item.sms"
+                            style="text-align: center; background-color:#00A651;color:white;border-radius: 5px;">SMS
+                        </div>
+                        <div *ngIf="!item.sms"
+                            style="text-align: center;background-color:#000;color:white;border-radius: 5px;">SMS</div>
+                    </div>
+                    <div class="col-md-3" style="padding-left:5px;padding-right:5px;">
+                        <div *ngIf="item.email"
+                            style="text-align: center;background-color:#00A651;color:white;border-radius: 5px;">Email
+                        </div>
+                        <div *ngIf="!item.email"
+                            style="text-align: center;background-color:#000;color:white;border-radius: 5px;">Email</div>
+                    </div>
+                    <div class="col-md-5" style="padding-left:5px;padding-right:5px;">
+                        <div *ngIf="item.notif"
+                            style="text-align: center;background-color:#00A651;color:white;border-radius: 5px;">
+                            Notification</div>
+                        <div *ngIf="!item.notif"
+                            style="text-align: center;background-color:#000;color:white;border-radius: 5px;">
+                            Notification</div>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                </div>
+            </td>
+            <td>
+                <i (click)="OpenModal(item.userID+'~update~'+item.roleId)" *ngIf="!item.self" class="fa fa-edit"
+                    style="padding-left:30px;font-size:18px;cursor:pointer" title="Edit"></i>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<form #newUserFrm="ngForm" autocomplete="off">
+
+    <app-modal #modalRoot [modalTitle]="[usertype]" [width]="400" tabindex="-1" [maximizable]="true"
+        (close)="onCloseModal()" autocomplete="off">
+        <ng-container class="app-modal-body">
+
+            <!-- <form #newUserFrm="ngForm"
+             (ngSubmit)="saveNewUser(newUserFrm.form.valid,newUserFrm.value,Attachaments.file)" autocomplete="off"> -->
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom: 20px;margin-left: 0px;">
+
+                    <!-- <button type="button" *ngIf="isDeleteShow" (click)="DeleteUser()" class="btn btn-warning" style="margin-right:0.25em;margin-top:0.25em">
+                        <i class="fa fa-trash"></i> {{'UsmRemove'|translate}}</button> -->
+
+                    <button type="button" id="btnPwdReset" *ngIf="isResetPasswordShow" (click)="openResetPwd()"
+                        class="btn" style="margin-left: 5px; " style="margin-right:0.25em;margin-top:0.25em">
+                        <i class="fa fa-key"></i> {{'UsmReset Password'|translate}}</button>
+
+                    <button type="button" *ngIf="isDeleteShow" id="btnUDelete" (click)="DeleteUser('changeStatus','0')"
+                        class="btn" style="margin-left: 5px; " [ngStyle]="{'background-color': this.userActive == true ? 'red' : 'green'}"
+                        style="margin-right:0.25em;margin-top:0.25em">{{this.removebuttonName}}</button>
+                    <button type="button" *ngIf="isDeleteShow" id="btnUDelete" (click)="DeleteUser('removeUser','0')" class="btn" style="margin-left: 5px;" style="margin-right:0.25em;margin-top:0.25em;background-color: red;">
+                        Remove
+                    </button>
+                         <!-- Remove</button><i class="fa fa-trash"></i> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="form-group">
+                                <div class="floating-label">
+                                    <input type="text" class="floating-input" name="name" placeholder=" "
+                                        [(ngModel)]="usermanagementobj.name"
+                                        (change)="spacesCheckedForUserName($event,'UsmName')"
+                                        (paste)="pasteName($event.clipboardData.getData('text/plain'),'UsmName')"
+                                        alphaNumerics acceptFirstCharacter appNameLengthCheck #name="ngModel" required
+                                        tabindex="1" autocomplete="new-password">
+                                    <label class="labClass" for="name">First Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="floating-label">
+                                    <input type="text" class="floating-input" name="lastname" placeholder=" "
+                                        [(ngModel)]="usermanagementobj.lastname"
+                                        (change)="spacesCheckedForUserName($event,'UsmName')"
+                                        (paste)="pasteName($event.clipboardData.getData('text/plain'),'UsmName')"
+                                        alphaNumerics acceptFirstCharacter appNameLengthCheck #name="ngModel"
+                                        tabindex="2" autocomplete="new-password">
+                                    <label class="labClass" for="lastname">Last Name</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" placeholder=" " class="floating-input" #mailId="ngModel"
+                                    [(ngModel)]="usermanagementobj.mailId" appEmailcheck id="mailId" name="mailId"
+                                    [ngClass]="{'is-invalid':newUserFrm.submitted && mailId.invalid}"
+                                    [disabled]='editUser' required #E1 tabindex="3" autocomplete="new-password" />
+                                <label class="labClass">Email ID</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-top: 5%;display: none;">
+                            <div *ngIf='!isEmailVerified'>
+                                <a (click)='verfiyMailId()' style="cursor: pointer;">Verify</a>
+                            </div>
+                            <div *ngIf='isEmailVerified' style="color: #00A651;">
+                                Verified
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <ng-select [dropdownPosition]="'top'" [items]="countryCodeList" required
+                                    bindLabel="c_Name" bindValue="c_Code" placeholder="Country Code"
+                                    [(ngModel)]="usermanagementobj.cCode" tabindex="4" #cCodeModal="ngModel" id="cCode"
+                                    name="cCode">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item.c_Code}}
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" #mobileNumber="ngModel" placeholder=" " class="floating-input"
+                                    (keypress)="allowNumericsOnly($event)" appNumberOnly
+                                    [(ngModel)]="usermanagementobj.mobileNumber" [disabled]='editUser' id="MobileNo"
+                                    name="mobileNumber" tabindex="5" required #E2 />
+                                <label class="labClass">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="padding-top: 5%;display: none;">
+                            <div *ngIf='!otpSent'>
+                                <a (click)='verfiyMobile()' style="cursor: pointer;">Verify</a>
+                            </div>
+                            <div *ngIf='isMobileVerified' style="color: #00A651;">
+                                Verified
+                            </div>
+                        </div>
+                        <div class="col-md-4" *ngIf='otpSent && !isMobileVerified'>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="floating-label">
+                                        <input type="text" #mobileOTP="ngModel" style="width:140%" placeholder="OTP"
+                                            class="floating-input" (keypress)="allowNumericsOnly($event)" appNumberOnly
+                                            [(ngModel)]="signupOTP" id="MobileNo" name="mobileOTP" tabindex="4" required
+                                            #E22 />
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="padding-top: 10%;">
+                                    <i class="fa fa-arrow-circle-o-right fa-2x" (click)='verfiyOTP()'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <div class="floating-label">
+                                <ng-select [items]="rolsList" [(ngModel)]="usermanagementobj.roleId" class="ddlClass"
+                                    #roleId="ngModel" id="roleId" name="roleId" bindLabel="roleName" bindValue="roleId"
+                                    placeholder="{{'UsmselectRole'|translate}}"
+                                    [ngClass]="{ 'is-invalid': newUserFrm.submitted && roleId.invalid }" required
+                                    tabindex="6" (change)="getFeatures($event);">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item.roleName}}
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="floating-label">
+                                <ng-select [dropdownPosition]="'top'" tabindex="7" [items]="defaultFeatures" required
+                                    bindLabel="name" bindValue="userFeatureId" placeholder="Preference"
+                                    [(ngModel)]="usermanagementobj.userPref" #PreferenceModal="ngModel" id="userPref"
+                                    name="userPref">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item.name}}
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div *ngIf="isPasswordShow" class="col-md-6 ">
+                            <div class="floating-label">
+                                <input type="password" placeholder=" " class="floating-input" #password="ngModel"
+                                    id="password" name="password" [(ngModel)]="usermanagementobj.password"
+                                    [ngClass]="{ 'is-invalid': newUserFrm.submitted && password.invalid }"
+                                    appStrongpassword maxlength="15" required tabindex="8"
+                                    autocomplete="new-password" />
+                                <label class="labClass">Password</label>
+                                <img src="./assets/Images/information.svg" title="{{'Usmpwdtitle'|translate}}"
+                                    alt="info" />
+                            </div>
+                        </div>
+                        <div *ngIf="isPasswordShow" class="col-md-6 ">
+                            <div class="floating-label">
+                                <input type="password" placeholder=" " #confirmPassword="ngModel" class="floating-input"
+                                    id="confirmPassword" name="confirmPassword"
+                                    [(ngModel)]="usermanagementobj.confirmPassword" maxlength="10"
+                                    [ngClass]="{ 'is-invalid': newUserFrm.submitted && confirmPassword.invalid }"
+                                    appStrongpassword maxlength="15" required tabindex="9"
+                                    autocomplete="new-password" />
+                                <label class="labClass">Confirm Password</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <div class="floating-label">
+                                <div class="row" style="padding-left: 15px;">
+                                    Alert Preference
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" tabindex="10" name="sms" [(ngModel)]="sms"
+                                                    data-md-icheck>
+                                                SMS</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" tabindex="11" name="email" [(ngModel)]="email"
+                                                    data-md-icheck>Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" tabindex="12" name="notif" [(ngModel)]="notif"
+                                                    data-md-icheck>Notification</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="checkbox">
+                                <label><input type="checkbox" tabindex="13" name="warning" [(ngModel)]="cbwarning"
+                                        data-md-icheck>
+                                    Warning</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="checkbox">
+                                <label><input type="checkbox" tabindex="13" name="critical" [(ngModel)]="cbcritical"
+                                        data-md-icheck>
+                                    Critical</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="checkbox">
+                                <label><input type="checkbox" tabindex="13" name="good" [(ngModel)]="cbgood"
+                                        data-md-icheck>
+                                    Good</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="nrSMS" [(ngModel)]="nrSMS" data-md-icheck>
+                                    Report/Not Reporting Alerts</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="showReportPermission">
+                        <div class="col-md-12">
+                            <div class="row" style="padding-left: 15px;">
+                                Report Preference
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="createReport" [(ngModel)]="createReport" data-md-icheck>
+                                    Create Reports</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <div class="row">
+                <div class="col-md-3" *ngIf='showUnverifyUser'>
+                    <!-- <div class="checkbox" style="float: left;">
+                        <label><input type="checkbox" tabindex="14" name="userActive" [(ngModel)]="userActive"
+                                data-md-icheck>Active</label>
+                    </div> -->
+                    <div *ngIf='isEmailUnverified'>
+                        <a (click)="DeleteUser('changeStatus','1')" style="cursor: pointer;">UnVerify</a>
+                    </div>
+                    <div *ngIf='!isEmailUnverified' style="color: #fc2024;">
+                        UnVerified
+                    </div>
+                </div>
+                <div class="col-md-8" style="float: right;">
+                    <!-- *ngIf="isMobileVerified || isEmailVerified" -->
+                    <button type="submit" class="btn btn-success" *ngIf = "this.userActive"
+                        (click)="saveNewUser(newUserFrm.form.valid,newUserFrm.value)" tabindex="14">
+                        <i class="fa fa-save"></i> {{'UsmSave'|translate}}</button>
+                </div>
+                <div class="col-md-4">
+                    <!-- <button type="button" class="btn btn-danger" (click)="modalRoot.hide();" tabindex="13">
+                        <i class="fa fa-close"></i> {{'UsmClose'|translate}}</button>  -->
+                    <button #Modalbtn (click)="modalRoot.show();" type="button" style="visibility: hidden;"></button>
+
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+</form>
+
+<app-modal #modalResetPswd [modalTitle]="'Reset Password'" [width]="350" [maximizable]="true">
+
+    <ng-container class="app-modal-body">
+        <form #newResetPswdFrm="ngForm" autocomplete="off">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="floating-label">
+
+                        <input type="password" id="ResetPassword" name="ResetPassword" appStrongpassword placeholder=" "
+                            class="floating-input" required maxlength="15" [(ngModel)]="usermanagementobj.ResetPassword"
+                            required />
+
+                        <label class="labClass">{{'UsmPassword'|translate}}</label>
+                        <img src="./assets/Images/information.svg" title="{{'UsmresetPwdtitle'|translate}}"
+                            alt="info" />
+                    </div>
+
+                </div>
+
+                <div class="col-md-12">
+                    <div class="floating-label">
+                        <input type="password" placeholder=" " class="floating-input" id="ResetConfirmPassword"
+                            name="ResetConfirmPassword" appStrongpassword required maxlength="15"
+                            [(ngModel)]="usermanagementobj.ResetConfirmPassword" required>
+                        <label class="labClass">{{'Usmre-enterPwd'|translate}}</label>
+                        <img src="./assets/Images/information.svg" title="{{'UsmresetPwdtitle'|translate}}"
+                            alt="info" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+        <!-- <button type="button" (click)="modalResetPswd.hide();" class="btn btn-danger">
+            <i class="fa fa-close"></i> {{'UsmClose'|translate}} </button>&nbsp; -->
+        <button type="submit" class="btn" (click)="saveResetPwd(newResetPswdFrm.form.valid,newResetPswdFrm.value)">
+            <img src='./assets/Images/lock-reset.svg' class="marginleft0px" title='Reset Password ' height='20'
+                width='30' />
+            {{'UsmReset'|translate}}
+        </button>
+    </ng-container>
+</app-modal>
+
+
+<style>
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control-placeholder {
+        position: absolute;
+        top: 0;
+        padding: 7px 0 0 13px;
+        transition: all 200ms;
+        opacity: 0.5;
+    }
+
+    .form-control:focus+.form-control-placeholder,
+    .form-control:valid+.form-control-placeholder {
+        font-size: 75%;
+        transform: translate3d(0, -100%, 0);
+        opacity: 1;
+    }
+
+    .coloumnSec {
+        padding: 12px;
+        background: #fff;
+        box-shadow: 5px 5px 5px #c1c1c1;
+        border-radius: 5px;
+        height: 440px;
+    }
+
+    .coloumnSec .floating-label {
+        margin: 20px 0;
+    }
+</style>

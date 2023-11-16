@@ -1,0 +1,1049 @@
+<div style="margin-bottom:5px;">
+    <span style="color:#03243B"> Setup <i class="fa fa-angle-double-right"></i> </span> Client Details
+</div>
+
+<div class="col-md-3" style="padding:0">
+
+    <button type="button" (click)="OpenModal('New')" *ngIf='isNewClient' value="Add New Client" id="btnAsset" class="btn md-button">
+    <i class="ion-plus-round"></i>
+    <span> New Client</span>
+  </button>
+    <button type="button" (click)="OpenSensorTypeModal('TypeList')" *ngIf='isNewType' value="Add New Type" id="btnSensorType" class="btn md-button">
+    <i class="fa fa-bars"></i>
+    <span> Hardware Types</span>
+  </button>
+</div>
+
+
+<form #newClientFrm="ngForm" autocomplete="off">
+
+
+    <app-modal #modalClient [modalTitle]="[clientType]" [width]="1000" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+            <div class="col-md-12" style="margin-bottom: 18px;">
+
+                <button type=" button" *ngIf="isDeleteShow" (click)="DeleteClient()" class="btn btn-warning" style="margin-right:0.25em;margin-top:0.25em">
+          <i class="fa fa-trash"></i>Remove</button>
+                <!-- modalSgnUp.show(); -->
+                <button type="button" *ngIf="isDeleteShow" (click)="GetSiteDetails();" class="btn" style="margin-left:0.25em;margin-right:0.25em;margin-top:0.25em">
+          <i class="fa fa-sign-in"></i>
+          SignUp Details</button>
+
+                <button type="button" *ngIf="isPermissionShow" (click)="GetPermissions();" class="btn" style="margin-left:0.25em;margin-top:0.25em">
+          <i class="fa fa-unlock"></i>
+          Permissions
+        </button>
+
+            </div>
+            <div class="row" style="margin-top: 25px;">
+                <div class="col-sm-4">
+                    <div class="coloumnSec" style="height: 415px;">
+                        <div class="margintop25px">
+                            <div class="floating-label">
+                                <input type="text" class="floating-input" [attr.disabled]="isEdit ? '' : null" id="txtClientName" name="ClientName" [(ngModel)]="clientProfileobj.ClientName" required placeholder=" " #clientName="ngModel" (change)="spacesCheckedForClientName($event,'ClientName')"
+                                    (paste)="pasteName($event.clipboardData.getData('text/plain'),'ClientName')" alphaNumerics acceptFirstCharacter appNameLengthCheck #clientNameColor />
+                                <label class="labClass">Client Name</label>
+                                <img src="./assets/Images/information.svg" title="{{'ClientNameStarts'|translate}}" alt="info" />
+                            </div>
+                        </div>
+                        <div class="margintop25px">
+                            <div class="floating-label">
+                                <input type="text" class="floating-input" [attr.disabled]="isEdit ? '' : null" name="AliasName" [(ngModel)]="clientProfileobj.AliasName" placeholder=" " #displayName="ngModel" required (change)="spacesCheckedForFriendly($event,'FriendlyName')" (paste)="pasteName($event.clipboardData.getData('text/plain'),'FriendlyName')"
+                                    appNameLengthCheck acceptFirstCharacter alphaNumerics />
+                                <label class="labClass"> Friendly Name</label>
+                                <img src="./assets/Images/information.svg" title="{{'friendlyNameStars'|translate}}" alt="info" />
+                            </div>
+                        </div>
+                        <div class=" margintop25px">
+                            <div class="floating-label">
+                                <input type="text" class="floating-input" name="AppName" [(ngModel)]="clientProfileobj.AppName" placeholder=" " #appName1="ngModel" maxlength="1000" (change)="checkSpecialCharactersOfAddress($event,'AppName')" />
+                                <label class="labClass">Application Name</label>
+                            </div>
+                        </div>
+
+                        <div class=" margintop25px">
+                            <div class="floating-label">
+                                <input type="text" class="floating-input" name="Address" [(ngModel)]="clientProfileobj.Address" placeholder=" " maxlength="1000" (change)="checkSpecialCharactersOfAddress($event,'Address')" />
+                                <label class="labClass">Address</label>
+                            </div>
+                        </div>
+
+
+                        <div class=" margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                            <ng-select [dropdownPosition]="'top'" [items]="Countries" [clearable]="false" [(ngModel)]="clientProfileobj.Address4" #DefaultMap="ngModel" name="Address4" bindLabel="country" bindValue="countryId" placeholder="Select Country" (change)="getStates_Isd_TimeZone($event)"
+                                required>
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.country}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+
+
+
+                        <!-- this.Countries -->
+
+                        <div class=" margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                            <ng-select [dropdownPosition]="'top'" [items]="stateList" [(ngModel)]="clientProfileobj.Address3" name="Address3" bindLabel="stateName" bindValue="stateId" placeholder="Select State" required>
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.stateName}}
+                                </ng-template>
+                            </ng-select>
+
+                        </div>
+
+                        <div class="margintop25px">
+                            <div class="floating-label">
+                                <input type="text" class="floating-input" name="ZipCode" [(ngModel)]="clientProfileobj.ZipCode" placeholder=" " #zipCode="ngModel" minlength="3" appNumberOnly />
+                                <label class="labClass">{{'ZipCode'|translate}}</label>
+                            </div>
+                        </div>
+                        <div class=" margintop25px">
+                            <div class="floating-label">
+                                <input type="text" class="floating-input" [attr.disabled]="isEdit ? '' : null" name="Domain" [(ngModel)]="clientProfileobj.Domain" placeholder=" " maxlength="60" required />
+                                <label class="labClass">SubDomain Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                    <div class="coloumnSec" style="height: 415px;">
+                        <div class="margintop25px">
+                            <h4>Contact Info</h4>
+                            <div>
+                                <div class="margintop25px">
+                                    <div class="floating-label">
+                                        <input type="text" class="floating-input" name="PhoneNumber" [(ngModel)]="clientProfileobj.PhoneNumber" placeholder=" " #phoneNo appNumberOnly (keypress)="phoneNumberValidate($event)" />
+                                        <label class="labClass">{{'OfficePhoneNo'|translate}}</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="margintop25px">
+                                        <div class="floating-label">
+                                            <input type="text" class="floating-input" name="ContactPersonName" [(ngModel)]="clientProfileobj.ContactPersonName" placeholder=" " maxlength="30" (change)="spacesCheckedContactPerson($event,'ContactPersonName')" (paste)="pasteName($event.clipboardData.getData('text/plain'),'ContactPersonName')"
+                                                alphaNumerics acceptFirstCharacter appNameLengthCheck />
+                                            <label class="labClass">{{'ContactPersonName'|translate}}</label>
+                                            <img src="./assets/Images/information.svg" title="{{'contactPersonStarts'|translate}}" alt="info" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="margintop25px">
+                                        <div class="floating-label">
+                                            <input type="text" class="floating-input" name="ContactPersonEmail" [(ngModel)]="clientProfileobj.ContactPersonEmail" appEmailcheck #ContactPersonMail placeholder=" " maxlength="100" />
+                                            <label class="labClass">{{'ContactPersonEmailID'|translate}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="margin-bottom: 5px">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="floating-label">
+                                                    <input type="text" placeholder="{{'ISDNo'|translate}}" class="floating-input" value="{{countryCode}}" readonly style="width:56px;" />
+                                                </div>
+                                            </div>
+
+                                            <!-- appMobilecheck -->
+
+                                            <div class="col-md-9 ">
+                                                <div class="floating-label">
+                                                    <input type="text" class="floating-input" name="ContactPersonMobileNo" [(ngModel)]="clientProfileobj.ContactPersonMobileNo" #ContactPersonNo placeholder=" " appNumberOnly />
+                                                    <label class="labClass">Contact Person PhNo</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="coloumnSec">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="margintop25px">
+                                    <div class="inputformDate">
+                                        <label style="width:100%">
+                      <span style="color:#c4c4c4;">Validity</span><br>
+                      <input [min]="minDate" [owlDateTimeTrigger]="Validity" [owlDateTime]="Validity" name="Validity"
+                        style="width:100%" id="Validityalidity" [(ngModel)]="clientProfileobj.Validity"
+                        class="date-picker-styles" required readonly>
+                      <owl-date-time #Validity [pickerType]="'calendar'" afterPickerClosed="clearSelectedDates()">
+                      </owl-date-time>
+                    </label>
+                                    </div>
+                                </div>
+
+                                <div class="margintop25px">
+                                    <div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="IsActive" [(ngModel)]="clientProfileobj.IsActive"
+                          data-md-icheck>Client Status</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="margintop25px">
+                                    <div class="m-t-10px">
+                                        <div class="thumbnail" style="margin-top: 10px" *ngIf="NotbasedOnLogoValidate">
+                                            <div *ngIf="logoCon && logoPath!=''; else showLogoTempImage">
+                                                <i class="fa fa-close" (click)="removeLogo()"></i>
+                                                <img src={{logoPath}} style="width: 100%; margin: 0;" alt="">
+                                            </div>
+                                            <ng-template #showLogoTempImage>
+                                                <img src="assets/Images/user_login.png" style="width: 50%;margin: 0 auto;" alt="">
+                                            </ng-template>
+                                        </div>
+                                        <div class="thumbnail" *ngIf="basedOnLogoFileValidate">
+                                            <i class="fa fa-close" (click)="removeLogo()"></i>
+                                            <img id="DisplayLogoImage" src="#" style="width: 100%; margin: 0 auto;" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="margintop25px">
+
+                                        <label for="AttachamentsForLogo" class="btn btn-primary btn-block btn-outlined" style="margin-top: -13px;">
+                    UploadLogo</label>
+                                        <input #AttachamentsLogo class="bl_feedback__form email" placeholder="Name" id="AttachamentsForLogo" name="filePath" style="display:none;" type="file" (change)="logoUpload($event)" accept=".png,.jpg,.jpeg" multiple="true">
+                                    </div>
+                                </div>
+
+                                <div class="margintop25px">
+                                    <div class="m-t-10px">
+
+                                        <div class="thumbnail" style="margin-top: 10px" *ngIf="bgNotbasedOnValidate">
+                                            <div *ngIf="bgCon && bgPath!=''; else showbgTempImage">
+                                                <i class="fa fa-close" (click)="removebg()"></i>
+                                                <img src={{bgPath}} style="width: 100%; margin: 0;" alt="">
+                                            </div>
+                                            <ng-template #showbgTempImage>
+                                                <img src="assets/Images/user_login.png" style="width: 50%;margin: 0 auto;" alt="">
+                                            </ng-template>
+                                        </div>
+                                        <div class="thumbnail" *ngIf="bgbasedOnFileValidate">
+                                            <i class="fa fa-close" (click)="removebg()"></i>
+                                            <img id="DisplaybgImage" src="#" style="width: 100%; margin: 0 auto;" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="margintop25px">
+
+                                        <label for="AttachamentsForbg" class="btn btn-primary btn-block btn-outlined" style="margin-top: -13px;">
+                    Upload Background Image</label>
+                                        <input #Attachamentsbg class="bl_feedback__form email" placeholder="Name" id="AttachamentsForbg" name="filePath" style="display:none;" type="file" (change)="bgUpload($event)" accept=".png,.jpg,.jpeg" multiple="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <button type="button" (click)="modalClient.hide();" class="btn btn-danger">
+        <i class="fa fa-close"></i> Close </button>&nbsp;
+            <button type="submit" class="btn btn-success" (click)="saveNewClient(newClientFrm.form.valid,newClientFrm.value,AttachamentsLogo.files,Attachamentsbg.files)">
+        <i class="fa fa-save"></i>
+        Save </button>
+
+            <button #Modalopenbtn (click)="modalClient.show();" type="button" style="visibility: hidden;"></button>
+            <button #Modalclosebtn (click)="modalClient.hide();" type="button" style="visibility: hidden;"></button>
+        </ng-container>
+
+    </app-modal>
+</form>
+
+<form #progressFrm="ngForm">
+    <app-modal #modalprogress [modalTitle]="[domainSts]" [width]="700" [maximizable]="true" aria-autocomplete="off" [isClose]="false">
+        <ng-container class="app-modal-body">
+            <div class="row">
+                <div class="col-md-4 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                    <div *ngIf="DBCreated">
+                        <i class="fa fa-check-circle-o fa-2x" style="color:#25dd53"></i>
+                        <span style="font-size: 19px; margin-left:5px;">Database Ready</span>
+                    </div>
+                    <div *ngIf="DBNotCreated">
+                        <i class="fa fa-spinner fa-2x fa-spin" style="color:#c4c4c4"></i>
+                        <span style="font-size: 15px; margin-left:5px;">Database Processing</span>
+                    </div>
+                </div>
+                <div class="col-md-4 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                    <div *ngIf="AppCreated">
+                        <i class="fa fa-check-circle-o fa-2x" style="color:#25dd53"></i>
+                        <span style="font-size: 19px; margin-left:5px;">Application Ready</span>
+                    </div>
+                    <div *ngIf="AppNotCreated">
+                        <i class="fa fa-spinner fa-2x fa-spin" style="color:#c4c4c4"></i>
+                        <span style="font-size: 15px; margin-left:5px;">Application Processing</span>
+                    </div>
+                </div>
+                <div class="col-md-4 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                    <div *ngIf="DomainCreated">
+                        <i class="fa fa-check-circle-o fa-2x" style="color:#25dd53"></i>
+                        <span style="font-size: 19px; margin-left:5px;">Subdomain Ready</span>
+                    </div>
+                    <div *ngIf="DomainNotCreated">
+                        <i class="fa fa-spinner fa-2x fa-spin" style="color:#c4c4c4"></i>
+                        <span style="font-size: 15px; margin-left:5px;">Subdomain Processing</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+</form>
+
+<table id="clientTable" class="table table-striped">
+    <thead class="table-head-background">
+        <tr>
+            <th style="width:120px;">Client Name</th>
+            <th style="width:90px;">Office No</th>
+            <th style="width:90px;">Validity</th>
+            <th style="width:100px;">Hardware Type</th>
+            <th style="width:250px;">Listener</th>
+            <th>Client Status</th>
+            <th style="width:50px;">Edit</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+</table>
+<form #deviceConfigFrm="ngForm">
+
+    <app-modal #modaldeviceConfig modalTitle='Device Config' [width]="1200" [maximizable]="true" style="top:0">
+
+        <ng-container class="app-modal-body">
+            <div style="height: 400px;overflow-y: auto;padding:1%;overflow-x: hidden;">
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-3" style="padding: 0px;">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="deviceTypeList" bindLabel="deviceName" bindValue="deviceCode" (change)="GetDeviceDataFormat($event)" placeholder="Device Type" [(ngModel)]="deviceTypeId" required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.deviceName}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <table id="clientDevice" class="table table-striped">
+                        <thead class="table-head-background">
+                            <tr>
+                                <th>Sensor Key</th>
+                                <th style="width:120px;">Sensor Type</th>
+                                <th>Units</th>
+                                <th style="width:120px;">Icon</th>
+                                <th>Convertion</th>
+                                <th style="width:120px;">Math Functions</th>
+                                <th>RW Type</th>
+                                <th>States</th>
+                                <th>Order</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </ng-container>
+        <!--    <ng-container class="app-modal-footer">
+
+           <button type="button" (click)="modaldeviceConfig.hide();" class="btn btn-danger">
+        <i class="fa fa-close"></i>
+        {{'Close'|translate}} </button>&nbsp;
+            <button type="submit" class="btn btn-success" (click)="saveDeviceConfig()">
+        <i class="fa fa-save"></i> {{'Save'|translate}}</button>
+        </ng-container> -->
+
+    </app-modal>
+
+</form>
+<form #deviceUpdateFrm="ngForm">
+
+    <app-modal #modaldeviceUpdate [modalTitle]="deviceSensor" [width]="600" [maximizable]="true" style="top:20">
+
+        <ng-container class="app-modal-body">
+            <div style="height: 400px;overflow-y: auto;padding:1%;overflow-x: hidden;">
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Disply Name</div>
+                    <div class="col-md-3">
+                        <input type="text" class="floating-input" name="sensorName" [(ngModel)]="sensorDisplyName" placeholder=" " #sensorDisp="ngModel" />
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Units</div>
+                    <div class="col-md-4">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="sensorUoMFilter" [clearable]="false" [(ngModel)]="UoM" #UoMName2="ngModel" name="UoMName2" (change)="setUoM($event)" bindLabel="uomsymbol" bindValue="uomId" placeholder="Sensor UoM" required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.uomsymbol}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Math Functions</div>
+                    <div class="col-md-4">
+                        <ng-select [items]="mathFunctions" [multiple]=true [closeOnSelect]="false" [(ngModel)]='mathFunctionList' style="color:#212121" bindLabel="functionName" bindValue="mathId" placeholder="Math Function" name="mathFunc">
+                            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                <div *ngIf="mathFunctionList.length === mathFunctions.length">
+                                    All (Default)
+                                </div>
+                                <div *ngIf="mathFunctionList.length != mathFunctions.length">
+                                    <div class="ng-value" *ngIf="items.length > 0">
+                                        <span class="ng-value-label">{{items.length}} Selected...</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Sensor Type</div>
+                    <div class="col-md-3">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="readWrite" [clearable]="false" [(ngModel)]="readWriteType" (change)="changeRWtype()" #RWName2="ngModel" name="RW2" bindLabel="rwName" bindValue="rwId" placeholder="Read Write" required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.rwName}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Icon</div>
+                    <div class="col-md-4">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="sensorIcons" [clearable]="false" [(ngModel)]="sensorIcon" #RWName2="ngModel" name="Icon" bindLabel="IconName" bindValue="IconId" placeholder="Icon" required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.IconName}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Convertion</div>
+                    <div class="col-md-3">
+                        <input type="text" class="floating-input" name="sensorConvert" [(ngModel)]="sensorConvertion" placeholder=" " #sensorDisp="ngModel" />
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Sensor States</div>
+                    <div class="col-md-4">
+                        <ng-select [items]="sensorStatesFilter" [multiple]=true [closeOnSelect]="false" [(ngModel)]='sensorStateList' style="color:#212121" bindLabel="stateName" bindValue="stateId" placeholder="Sensor State" name="snsrState">
+                            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                <div *ngIf="sensorStateList.length === sensorStates.length">
+                                    All (Default)
+                                </div>
+                                <div *ngIf="sensorStateList.length != sensorStates.length">
+                                    <div class="ng-value" *ngIf="items.length > 0">
+                                        <span class="ng-value-label">{{items.length}} Selected...</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row" style="padding: 1%;">
+                    <div class="col-md-3">Show Trend</div>
+                    <div class="col-md-3">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="chkTrend"
+                  [(ngModel)]="chkShowTrend"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">Order in LiveView</div>
+                    <div class="col-md-1">
+                        <input type="text" name="sensorOrder" [(ngModel)]="sensorOrder" style="width: 50px;" placeholder="Order No." />
+                    </div>
+                </div>
+                <div class="row" *ngIf="isWriteType" style="padding: 1%;">
+                    <div class="col-md-3">Write Range</div>
+                    <div class="col-md-4">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="sensorWrite" [(ngModel)]="sensorWriteRange" placeholder="Range " />
+                            <img src="./assets/Images/information.svg" title="Enter range of values with comma seperate" alt="info" /> </div>
+                    </div>
+                </div>
+            </div>
+
+        </ng-container>
+        <ng-container class="app-modal-footer">
+
+            <button type="button" (click)="modaldeviceUpdate.hide();" class="btn btn-danger">
+            <i class="fa fa-close"></i>
+            {{'Close'|translate}} </button>&nbsp;
+            <button type="submit" class="btn btn-success" (click)="saveDeviceConfig()">
+            <i class="fa fa-save"></i> {{'Save'|translate}}</button>
+        </ng-container>
+
+    </app-modal>
+
+</form>
+<form #newSignUpFrm="ngForm" autocomplete="off" (ngSubmit)="saveSiteAccess(newSignUpFrm.form.valid,newSignUpFrm.value)">
+    <app-modal #modalSgnUp [modalTitle]="[signUp]" [width]="350" [maximizable]="true" aria-autocomplete="off">
+
+        <ng-container class="app-modal-body">
+
+            <div class="row">
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="text" placeholder=" " class="floating-input" name="name" [(ngModel)]="siteadminobj.name" #name="ngModel" (change)="spacesCheckedForName($event,'Name')" (paste)="pasteName($event.clipboardData.getData('text/plain'),'Name')" alphaNumerics required
+                            autocomplete="new-password" />
+                        <label class="labClass">{{'Name'|translate}}</label>
+                    </div>
+                </div>
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="text" placeholder=" " class="floating-input" name="userName" [(ngModel)]="siteadminobj.userName" appEmailcheck #userName="ngModel" [attr.disabled]="disabled ? '' : null" required autocomplete="new-password" />
+                        <label class=" labClass">{{'LoginwithEmail'|translate}}
+            </label>
+                    </div>
+                </div>
+
+                <!-- appMobilecheck -->
+
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="text" #mobileNumber [(ngModel)]="siteadminobj.mobileNumber" id="MobileNo" name="mobileNumber" placeholder=" " class="floating-input" (keypress)="allowNumericsOnly($event)" (paste)="pasteMobileNo($event.clipboardData.getData('text/plain'),'RegisterMobileNo')"
+                            [attr.disabled]="disabled ? '' : null" required autocomplete="new-password" />
+                        <label class="labClass">{{'RegisterMobileNo'|translate}}</label>
+                    </div>
+                </div>
+                <div *ngIf="isConfirmPasswordShow" class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="password" placeholder=" " class="floating-input" #password="ngModel" [(ngModel)]="siteadminobj.password" id="Password" name="password" appStrongpassword maxlength="15" required autocomplete="new-password" />
+                        <label class="labClass">{{'Password'|translate}}</label>
+                        <img src="./assets/Images/information.svg" title="{{'pwdInfo'|translate}}" alt="info" />
+                    </div>
+
+                </div>
+                <div *ngIf="isConfirmPasswordShow" class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="password" placeholder=" " class="floating-input" [(ngModel)]="siteadminobj.ConfirmPassword" id="ConfirmPassword" name="ConfirmPassword" appStrongpassword maxlength="15" required autocomplete="new-password" />
+                        <label class="labClass">{{'ReEnterPassword'|translate}}</label>
+                        <img src="./assets/Images/information.svg" title="{{'pwdInfo'|translate}}" alt="info" />
+                    </div>
+                </div>
+
+                <div *ngIf="isResetPasswordShow" class="col-md-12 css10" style="color: #3598dc;">
+                    <a (click)="modalResetPswd.show()" style="cursor: pointer;">
+            {{'ResetPassword'|translate}}
+          </a>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <button type="button" (click)="modalSgnUp.hide();" class="btn btn-danger">
+        <i class="fa fa-close"></i>
+        {{'Close'|translate}} </button>&nbsp;
+            <button type="submit" class="btn btn-success">
+        <i class="fa fa-save"></i> {{'Save'|translate}}</button>
+
+        </ng-container>
+
+    </app-modal>
+
+</form>
+
+<form #clientSensorFrm="ngForm" autocomplete="off">
+    <app-modal #modalclientSensor [modalTitle]="'Client Sensor List'" [width]="1100" [maximizable]="true" aria-autocomplete="off">
+        <ng-container class="app-modal-body">
+            <div class="row">
+                <div class="col-md-12" style="padding:0">
+                    <button type="button" (click)="OpenSensorTypeModal('Sensor')" value="Add New Sensor" id="btnNewSensor" class="btn btn-success" style="margin-left:0.9em;margin-right:0.25em;margin-top:0.25em">
+            <i class="ion-plus-round"></i>
+            <span> New Device</span>
+          </button>
+                    <button type="button" (click)="OpenSensorTypeModal('Hub')" value="Add New Type" id="btnHubType" class="btn btn-success" style="margin-left:0.25em;margin-top:0.25em">
+            <i class="ion-plus-round"></i>
+            <span> New Hub</span>
+          </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+
+                    <table id="clientSensorTable" class="table table-striped">
+                        <thead class="table-head-background">
+                            <tr>
+                                <th>Hardware Type</th>
+                                <th>Sensor Id</th>
+                                <th style="width:120px;">Sensor Type</th>
+                                <th>Date Of Delivery</th>
+                                <th>On Boarded</th>
+                                <th>IsActive?</th>
+                                <th style="width:50px;">Edit</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+        </ng-container>
+    </app-modal>
+
+    <form #newHubTypeFrm="ngForm" autocomplete="off" (ngSubmit)="saveSiteHub(newHubTypeFrm.form.valid,newHubTypeFrm.value)">
+        <app-modal #modalHubType [modalTitle]="[addSensor]" [width]="300" [maximizable]="true" aria-autocomplete="off">
+            <ng-container class="app-modal-body">
+                <div class="row">
+                    <div class="col-md-12 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="hubCategories" [clearable]="false" [(ngModel)]="sensorDetails.HubCategoryId" #Sensors="ngModel" name="HubCategoryId" bindLabel="HubCategoryName" (change)="getHubShortCode($event)" bindValue="HubCategoryId"
+                            placeholder="Hub Category" required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.HubCategoryName}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-12 " *ngIf="isNewSensor">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="floating-label">
+                                    <input type="text" placeholder=" " [attr.disabled]="''" class="floating-input" id="NewHubid" [(ngModel)]="NewHubid" name="NewHubid" required />
+                                    <label class="labClass">Id-Prefix</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="floating-label">
+                                    <input type="text" class="floating-input" name="HubId" [(ngModel)]="sensorDetails.HubId" #ModelNo placeholder=" " />
+                                    <label class="labClass">Hub Id</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+
+                                <div class="addButton" style="top:20px;margin-left:20px;">
+                                    <i class="fa fa-plus-circle fa-2x" (click)="addHubID()" style="color: #49cf8c;margin-top:-10px;cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div style="border: 1px solid #ccc;height:100px;overflow-y:auto;padding:5px;">
+                                <table>
+                                    <tbody>
+                                        <tr *ngFor="let hubId1 of HubIDS; let idx = index" [attr.id]="idx">
+                                            <td>
+                                                <input type="text" value="{{HubIDS[idx].hubid}}" maxlength="10" readonly style="width:100%;">
+                                            </td>
+                                            <td>
+                                                <button type="button" (click)="deleteHubId(idx)">
+                          <i class="closeButton ion-close-circled"></i>
+                        </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 margintop25px">
+                        <label>
+              <span style="color:#c4c4c4;">Delivery Date</span><br>
+              <input [min]="minDate" style="padding-top: 4px; margin-top: 5px; padding-bottom: 4px; width:168%;"
+                [owlDateTimeTrigger]="dt7" [owlDateTime]="dt7" name="Hubdelivery" id="Hubdelivery"
+                [(ngModel)]="sensorDetails.Delivery" class="date-picker-styles" required>
+              <owl-date-time #dt7 afterPickerClosed="clearSelectedDates()" [pickerType]="'calendar'"></owl-date-time>
+            </label>
+                    </div>
+                    <div class="col-md-12 margintop25px">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="IsSensorActive"
+                  [(ngModel)]="sensorDetails.IsSensorActive">IsActive?</label>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container class="app-modal-footer">
+                <button type="button" (click)="modalHubType.hide();" class="btn btn-danger">
+          <i class="fa fa-close"></i>
+          Close</button>&nbsp;
+                <button type="submit" class="btn btn-success">
+          <i class="fa fa-save"></i> Save</button>
+            </ng-container>
+        </app-modal>
+    </form>
+
+    <form #newSensorTypeFrm="ngForm" autocomplete="off" (ngSubmit)="saveSiteSensor(newSensorTypeFrm.form.valid,newSensorTypeFrm.value)">
+        <app-modal #modalSensorType [modalTitle]="[addSensor]" [width]="300" [maximizable]="true" aria-autocomplete="off">
+            <ng-container class="app-modal-body">
+                <div class="row">
+                    <div class="col-md-12 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="sensorTypes" [clearable]="false" [(ngModel)]="sensorDetails.SensorType" #Sensors="ngModel" name="SensorType" bindLabel="SensorName" bindValue="SensorType" (change)="getShortCode($event)" placeholder="Sensor Type"
+                            required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.SensorName}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="isNewSensor">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="floating-label">
+                                    <input type="text" placeholder=" " class="floating-input" id="NewSensorid" [(ngModel)]="NewSensorid" name="NewSensorid" [attr.disabled]="''" required />
+                                    <label class="labClass">Id-Prefix</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="floating-label">
+                                    <input type="text" class="floating-input" name="SensorId" [(ngModel)]="sensorDetails.SensorId" #ModelNo placeholder=" " />
+                                    <label class="labClass">Device Id</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="addButton" style="top:20px;margin-left:20px;">
+                                    <i class="fa fa-plus-circle fa-2x" (click)="addSensorID()" style="color: #49cf8c;margin-top:-10px;cursor: pointer;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div style="border: 1px solid #ccc;height:100px;overflow-y:auto;padding:5px;">
+                                <table>
+                                    <tbody>
+                                        <tr *ngFor="let sensorId1 of SensorIDS; let idx = index" [attr.id]="idx">
+                                            <td>
+                                                <input type="text" value="{{SensorIDS[idx].sensorid}}" maxlength="10" readonly style="width:100%;">
+                                            </td>
+                                            <td>
+                                                <button type="button" (click)="deleteSensorId(idx)">
+                          <i class="closeButton ion-close-circled"></i>
+                        </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 margintop25px">
+                        <label>
+              <span style="color:#c4c4c4;">Delivery Date</span><br>
+              <input [min]="minDate" style="padding-top: 4px; margin-top: 5px; padding-bottom: 4px; width:168%;"
+                [owlDateTimeTrigger]="dt8" [owlDateTime]="dt8" name="delivery" id="Sensordelivery"
+                [(ngModel)]="sensorDetails.Delivery" class="date-picker-styles" required>
+              <owl-date-time #dt8 afterPickerClosed="clearSelectedDates()" [pickerType]="'calendar'"></owl-date-time>
+            </label>
+                    </div>
+                    <div class="col-md-12 margintop25px">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="IsSensorActive"
+                  [(ngModel)]="sensorDetails.IsSensorActive">IsActive?</label>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container class="app-modal-footer">
+                <button type="button" (click)="modalSensorType.hide();" class="btn btn-danger">
+          <i class="fa fa-close"></i>
+          Close</button>&nbsp;
+                <button type="submit" class="btn btn-success">
+          <i class="fa fa-save"></i> Save</button>
+            </ng-container>
+        </app-modal>
+    </form>
+
+    <form #hardwareTypeListFrm="ngForm" autocomplete="off">
+        <app-modal #modalhardwareTypeList [modalTitle]="'Hardware Types'" [width]="1300" [maximizable]="true" aria-autocomplete="off">
+            <ng-container class="app-modal-body">
+                <div class="row">
+                    <div class="col-md-12 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                        <button type="button" (click)="OpenSensorTypeModal('Type')" value="Add New Type" id="btnSensorType" class="btn md-button" style="position:absolute">
+              <i class="ion-plus-round"></i>
+              <span> New Hardware</span>
+            </button>
+                        <table id="HardwareTypeTable" class="table table-striped">
+                            <thead class="table-head-background">
+                                <tr>
+                                    <th>Hardware Type</th>
+                                    <th>Hardware Name</th>
+                                    <th>Short Code</th>
+                                    <th>Model No</th>
+                                    <th>Vendor</th>
+                                    <th>Data Format</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ng-container>
+        </app-modal>
+    </form>
+
+    <form #addSensorHubTypeFrm="ngForm" autocomplete="off" (ngSubmit)="saveNewSensorHardwareType(addSensorHubTypeFrm.form.valid,addSensorHubTypeFrm.value)">
+        <app-modal #modaladdSensorHubType [modalTitle]="[addSensor]" [width]="300" [maximizable]="true" aria-autocomplete="off">
+            <ng-container class="app-modal-body">
+                <div class="row" *ngIf="isHWNewType">
+                    <div class="col-md-12 margintop25px" style="margin-bottom: 12px; margin-top: 8px;">
+                        <ng-select [dropdownPosition]="'bottom'" [items]="HardwareTypes" [clearable]="false" [(ngModel)]="hwType.HardwareType" #Sensors="ngModel" (change)="getHarwareType($event)" name="HardwareType" bindLabel="HardwareName" bindValue="HardwareId" placeholder="Hardware Type"
+                            required>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.HardwareName}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row" *ngIf='isSensor'>
+                    <div class="col-md-12 ">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="HardwareName" [(ngModel)]="hwType.HardwareName" #SensorID placeholder=" " [attr.disabled]="HWdisabled ? '' : null" required />
+                            <label class="labClass">Sensor Type</label>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12 ">
+            <div class="floating-label">
+              <input type="text" class="floating-input" name="UoM" [(ngModel)]="hwType.UoM" #Units placeholder=" "
+                required />
+              <label class="labClass">UoM</label>
+            </div>
+          </div> -->
+                </div>
+                <div class="row" *ngIf='isHub'>
+                    <div class="col-md-12 ">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="HardwareName" [(ngModel)]="hwType.HardwareName" #HubType placeholder=" " [attr.disabled]="HWdisabled ? '' : null" required />
+                            <label class="labClass">Hub Type</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="OS" [(ngModel)]="hwType.OS" #OS placeholder=" " />
+                            <label class="labClass">OS</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="ShortName" [(ngModel)]="hwType.ShortName" #ShortName placeholder=" " [attr.disabled]="HWdisabled ? '' : null" required />
+                            <label class="labClass">Short Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="ModelNo" [(ngModel)]="hwType.ModelNo" #ModelNo placeholder=" " />
+                            <label class="labClass">ModelNo</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="Vendor" [(ngModel)]="hwType.Vendor" #Vendor placeholder=" " />
+                            <label class="labClass">Vendor</label>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container class="app-modal-footer">
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="button" (click)="openDataFormatModal(addSensorHubTypeFrm.value)" *ngIf="isHWTypeSave" class="btn btn-primary">
+              <i class="fa fa-ellipsis-v"></i>
+              Format</button>
+                    </div>
+                    <div class="col-md-4" *ngIf="IsNewDF">
+                        <button type="button" (click)="modaladdSensorHubType.hide();" class="btn btn-danger">
+              <i class="fa fa-close"></i>
+              Close</button>
+                    </div>
+                    <div class="col-md-4" *ngIf="IsNewDF">
+                        <button type="submit" class="btn btn-success">
+              <i class="fa fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </ng-container>
+        </app-modal>
+    </form>
+
+    <form #sensorDataFormatFrm="ngForm" autocomplete="off">
+        <app-modal #modalsensorDataFormat [modalTitle]="'Data Format'" [width]="600" [maximizable]="true" aria-autocomplete="off">
+            <ng-container class="app-modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div style="height: 150px;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="floating-label">
+                                        <input type="text" placeholder=" " class="floating-input" [(ngModel)]="dataKey" name="dataKey" required />
+                                        <label class="labClass">Key</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 12px; margin-top: 8px;">
+                                    <!-- <div class="floating-label">
+                                        <input type="text" placeholder=" " class="floating-input" [(ngModel)]="dataKeyName" name="dataKeyName" required />
+                                        <label class="labClass">Key Name</label>
+                                    </div> -->
+                                    <ng-select [dropdownPosition]="'bottom'" [items]="sensorNames" [clearable]="false" [(ngModel)]="sensorName" #SensorName="ngModel" name="TypeName" (change)="getUoMByEvent($event)" bindLabel="sensorType" bindValue="sensorId" placeholder="Sensor Type" required>
+                                        <ng-template ng-label-tmp let-item="item">
+                                            {{item.sensorType}}
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-4" style="margin-bottom: 12px; margin-top: 8px;">
+                                    <ng-select [dropdownPosition]="'bottom'" [items]="sensorUoMFilter" [clearable]="false" [(ngModel)]="UoM" #UoMName="ngModel" name="UoMName" (change)="setUoM($event)" bindLabel="uomsymbol" bindValue="uomId" placeholder="Sensor UoM" required>
+                                        <ng-template ng-label-tmp let-item="item">
+                                            {{item.uomsymbol}}
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-2" style="margin-bottom: 12px; margin-top: 8px;">
+                                    <div class="floating-label">
+                                        <!-- <input type="text" class="floating-input" name="UoM" [(ngModel)]="UoM" placeholder=" " /> -->
+
+                                        {{UoMId}}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="floating-label">
+                                        <input type="text" class="floating-input" name="Convertion" [(ngModel)]="Convertion" placeholder=" " />
+                                        <label class="labClass">Convertion</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="floating-label">
+                                        <ng-select [dropdownPosition]="'bottom'" [items]="readWrite" [clearable]="false" [(ngModel)]="readWriteType" #RWName="ngModel" name="RW" bindLabel="rwName" bindValue="rwId" placeholder="Read Write" required>
+                                            <ng-template ng-label-tmp let-item="item">
+                                                {{item.rwName}}
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="checkbox">
+                                        <label>
+                      <input type="checkbox" class="floating-input" name="showLive" [(ngModel)]="showLive" />
+                      Show Live</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4" *ngIf="isBoolType">
+                                    <div class="floating-label">
+                                        <input type="text" class="floating-input" name="bool1" [(ngModel)]="bool1" placeholder=" " />
+                                        <label class="labClass">1 Details</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" *ngIf="isBoolType">
+                                    <div class="floating-label">
+                                        <input type="text" class="floating-input" name="bool0" [(ngModel)]="bool0" placeholder=" " />
+                                        <label class="labClass">0 Details</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="addButton" style="top:20px;margin-left:20px;">
+                                        <i class="fa fa-plus-circle fa-2x" (click)="addKeyType(sensorDataFormatFrm.value)" style="color: #49cf8c;margin-top:-10px;cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height:90px;width:590px;overflow-y: auto;">
+                            <div class="col-md-12" style="font-size: medium;">
+                                Data Format : {{dataFormat}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container class="app-modal-footer">
+                <button type="button" (click)="modalsensorDataFormat.hide();" class="btn btn-danger">
+          <i class="fa fa-close"></i>
+          Close</button>
+            </ng-container>
+        </app-modal>
+    </form>
+
+</form>
+
+<form #newResetPswdFrm="ngForm" (ngSubmit)="saveResetPwd(newResetPswdFrm.form.valid,newResetPswdFrm.value)" autocomplete="off">
+
+    <app-modal #modalResetPswd [modalTitle]="'Reset Password'" [width]="350" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+
+            <div class="row">
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+
+                        <input type="password" id="ResetPassword" name="ResetPassword" appStrongpassword placeholder=" " class="floating-input" required maxlength="15" [(ngModel)]="siteadminobj.ResetPassword" autocomplete="new-password" />
+
+                        <label class="labClass">{{'Password'|translate}}</label>
+                        <img src="./assets/Images/information.svg" title="{{'pwdInfo'|translate}}" alt="info" />
+                    </div>
+
+                </div>
+
+                <div class="col-md-12">
+                    <div class="floating-label">
+                        <input type="password" placeholder=" " class="floating-input" id="ResetConfirmPassword" name="ResetConfirmPassword" appStrongpassword required maxlength="15" [(ngModel)]="siteadminobj.ResetConfirmPassword" autocomplete="new-password">
+                        <label class="labClass">{{'ReEnterPassword'|translate}}</label>
+                        <img src="./assets/Images/information.svg" title="{{'pwdInfo'|translate}}" alt="info" />
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+
+            <button type="button" (click)="modalResetPswd.hide();" class="btn btn-danger">
+        <i class="fa fa-close"></i>
+        {{'Close'|translate}} </button>&nbsp;
+            <button type="submit" class="btn">
+        <i class="fa fa-refresh"></i>{{'Reset'|translate}} </button>
+        </ng-container>
+
+    </app-modal>
+
+</form>
+
+<form #newPermissionFrm="ngForm">
+
+    <app-modal #modalPermissions [modalTitle]="[Permissions]" [width]="450" [maximizable]="true" style="top:0">
+
+        <ng-container class="app-modal-body">
+
+            <div style="padding-bottom:5px;    border-bottom: 1px solid gray;">
+                <ngx-treeview [config]="config" [items]="items" (selectedChange)="onSelectedChange($event)">
+                </ngx-treeview>
+            </div>
+
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <div class="col-md-6" style="padding: 0px;">
+                <ng-select [dropdownPosition]="'top'" [items]="defaultDrpList" bindLabel="name" bindValue="id" name="DefaultFeatureId" id="DefaultFeatureId" placeholder="{{'SelectHomeScreen'|translate}}" [(ngModel)]="defaultFeatureId" required>
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.name}}
+                    </ng-template>
+                </ng-select>
+            </div>
+            <button type="button" (click)="modalPermissions.hide();" class="btn btn-danger">
+        <i class="fa fa-close"></i>
+        {{'Close'|translate}} </button>&nbsp;
+            <button type="submit" class="btn btn-success" (click)="savePermissions()">
+        <i class="fa fa-save"></i> {{'Save'|translate}}</button>
+        </ng-container>
+
+    </app-modal>
+
+</form>
+
+<style>
+    .the-legend {
+        border-style: none;
+        border-width: 0;
+        font-size: 14px;
+        line-height: 20px;
+        margin-bottom: 0;
+        width: auto;
+        padding: 0 10px;
+        /* border: 1px solid #e0e0e0; */
+    }
+    
+    .the-fieldset {
+        /*border: 1px solid #e0e0e0;*/
+        border: 1px solid #c9c0c0;
+        padding: 10px;
+    }
+</style>

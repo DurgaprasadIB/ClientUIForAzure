@@ -1,0 +1,224 @@
+<div style="margin-bottom:5px;">
+
+  <div class="row">
+
+    <div class="col-md-4" style="float:left; margin-bottom: 10px;">
+      <div class="row">
+        <div class="col-md-12">
+          <div style="float: left;padding-bottom:2px;">
+            <i class="fa fa-list-ul fa-2x" (click)="changeView('live')" title="List View"
+              style="cursor: pointer;"></i>&nbsp;
+            <!-- <i class="fa fa-thumb-tack fa-2x" *ngIf='hasDBpin' (click)="changeView('pin')" title="Dashboard Pin"
+              style="cursor: pointer;"></i> &nbsp; -->
+            <i class="fa fa-map fa-2x" *ngIf='hasMap' (click)="changeView('map')" title="Map View"
+              style="cursor: pointer;"></i>&nbsp;
+            <i class="fa fa-thermometer-half fa-2x" *ngIf='hasTemp' (click)="changeView('temp')"
+              title="Temperature View" style="cursor: pointer;"></i>&nbsp;
+            <i class="fa fa-area-chart fa-2x" *ngIf='hasChart' style="color:#3598DC;" title="Charts View"></i> &nbsp;
+            <!-- <i class="fa fa-camera fa-2x" *ngIf='hasSurv' (click)="changeView('image')" title="Recordings"
+              style="cursor: pointer;"></i> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="overflow-y: hidden;height: 530px;font-family:Helvetica;">
+  <div class="col-md-4 col-lg-4" style="padding-left: 10px;">
+    <div style="background-color: #FFF;padding-bottom: 10px;
+    margin-bottom: 10px;border: solid 1px #EDEEF4;border-radius: 5px;overflow-x: hidden;">
+      <div class="row" style=" background-color: #03243B;color: #fff;margin-bottom: 10px;">
+        <h4 style="padding-left:20px;">Sensor Status</h4>
+      </div>
+      <div class="col-md-12" style="padding: 2%;height: 450px" *ngIf="notFound">
+        <img src="./assets/Images/notFound.png" style="padding-left: 29%;padding-top:10%" height="150px">
+        <p style="font-family: helvetica;font-size: x-large; padding-left: 14%; padding-top: 8%;">none of the devices
+          are reporting</p>
+      </div>
+      <div class="col-md-12">
+        <div class="row" style="margin-top: -20px;padding-left: 5%;padding-top: 3%;
+        background-color: #d6e8f7;
+        padding-bottom: 3%;
+        margin-bottom: 3%;">
+          <div class="col-md-2"> <i class="fa fa-circle" style="color:#34C6EB;"></i>Live</div>
+          <div class="col-md-2" style="padding-left: 3px;"> <i class="fa fa-circle" style="color:#807D7C;"></i>Non.Live
+          </div>
+          <div class="col-md-2"> <i class="fa fa-circle" style="color:#E01F26;"></i>Critical</div>
+          <div class="col-md-2"> <i class="fa fa-circle" style="color:#E7C219;"></i>Warning</div>
+          <div class="col-md-2" style="padding-left: 24px;"> <i class="fa fa-circle" style="color:#00A65A;"></i>Good
+          </div>
+        </div>
+        <div class="row" style="overflow-y:auto;overflow-x: hidden;height: 444px;">
+
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart1">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart2">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart3">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart4">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart5">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart6">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart7">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart8">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart9">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart10">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart11">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart12">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart13">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart14">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart15">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart16">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart17">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart18">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart19">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+          <div class="col-md-6" style="padding-left: 0px;">
+            <div id="snChart20">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-8 col-lg-8" style="padding-left: 0px;padding-right: 10px;overflow-x: hidden;">
+
+
+    <div class="col-md-12" *ngIf="notFound" style="background-color: #FFF; padding-bottom: 10px;
+    margin-bottom: 10px;  border: solid 1px #EDEEF4;  border-radius: 5px;    padding-left: 10px;
+      padding-right: 10px;">
+      <div class="row" style=" background-color: #03243B;color: #fff;margin-bottom: 10px;">
+        <h4 style="padding-left:10px;">Last 24hr trend</h4>
+      </div>
+      <div style="height: 450px;">
+        <img src="./assets/Images/notFound.png" style="padding-left: 29%;padding-top:10%" height="200px"
+          class="loginDivlogo">
+        <p style="font-family: helvetica;font-size: x-large; padding-left: 14%; padding-top: 8%;">none of the devices
+          are
+          reporting</p>
+      </div>
+    </div>
+    <div *ngIf="!notFound" style="background-color: #FFF;  padding-bottom: 10px;
+  margin-bottom: 10px;  border: solid 1px #EDEEF4;  border-radius: 5px;    padding-left: 10px;
+    padding-right: 10px;overflow-x: hidden;">
+      <div class="row" style=" background-color: #03243B;color: #fff;margin-bottom: 10px;">
+        <h4 style="padding-left:10px;">Last 24hr trend</h4>
+      </div>
+      <div class="row">
+        <button type="button" [disabled]="isPrevDisabled" style="float: left;" (click)="plotPrev()" class="btn">
+          <i class="fa fa-chevron-left"></i>
+          <span> Previous</span>
+        </button>
+        <button type="button" [disabled]="isNextDisabled" style="float: right;" (click)="plotNext()" class="btn">
+          <span>Next </span>
+          <i class="fa fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="row" style=" height: 427px;  overflow-y: auto; background-color: #FFF; ">
+        <div class="col-md-12" *ngIf="nrDevices!==''" style="padding-left: 10%;padding-top: 5%; padding-right: 0px;
+        font-size: large;">
+          {{nrDevices}}
+        </div>
+        <div class="col-md-6" style="padding-left: 0px;padding-right: 0px;">
+          <div id="trChart1" style="height: 150px;">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="trChart2" style="height: 150px;">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="trChart3" style="height: 150px;">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="trChart4" style="height: 150px;">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="trChart5" style="height: 150px;">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="trChart6" style="height: 150px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

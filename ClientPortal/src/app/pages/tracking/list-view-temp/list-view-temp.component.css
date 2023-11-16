@@ -1,0 +1,400 @@
+.pageDiv
+{
+    border-radius: 5px;
+    height: 35px;
+    border: solid 1px #b5b6b7;
+    margin-right:2px ;
+    width: 40px;
+    text-align: center;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    margin: 0 auto;
+    background-repeat: repeat-x;
+}
+
+.tileDiv {
+    height: 70px;
+    color: whitesmoke;
+}
+
+.tileTopLeft {
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: large;
+    color: white;
+}
+
+.tileBottomLeft {
+    margin-top: -5px;
+    padding-left: 5px;
+    font-size: small;
+}
+
+.tileTopRight {
+    padding-left: 80%;
+    margin-top: -40px;
+}
+
+.tileBottom {
+    padding-left: 55%;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.widget {
+    padding: 5px 8px 5px 0;
+    cursor: pointer;
+}
+
+.widgetPeople {
+    /* width: 29%; */
+    padding: 5px 8px 5px 0;
+    cursor: pointer;
+}
+
+.widgetPeople.states-mdl {
+    /* margin: 0 0 0 5%; */
+    cursor: pointer;
+}
+
+.widget.states-mdl {
+    cursor: pointer;
+}
+
+.widget.states-thrd {
+    margin-right: 2%;
+}
+
+.stats-left.good {
+    float: left;
+    width: 70%;
+    background-color: #00a65a;
+    text-align: left;
+    height: 77px;
+    padding-top: 27px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-left.ok {
+    float: left;
+    width: 70%;
+    background-color: #3a8ac0;
+    text-align: left;
+    height: 77px;
+    padding-top: 27px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-left.critical {
+    float: left;
+    width: 70%;
+    background-color: #e01f26;
+    text-align: left;
+    height: 77px;
+    padding-top: 27px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-left.warning {
+    float: left;
+    width: 70%;
+    background-color: #e7c219;
+    text-align: left;
+    height: 77px;
+    vertical-align: middle;
+    padding-top: 27px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-left.noPolling {
+    white-space: nowrap;
+    float: left;
+    width: 70%;
+    background-color: #2f353b;
+    text-align: left;
+    height: 77px;
+    padding-top: 27px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-left.all {
+    float: left;
+    width: 70%;
+    background-color: #3598dc;
+    text-align: left;
+    height: 77px;
+    padding-top: 27px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+
+/* .states-mdl .stats-left.ok {
+    background-color: #cab700;
+}
+
+.states-mdl .stats-right.ok {
+    border: none;
+    border-right: 2px solid #cab700;
+} */
+
+.states-last .stats-left {
+    background-color: #03243B;
+    border: none;
+}
+
+.states-last.stats-right {
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #00a65a;
+}
+
+.states-thrd .stats-left {
+    background-color: #052963;
+}
+
+.widget.states-last .stats-right {
+    border: none;
+    border-right: 2px solid #03243B;
+}
+
+.stats-right.good {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 26px 0em;
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #00a65a;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-right.ok {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 26px 0em;
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #3a8ac0;
+    ;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-right.critical {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 26px 0em;
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #e01f26;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-right.warning {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 26px 0em;
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #e7c219;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-right.noPolling {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 26px 0em;
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #2f353b;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-right.all {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 26px 0em;
+    background-color: #eee;
+    border: none;
+    border-right: 2px solid #3598dc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -o-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.stats-left h5 {
+    color: #fff;
+    font-size: 1em;
+}
+
+.stats-left h4 {
+    /* font-size: 2em; */
+    color: #fff;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.stats-right label {
+    font-size: 10px;
+    color: #3E3D3D;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #3598dc;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.good {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #00a65a;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.ok {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #cab700;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.critical {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #e01f26;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.warning {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #E7C219;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.noPolling {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #7590A1;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.all {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #0081bd;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+hr.live {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 5px solid #34C6EB;
+    margin-top: 10px;
+    padding: 0;
+    margin-bottom: 0 !important;
+}
+
+
+/* @media screen and (max-width:1400px){
+.tableGrig-style{
+    width: 98%;
+    overflow-x: scroll;
+    margin: 0 auto;
+
+}
+} */
+
+@media screen and (max-width:450px) {
+    .s-QuickSearchInput {
+        width: 78%;
+        margin-bottom: 10px;
+    }
+    .s-QuickSearchBar {
+        float: none;
+    }
+}
+
+.MapviewContainer {
+    height: 400px;
+    width: 100%;
+}
+
+@media screen and (min-height:700px) {
+    .MapviewContainer {
+        height: 70vh;
+        margin-top: 38px;
+    }
+}
+
+
+/*:host ::ng-deep .dataTables_filter {
+    display: none !important;
+} */

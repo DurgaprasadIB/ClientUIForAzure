@@ -1,0 +1,234 @@
+<div class="row" style="height: 90vh;">
+    <div class="col-md-3"></div>
+    <div class="col-md-5"
+        style="background-color:#fff;border: solid 1px black; padding: 0px;border-radius: 5px 5px 0px 0px;">
+        <div class="col-md-12 " style="margin-bottom: 20px;    padding: 0px;">
+            <div
+                style="background-color:#02121E;color: white;border-radius: 5px 5px 0px 0px;height: 30px;padding-top: 6px;padding-left: 2%;">
+                Edit Profile
+            </div>
+        </div>
+
+        <div class="col-md-6 ">
+            <div class="form-group">
+                <div class="floating-label">
+                    <input type="text" class="floating-input" name="name" placeholder=" "
+                        [(ngModel)]="usermanagementobj.name" (change)="spacesCheckedForUserName($event,'UsmName')"
+                        (paste)="pasteName($event.clipboardData.getData('text/plain'),'UsmName')" alphaNumerics
+                        acceptFirstCharacter appNameLengthCheck #name="ngModel" required tabindex="1">
+                    <label class="labClass" for="name">First Name</label>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="floating-label">
+                    <input type="text" class="floating-input" name="lastname" placeholder=" "
+                        [(ngModel)]="usermanagementobj.lastname" (change)="spacesCheckedForUserName($event,'UsmName')"
+                        (paste)="pasteName($event.clipboardData.getData('text/plain'),'UsmName')" alphaNumerics
+                        acceptFirstCharacter appNameLengthCheck #name="ngModel" required tabindex="2">
+                    <label class="labClass" for="lastname">Last Name</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 ">
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <div class="floating-label">
+                            <input type="text" class="floating-input" name="mailId" placeholder=" "
+                                [(ngModel)]="usermanagementobj.mailId" #mailId="ngModel" tabindex="3"
+                                (keyup)="checkEmailid()">
+                            <label class="labClass" for="mailId">Email ID</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" style="padding-top: 2%;">
+                    <div *ngIf='!isEmailVerified'>
+                        <a (click)='verfiyMailId()' style="cursor: pointer;">Verify</a>
+                    </div>
+                    <div *ngIf='isEmailVerified' style="color: #00A651;">
+                        Verified
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="floating-label">
+                <input type="text" #mobileNumber="ngModel" placeholder=" " tabindex="3" class="floating-input"
+                    (keypress)="allowNumericsOnly($event)" (keyup)="checkMobileNo()" appNumberOnly
+                    [(ngModel)]="usermanagementobj.mobileNumber" id="MobileNo" name="mobileNumber" tabindex="4" required
+                    #E2 />
+                <label class="labClass">Phone #</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div *ngIf='!otpSent'>
+                <a (click)='verfiyMobile()' style="cursor: pointer;">Verify</a>
+            </div>
+            <div *ngIf='isMobileVerified' style="color: #00A651;">
+                Verified
+            </div>
+        </div>
+        <div class="col-md-4" *ngIf='otpSent && !isMobileVerified'>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="floating-label">
+                        <input type="text" #mobileOTP="ngModel" style="width:140%" placeholder="OTP"
+                            class="floating-input" (keypress)="allowNumericsOnly($event)" appNumberOnly
+                            [(ngModel)]="signupOTP" id="MobileNo" name="mobileOTP" tabindex="5" required #E22 />
+                    </div>
+                </div>
+                <div class="col-md-2" style="padding-top: 10%;">
+                    <i class="fa fa-arrow-circle-o-right fa-2x" (click)='verfiyOTP()'></i>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12 ">
+            <div class="form-group">
+                <div class="floating-label">
+                    <input type="text" (click)="openRestPwd()" readonly tabindex="6" value="******"
+                        class="floating-input" name="password" placeholder=" " autocomplete="new-password">
+                    <label class="labClass" for="password">Password</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 ">
+            <div class="floating-label">
+                <div class="row" style="padding-left: 15px;">
+                    Alert Preference
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label><input type="checkbox" tabindex="7" name="sms" [(ngModel)]="sms" data-md-icheck>
+                                SMS</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label><input type="checkbox" tabindex="8" name="email" [(ngModel)]="email"
+                                    data-md-icheck>Email</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label><input type="checkbox" tabindex="9" name="notif" [(ngModel)]="notif"
+                                    data-md-icheck>Notification</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-left: 15px;" *ngIf="isSuperAdmin">
+            <div class="col-md-4">
+                <div class="checkbox">
+                    <label><input type="checkbox" tabindex="10" name="warning" [(ngModel)]="cbwarning" data-md-icheck>
+                        Warning</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="checkbox">
+                    <label><input type="checkbox" tabindex="11" name="critical" [(ngModel)]="cbcritical" data-md-icheck>
+                        Critical</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="checkbox">
+                    <label><input type="checkbox" tabindex="12" name="good" [(ngModel)]="cbgood" data-md-icheck>
+                        Good</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 ">
+            <div class="checkbox">
+                <label><input type="checkbox" tabindex="13" name="nrSMS" [(ngModel)]="nrSMS" data-md-icheck>
+                    Report/Not Reporting Alerts</label>
+            </div>
+        </div>
+        <div class="col-md-6 ">
+
+            <div class="floating-label">
+                <ng-select [dropdownPosition]="'top'" tabindex="14" [items]="defaultFeatures" required bindLabel="name"
+                    bindValue="userFeatureId" placeholder="Preference" [(ngModel)]="usermanagementobj.userPref"
+                    #PreferenceModal="ngModel" id="userPref" name="userPref">
+                    <ng-template ng-label-tmp let-item="item">
+                        {{item.name}}
+                    </ng-template>
+                </ng-select>
+            </div>
+        </div>
+        <div class="col-md-6" style="padding-top: 2%;">
+            <button type="submit" class="btn btn-success" tabindex="15" (click)="saveNewUser()">
+                <i class="fa fa-save"></i> Save</button>
+        </div>
+
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+<form #newChangePswdFrm="ngForm" autocomplete="off">
+    <app-modal #modalChangePswd [modalTitle]="'Change Password'" [width]="330" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+
+            <div class="row">
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="oldPassword" [(ngModel)]="oldPassword"
+                            appStrongpassword autocomplete="new-password" required placeholder=" "
+                            #oldpassword="ngModel" tabindex="100" maxlength="15" />
+
+                        <label class="labClass">Current Password</label>
+                        <!-- <i class="fa fa-arrow-circle-right fa-2x" style="cursor: pointer; color: #5CB85C; position: absolute;right: 5px;top: 0px;"  tabindex="101" (click)="checkuserPwd()"></i> -->
+                    </div>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <!-- *ngIf="isInValidPwd" -->
+                    <!-- <div  style="margin-bottom: 20px;">Enter Password
+                    </div> -->
+                    <!-- *ngIf="isValidPwd" -->
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="password" [(ngModel)]="chngobj.password"
+                            appStrongpassword required placeholder=" " #password="ngModel" tabindex="102" maxlength="15"
+                            autocomplete="new-password"
+                            [ngClass]="{ 'is-invalid': newChangePswdFrm.submitted && password.invalid }" />
+                        <label class="labClass">Enter Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <!-- *ngIf="isInValidPwd" -->
+                    <!-- <div *ngIf="isInValidPwd">Re-Enter Password
+                    </div> -->
+                    <!-- *ngIf="isValidPwd" -->
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="confirmPassword"
+                            [(ngModel)]="chngobj.confirmPassword" appStrongpassword required placeholder=" "
+                            #confirmPassword="ngModel" tabindex="103" maxlength="15" autocomplete="new-password"
+                            [ngClass]="{ 'is-invalid': newChangePswdFrm.submitted && confirmPassword.invalid }" />
+                        <label class="labClass">Re-Enter Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <button type="submit" class="btn btn-success" (click)="saveChangePwd(newChangePswdFrm.value)"
+                tabindex="104">
+                <i class="fa fa-save"></i> Save</button>
+        </ng-container>
+
+    </app-modal>
+
+</form>

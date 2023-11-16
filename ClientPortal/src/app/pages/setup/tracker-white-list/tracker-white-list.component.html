@@ -1,0 +1,186 @@
+<div style="margin-bottom:5px;">
+    <span style="color:#03243B"> {{'Setup'|translate}} <i class="fa fa-angle-double-right"></i> </span>
+      {{'Tracker Whitelist'|translate}}
+  </div>
+
+
+<div class="col-md-6" style="padding:0;margin-bottom: 10px;">
+
+
+    <div class="col-md-6 col-sm-6 col-xs-8" style="padding-left:0">
+      <ng-select [items]="listDropdownList" style="margin-right: 11px" bindLabel="clientName" bindValue="clientID"
+        placeholder="{{'Select Client'|translate}}" (change)="selectCreateBy($event)">
+        <ng-template ng-label-tmp let-item="item">
+          {{item.clientName}}
+        </ng-template>
+      </ng-select>
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-xs-4">
+      <div class="btn-with-ion-plus-round">
+        <button type="button" [disabled]="!isButtonActive" (click)="OpenModal('', 'create');modalRoot.show()"
+          id="btnAsset" class="btn">
+          <i class="ion-plus-round"></i>
+          <span> {{'Whitelist'|translate}}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+<div class="row">
+  <div *ngIf="isClientDetais" class="col-md-12 col-sm-12 col-xs-12 container hiddenPanel">
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <span><b>{{'Client Name'|translate}}:</b> {{DisplayClientName}}</span>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <span><b>{{'Friendly Name'|translate}}:</b> {{DisplayFriendlyName}}</span>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <span><b>{{'Email'|translate}}:</b></span><span>&nbsp;{{DisplayEmailID}}</span>
+    </div>
+  </div>
+</div>
+
+<!-- (ngSubmit)="saveTrackerWhiteList(newWhiteListFrm.form.valid,trackerWhiteList) -->
+
+<form #newWhiteListFrm="ngForm" autocomplete="off"
+  (ngSubmit)="saveTrackerWhiteList(newWhiteListFrm.form.valid,trackerWhiteList)">
+  <app-modal #modalRoot [modalTitle]="[whitelisttype]" [width]="350" [maximizable]="true">
+    <ng-container class="app-modal-body">
+      <div class="row">
+        <div class="col-md-12" *ngIf="this.editOrSave!=-1">
+          <div class="col-md-12" style="margin-bottom: 10px;">
+            <button type="button" class="btn btn-warning" tabindex="1" (click)="DeleteTrackerWhiteList()">
+              <i class="fa fa-trash"></i> {{'Remove'|translate}} </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 m-t-10px">
+        <div class="floating-label">
+          <div>
+            <input type="text" 
+                   class="floating-input"
+                   name="IMEI"
+                   [(ngModel)]="trackerWhiteList.IMEI" 
+                   placeholder=" "
+                   #IMEI="ngModel"
+                   minlength="14"
+                   maxlength="15"
+                   (keypress)="phoneNumberValidate($event)"
+                   (change)="changeWithImei($event,'IMEI')"
+                   (paste)="pasteIMEI($event.clipboardData.getData('text/plain'),'IMEI')"
+                   required
+                   tabindex="2">
+            <label class="labClass">{{'IMEI'|translate}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 m-t-10px">
+        <div class="floating-label">
+          <div>
+            <input type="text"
+                   class="floating-input"
+                   name="IMSI"
+                   [(ngModel)]="trackerWhiteList.IMSI" 
+                   placeholder=" "
+                   #IMSI="ngModel"
+                   (keypress)="phoneNumberValidate($event)"
+                   (change)="changeWithImei($event,'IMSI')"
+                   (paste)="pasteIMEI($event.clipboardData.getData('text/plain'),'IMSI')"
+                   minlength="15"
+                   maxlength="15"
+                   tabindex="3"
+                   (change)="whiteListValidation()">
+            <label class="labClass">{{'IMSI'|translate}}</label>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+      <!-- <button type="button" class="btn btn-danger" tabindex="4"
+       (click)="clearTextBox();modalRoot.hide()">
+        <i class="fa fa-close"></i>
+        Close
+      </button> -->
+      <button type="button" class="btn btn-danger" tabindex="4"
+       (click)="modalRoot.hide()">
+        <i class="fa fa-close"></i>
+        {{'Close'|translate}}
+      </button>
+      &nbsp;
+      <button type="submit" class="btn btn-success" tabindex="5">
+        <i class="fa fa-save"></i>
+        {{'Save'|translate}}
+      </button>
+    </ng-container>
+
+  </app-modal>
+</form>
+
+
+      <table id="trackerWhiteListTable" class="table table-striped">
+        <thead class="table-head-background">
+          <tr>
+            <th style="width:120px;">{{'IMEI'|translate}}</th>
+            <th style="width:120px;">{{'IMSI'|translate}}</th>
+            <th style="width:150px;">{{'Whitelisted'|translate}}</th>
+            <th>{{'Mapped to Tracker'|translate}}</th>
+            <th>{{'Action'|translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of tableBindArray">
+            <td>
+              {{item.IMEI}}
+            </td>
+            <td>
+              {{item.IMSI}}
+            </td>
+            <td>
+              {{CheckboxFormatter(item.IsWhitList)}}
+            </td>
+            <td>
+              {{isAddeded(item.isAdded)}}
+            </td>
+            <td>
+              <i (click)="OpenModal(item.CIWLID+'~'+item.isAdded,'update')" class="fa fa-edit" style="padding-left:30px;font-size:18px;cursor:pointer" title="{{'ModelEditTitle'|translate}}"></i>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+<style>
+  .inputColor {
+    color: #010305;
+  }
+
+  .s-QuickSearchBar {
+    float: left;
+    border-radius: 0 4px 4px 0;
+    background-clip: padding-box;
+    /* width: 22% !important; */
+    padding-left: 15px
+  }
+
+  .hiddenDetails {
+    margin: 4px 0;
+  }
+
+  @media screen and (max-width:1247px) {
+    .s-QuickSearchBar input.s-QuickSearchInput {
+      width: 106px;
+
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    .hiddenDetails {
+      margin: 10px 0 10px -12px;
+    }
+  }
+
+  /* .s-QuickSearchBar input.s-QuickSearchInput {
+    width: 80% !important;
+  } */
+</style>

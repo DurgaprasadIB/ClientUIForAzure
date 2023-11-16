@@ -1,0 +1,262 @@
+<div style="margin-bottom:5px;">
+
+  <div class="row">
+
+    <div class="col-md-12" style="float:left; margin-bottom: 10px;">
+      <div class="row">
+        <div class="col-md-4">
+          <i class="fa fa-list-ul fa-2x" (click)="changeView('live')" title="List View"
+            style="cursor: pointer; margin-right: 1%;"></i> &nbsp;
+          <!-- <i class="fa fa-thumb-tack fa-2x" *ngIf='hasDBpin' (click)="changeView('pin')" title="Dashboard Pin"
+            style="cursor: pointer; margin-right: 1%;"></i> -->
+          <i class="fa fa-map fa-2x" (click)="changeView('map')" title="Map View"
+            style="cursor: pointer; margin-right: 1%;"></i> &nbsp;
+          <i class="fa fa-th-large fa-2x" (click)="changeView('temp')" style="cursor: pointer; margin-right: 1%;"
+            title="Temperature View"></i>
+            <i class="fa fa-bolt fa-2x" style="cursor: pointer; margin-left: 3%;color:#3598DC;"
+            title="Energy View"></i>
+          <!-- <i class="fa fa-area-chart fa-2x" *ngIf='hasChart' (click)="changeView('chart')" title="Charts View"></i> -->
+          <!-- <i class="fa fa-camera fa-2x" *ngIf='hasSurv' (click)="changeView('image')" title="Recordings"
+              style="cursor: pointer;"></i> -->
+
+        </div>
+        <!-- <div class="col-md-2">
+          <ng-select [items]="clientRegions" [(ngModel)]="selectedRegion" name="region" (change)="changeRegion()"
+            bindLabel='regionName' bindValue='regionId' placeholder='Location'>
+          </ng-select>
+          <ng-template ng-label-temp let-item='item'>
+            {{item.regionName}}
+          </ng-template>
+        </div>
+        <div class="col-md-2">
+          <ng-select [items]="FilteredDeviceIdList" (change)="displayDevice()" [(ngModel)]="deviceId" name="devicess"
+            bindLabel="deviceName" bindValue="deviceId" placeholder="Select Device">
+          </ng-select>
+          <ng-template ng-label-tmp let-item="item">
+            {{item.deviceName}}
+          </ng-template>
+        </div>
+        <div class="col-md-2">
+          <ng-select [items]="deviceState" [(ngModel)]="selectedState" name="state" (change)="changeState()"
+            bindLabel='state' bindValue='colorCode' placeholder='State'>
+          </ng-select>
+          <ng-template ng-label-temp let-item='item'>
+            {{item.state}}
+          </ng-template>
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <ng-select [items]="SensorList" [multiple]=true [(ngModel)]='selectedSensorIdList' style="color:#212121"
+            bindLabel="sensorName" bindValue="sensorId" placeholder="Sensor" (change)="changeselectedSensor()">
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div *ngIf="selectedSensorIdList.length === SensorList.length">
+                All (Default)
+              </div>
+              <div *ngIf="selectedSensorIdList.length != SensorList.length">
+                <div class="ng-value" *ngIf="items.length > 0">
+                  <span class="ng-value-label">{{items.length}} Selected...</span>
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" style="overflow-y: scroll;height: 550px;">
+  <div *ngFor="let item of liveEnergyData">
+    <div>
+      <div class="col-md-4">
+        <div style="background-color: #FFF;
+            border-radius: 5px;
+            border: solid 1px #a4a5a7;
+            text-align: center;    margin-bottom: 10px;
+    padding-bottom: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+          <!-- <div style="height: 10px;margin-bottom: 20px;"> -->
+          <div style="background-color: #2565AE;color: #fff;    margin-left: 0%;
+          margin-right: 0%;font-size: small;" class="row">
+            <div class="col-md-12" style="text-align: center;
+            height: 25px;
+            padding-top: 4px;cursor: pointer;" title="{{item.sensorId}}">{{item.sensorName}}</div>
+            <!--{{item.deviceName}} : {{item.sensorName}}-->
+            <!-- <div class="col-md-2" style="text-align: center;padding-right: 0%;padding-left: 0%">|</div>
+            <div class="col-md-5" style="text-align: center;padding-left: 0%"></div> -->
+          </div>
+          <!-- </div> -->
+          <div class="row">
+            <div class="col-md-5" style="text-align: left; margin:5px 0px 0px 10px;">
+              <div><span class="heading">Yesterday</span></div>
+              <div>
+                <span class="Actualtext">
+                  {{item.pDConsumption}} {{this.UoM}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-6" style="text-align: right; margin:5px 0px 0px 0px">
+             <!-- <div>
+              <span class="heading">Today Cummul.</span>
+             </div> 
+             <div>
+              <span class="Actualtext">
+                {{item.tCConsumption}}
+              </span>
+             </div> -->
+             <div>
+              <span class="heading">
+                <i class = "fa fa-circle" title="Active" style="color: green;" *ngIf="item.isReporting == '1'"></i>
+                <i class = "fa fa-circle" title="InActive" *ngIf="item.isReporting == '0'"></i> 
+                LastUpdated</span>
+              </div>
+            <div>
+              <span class="Actualtext">
+                {{item.lastUpdated}}
+              </span>
+            </div>
+            </div>
+          </div>
+          <div class="row">
+            <div  class="col-md-12" style="text-align: center;margin:5px 0px 0px 0px">
+              <div class="col-md-12" style="text-align: left;">
+                <span class="heading">Active Energy</span>
+              </div>
+              <div class="col-md-12">
+                <div style="background-color: black;border:solid 1px gray;">
+                  <span  class="Actualtext"  style="text-align: center;color: red;padding: 5px;font-family: Segment7Standard;font-weight: bold;font-size:40px;">
+                    {{item.activeEnergy}}
+                  </span>
+                  <span style="font-size: larger;font-weight: bolder;color: white;">
+                    {{this.UoM}}
+                  </span>
+                 
+                </div>
+               
+              </div>
+              <!-- <div style="background-color: black; color: white;">This is a black box with white text.</div> -->
+              
+            </div>
+          </div>  
+          <!-- <div class="horizontal-line"></div> -->
+          <!-- <div class="row">
+            <div class="col-md-3" style="text-align: left;margin-left: 10px;">
+              <span class="heading">LastUpdated</span>
+            </div>
+            <div class="col-md-8" style="text-align: right;">
+              <span class="Actualtext">
+                {{item.lastUpdated}}
+              </span>
+            </div>
+          </div> -->
+          <div class="row">
+            <div class="col-md-8" style="text-align: left;margin: 5px 0px 0px 10px;">
+              <div>
+                <span class="heading">Last Month Daily Avg.</span>
+              </div>
+              <div>
+                <span class="Actualtext">
+                  {{item.lastMonthAvg}} {{this.UoM}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3" style="text-align: right;margin-top: 15px;">
+              <button (click)="showTrend(item)"
+                style="background-color: white; border-radius: 3px; color:gray;border-width: 1px; border-style: solid;">
+                <i class="fa fa-line-chart" style="color:gray;padding-left:10%;"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modal #modalTrend [modalTitle]="[TrendName]" [width]="850" [maximizable]="true">
+  <ng-container class="app-modal-body">
+    <div style="height: 400px;">
+      <div class="row">
+        <!-- <div class="col-md-3">
+                  <label>Duration</label>
+                  <ng-select [items]="DateRangeList" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName"
+                      bindValue="dtId" placeholder="Duration" (change)="checkDateRange($event)" required>
+                  </ng-select>
+                  <ng-template ng-label-tmp let-item="item">
+                      {{item.dtName}}
+                  </ng-template>
+              </div> -->
+        <div class="col-md-3">
+          <label style="margin-bottom: 0px;">Interval</label>
+          <ng-select [items]="periodRange" [(ngModel)]="period" name="period" bindLabel="pVal" bindValue="pId"
+            placeholder="Interval" (change)="checkInterval($event)" required>
+          </ng-select>
+          <ng-template ng-label-tmp let-item="item">
+            {{item.pVal}}
+          </ng-template>
+        </div>
+        <div class="col-md-4"  *ngIf="showDaily">
+          <label style="margin-bottom: 0px;">Date Range</label>
+          <input [max]="maxDate" [min]="minDate" style="width: 215px;    height: 35px; border-radius: 3px;"
+            [selectMode]="'range'" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate"
+            [(ngModel)]="fromDateLst" placeholder="Date Range" class="date-picker-styles" readonly>
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+        <div class="col-md-3" *ngIf="showMonthly">
+          <label for="startMonth" style="margin-bottom: 0px;">Start Month</label>
+          <input type="month" id="startMonth" [max]="maxDateM" [min]="minDateM" [(ngModel)] = "startMonth" style="height: 35px;border:1px solid #ccc; border-radius: 4px; width: 180px;" name="startMonth">
+        </div>
+        <div class="col-md-3" *ngIf="showMonthly">
+          <label for="endMonth" style="margin-bottom: 0px;">End Month</label>
+          <input type="month" id="endMonth" [max]="maxDateM" [min]="minDateM" [(ngModel)] = "endMonth" style="height: 35px;border:1px solid #ccc; border-radius: 4px; width: 180px;" name="endMonth">
+        </div>
+       
+        <div class="col-md-4" *ngIf="showHourly">
+          <div style="margin-left: 20px;"><label for="datepicker" style="margin-bottom: 0px;">Date</label></div>
+          <i class="fa fa-chevron-left" [ngClass]="{'disabled': !showleft}" (click)="moveleft()" style="margin-right: 10px;"></i>
+          <input type="date" id="datepicker" style="height: 36px;border:1px solid #ccc; border-radius: 4px; width: 180px;margin-right: 10px;" [max]="maxDateH" [min]="minDateH" name="datepicker" [(ngModel)]="hourlyDate">
+          <i class="fa fa-chevron-right" [ngClass]="{'disabled': !showright}" (click)="moveright()" style="margin-right: 10px;"></i>
+        </div>
+
+
+        <div class="col-md-3" style="padding-left: 5px;padding-top: 3%;">
+          <div class="row">
+            <div class="col-md-5">
+              <button class="btn" style="width: 80px;"  type="button" (click)="GetConsumptionData()">
+                GO <i class="fa fa-angle-right"></i>
+              </button>
+            </div>
+            <div class="col-md-5">
+              <div class="dropdownload" style="margin-top:-10px;">
+                  <i class="btn dropbtn fa fa-download" aria-hidden="true"></i>
+                  <div class="dropdownload-content" style="cursor: pointer;">
+                      <span (click)="downloadConsumptionData('csv')"><i class="fa fa-file-excel-o"></i>
+                          Download CSV</span>
+                      <span (click)="downloadConsumptionData('pdf')"><i class="fa fa-file-pdf-o"></i>
+                          Download PDF</span>
+                  </div>
+              </div>
+          </div>
+            <!-- <div class="col-md-6" *ngIf="showTrendDownload">
+                          <div class="dropdownload" style="margin-top:-10px;">
+                              <i class="btn dropbtn fa fa-download" aria-hidden="true"></i>
+                              <div class="dropdownload-content" style="cursor: pointer;">
+                                  <span (click)="downloadData('csv')"><i class="fa fa-file-excel-o"></i>
+                                      Download CSV</span>
+                                  <span (click)="downloadData('pdf')"><i class="fa fa-file-pdf-o"></i>
+                                      Download PDF</span>
+                              </div>
+                          </div>
+                      </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-11">
+          <div id="trendChart" style="height: 300px;">
+          </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-modal>

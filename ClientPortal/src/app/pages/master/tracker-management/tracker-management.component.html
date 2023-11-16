@@ -1,0 +1,481 @@
+<div style="margin-bottom:5px;">
+  <span style="color:#03243B"> {{'Master'|translate}}
+    <i class="fa fa-angle-double-right"></i> </span>&nbsp;
+  {{'TrmFeatureName'|translate}}
+</div>
+<div class="col-md-3" style="padding:0">
+  <button type="button" (click)="OpenModal('', 'create');modalRoot.show()" value="" id="btnAsset" class="btn">
+    <i class="ion-plus-round"></i>
+    <span> {{'TrmAddButton'|translate}}</span>
+
+  </button>
+  <form #newdeviceFrm="ngForm" (ngSubmit)="saveTracker(newdeviceFrm.form.valid,newdeviceFrm.value)" autocomplete="off">
+    <app-modal #modalRoot style="width: 800px;" [modalTitle]="[trackerType]" [width]="1000" [maximizable]="true">
+      <ng-container class="app-modal-body">
+
+        <div class="row">
+          <div class="col-md-12" style="margin-bottom: 25px;" *ngIf="this.editOrSave!=-1">
+            <button type="button" class="btn btn-warning" (click)="DeleteTracker()">
+              <i class="fa fa-trash"></i>
+              {{'TrRemove'|translate}}</button>&nbsp;
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="coloumnSec">
+                  <div *ngIf="TrackerId==-1">
+                    <ng-select [items]="whiteListedIMEIList" 
+                               required
+                               bindLabel="IMEI"
+                               bindValue="IMEI"
+                               placeholder="{{'TrImeiPlaceholder'|translate}}"
+                               [(ngModel)]="trackerDetails.IMEIId"
+                               #iMEIModal="ngModel"
+                               id="IMEIId"
+                               name="IMEIId"
+                               (change)="getImsINumber($event)">
+                      <ng-template ng-label-tmp let-item="item">
+                        {{item.IMEI}}
+                      </ng-template>
+                    </ng-select>
+                  </div>
+
+                  <div *ngIf="TrackerId!=-1">
+
+                    <div class="floating-label">
+                      <input type="text" placeholder=" " class="floating-input" name="IMEIId" id="IMEIId"
+                        [attr.disabled]="true" [(ngModel)]="trackerDetails.IMEIId" #iMEIModal="ngModel" />
+                      <label class="labClass">{{'TrImeiNoInEdit'|translate}}</label>
+                    </div>
+                  </div>
+
+
+                  <div class="floating-label">
+                    <input type="text" placeholder=" " class="floating-input" name="IMSI" id="IMSI"
+                      [(ngModel)]="trackerDetails.IMSI" #IMSI="ngModel" [attr.disabled]="true" />
+                    <label class="labClass">{{'TrImsiNo'|translate}}</label>
+                  </div>
+
+                  <div class="floating-label">
+                    <input type="text" placeholder=" " class="floating-input" name="simNo" id="simNo"
+                      [(ngModel)]="trackerDetails.simNo" #simNo="ngModel" ngxNumberOnly 
+                      appNumberOnly appMobilecheck #E1 />
+                    <label class="labClass">{{'TrSimNo'|translate}}</label>
+                  </div>
+
+                  <ng-select [items]="deviceTypeList" [dropdownPosition]="'top'" bindLabel="type" bindValue="did"
+                    placeholder="{{'TrDeviceType'|translate}}" [(ngModel)]="trackerDetails.deviceType"
+                    #iMEIModal="ngModel" name="deviceType" id="deviceType" required>
+                    <ng-template ng-label-tmp let-item="item">
+                      {{item.type}}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+
+
+              <div class="col-md-3">
+                <div class="coloumnSec">
+                  <div class="floating-label">
+                    <input type="text"
+                           placeholder=" "
+                           class="floating-input" 
+                           name="assetName" 
+                           id="assetName"
+                           [(ngModel)]="trackerDetails.assetName" 
+                           #assetName="ngModel"
+                      (change)="spacesCheckedForFriendlyName($event,'TrFriendlyName')"
+                      (paste)="pasteName($event.clipboardData.getData('text/plain'),'TrFriendlyName')"  
+                      alphaNumerics
+                       required
+                      appNameLengthCheck />
+                    <label class="labClass">{{'TrFriendlyName'|translate}}</label>
+                  </div>
+
+                  <div class="floating-label">
+                    <input type="text"
+                           placeholder=" "
+                           class="floating-input"
+                           name="assetRegNo"
+                           id="assetRegNo"
+                           [(ngModel)]="trackerDetails.assetRegNo"
+                           #assetRegNo="ngModel"
+                           required 
+                           minlength="3"
+                           maxlength="15"
+                           (change)="spacesCheckedForRegisterNo($event,'TrRegNo')"
+                           (paste)="pasteName($event.clipboardData.getData('text/plain'),'TrRegNo')"
+                           alphaNumerics>
+                    <label class="labClass">{{'TrRegNo'|translate}}</label>
+                  </div>
+                  <ng-select [items]="assetTypesDrpList" #changeState bindLabel="assetType" bindValue="typeValue"
+                    placeholder="{{'TrAssetType'|translate}}" [(ngModel)]="trackerDetails.assetType"
+                    #assetType="ngModel" id="assetType" name="assetType" (change)="hideElementsBasedOnCond($event)"
+                    required>
+                    <ng-template ng-label-tmp let-item="item">
+                      {{item.assetType}}
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="modelYear">
+                    <div style="width:45%; display:inline-block;">
+                      <div class="floating-label">
+                        <input type="text"
+                               placeholder=" "
+                               class="floating-input" 
+                               name="assetMake"
+                               id="assetMake"
+                          [(ngModel)]="trackerDetails.assetMake"
+                           #assetModel="ngModel" maxlength="50" alphaNumerics />
+                        <label class="labClass">{{'TrMake'|translate}}</label>
+                      </div>
+                    </div>
+
+                    <div style="width:45%; display:inline-block;">
+                      <div class="floating-label">
+                        <input type="text" placeholder=" " class="floating-input" name="assetModel" id="assetModel"
+                          [(ngModel)]="trackerDetails.assetModel" #assetModel="ngModel" maxlength="50" alphaNumerics />
+                        <label class="labClass">{{'TrModel'|translate}}</label>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div *ngIf="assetYear">
+                    <ng-select [items]="assetYearList" bindLabel="assetYear" bindValue="assetYear"
+                      placeholder="{{'TrYear'|translate}}" [(ngModel)]="trackerDetails.assetYear" #assetYear="ngModel"
+                      id="assetYear" name="assetYear">
+                      <ng-template ng-label-tmp let-item="item">
+                        {{item.assetYear}}
+                      </ng-template>
+                    </ng-select>
+                  </div>
+
+                  <div *ngIf="fuelType">
+                    <ng-select [items]="fuelTypeDetailsList" bindLabel="fuleType" bindValue="fuleType" style="margin:10px 0;"
+                      placeholder="{{'TrFuelType'|translate}}" [(ngModel)]="trackerDetails.assetFuelType"
+                      #assetFuelType="ngModel" id="assetFuelType" name="assetFuelType">
+                      <ng-template ng-label-tmp let-item="item">
+                        {{item.fuleType}}
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div *ngIf="speedLimit">
+                    <ng-select [items]="assetSpeedLimitList" bindLabel="assetSpeed" bindValue="assetSpeed"
+                      [(ngModel)]="trackerDetails.speedLimit" #speedLimit="ngModel" id="speedLimit" name="speedLimit"
+                      placeholder="{{'TrDropDownSpeedLimit'|translate}}" required>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{item.assetSpeed}}
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="col-md-3">
+                  <div class="coloumnSec">
+                    <ng-select [items]="timeZonesDrpList" bindLabel="timeZone" bindValue="timeDiffMins" style="margin-bottom:10px;"
+                      placeholder="{{'TrSelectTimeZone'|translate}}" [(ngModel)]="trackerDetails.timeZone"
+                      #TimeZone="ngModel" id="timeZone" name="timeZone" required>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{item.timeZone}}
+                      </ng-template>
+                    </ng-select>
+
+                    <ng-select [items]="vendorDetailsList" bindLabel="vendorName" bindValue="vendorId"
+                      placeholder="{{'TrVenderCode'|translate}}" [(ngModel)]="trackerDetails.vendorCode"
+                      #vendorCode="ngModel" id="vendorCode" name="vendorCode">
+                      <ng-template ng-label-tmp let-item="item">
+                        {{item.vendorName}}
+                      </ng-template>
+                    </ng-select>
+                    <div class="floating-label input-group">
+                      <label>
+                        <span style="color:#c4c4c4;">{{'TrValidity'|translate}}</span><br>
+                        <input #Validity [min]="minDate" [owlDateTimeTrigger]="Validity" [owlDateTime]="Validity"
+                          id="assetValidity" name="assetValidity" [(ngModel)]="trackerDetails.assetValidity"
+                          class="date-picker-styles" style="width:100%;" required readonly>
+                        <owl-date-time #Validity [pickerType]="'calendar'" afterPickerClosed="clearSelectedDates()">
+                        </owl-date-time>
+                      </label>
+                    </div>
+
+                    <div>
+                      <textarea rows="5"
+                               [(ngModel)]="trackerDetails.descr" 
+                               id="descr"
+                               name="descr"
+                               placeholder="{{'TrDescription'|translate}}"
+                               (change)="spacesCheckedForDescription($event,'RoleDescription')"
+                               (paste)="pasteWithDescription($event.clipboardData.getData('text/plain'),'RoleDescription')"
+                               maxlength="1000"
+                               alphaNumerics
+                               style="width:100%;resize: none;">
+                            </textarea>
+                    </div>
+                    <label class="container-check">
+                    <input type="checkbox" [value]="true" checked="checked" style="color:#3598dc" id="AssetStatus"
+                      name="AssetStatus" [(ngModel)]="trackerDetails.AssetStatus" [disabled]="TrackerId==-1" />
+                      <span class="checktick"></span>
+                    <span class="lable-icon">{{'TrActive'|translate}}</span>
+                  </label>
+                </div>
+              </div>
+
+
+
+              <div class="col-md-3">
+                  <div class="coloumnSec">
+              
+
+                  <span style="margin-top:-5px" class="textcolor">{{'TrAlert'|translate}}</span>
+
+              
+                      <div class="floating-label">
+                        <input type="text"
+                               placeholder=" "
+                               class="floating-input"
+                               name="ownerName" 
+                               id="ownerName"
+                               [(ngModel)]="trackerDetails.ownerName"
+                               #OwnerName="ngModel" 
+                               (change)="spacesCheckedForOwnerName($event,'TrOwner Name')"
+                               (paste)="pasteName($event.clipboardData.getData('text/plain'),'TrOwner Name')" 
+                               alphaNumerics
+                                required
+                               appNameLengthCheck />
+                        <label class="labClass">{{'TrOwner Name'|translate}}</label>
+                      </div>
+
+
+
+                      <div class="floating-label">
+                        <input type="text"
+                               placeholder=" "
+                               class="floating-input"
+                               name="ownerMobileNo"
+                               id="ownerMobileNo"
+                               [(ngModel)]="trackerDetails.ownerMobileNo"
+                               appNumberOnly 
+                               required 
+                               #E2 />
+                               <!-- appMobilecheck -->
+                        <label class="labClass">{{'TrOwner Contact'|translate}}</label>
+                      </div>
+                  <div>
+                      <label class="container-check">
+                      <input type="checkbox" [value]="true" checked="checked" style="color:#3598dc" id="sendAlert"
+                        name="sendAlert" [(ngModel)]="trackerDetails.sendAlert" [disabled]="TrackerId==-1" />
+                        <span class="checktick"></span>
+                      <span class="lable-icon">{{'TrSend Sms'|translate}}</span>
+                    </label>
+                    </div>
+
+                <div  *ngIf="sensorState">
+                  <div style="border: 1px solid #C1C1C1; padding: 10px;color:#010305;margin-top: 5px">
+                    <div>
+                      <span id="" class="textcolor">{{'TrSensors'|translate}}</span>
+                    </div>
+                    <div class="m-t-10" style="height:140px; overflow-y:auto;overflow-x:hidden;">
+                      <table id="chkSensors" class="checkbox" style="margin-bottom: 0px; width: 200px;">
+                        <tbody>
+                          <tr *ngFor="let item of sensorNamesList;let i = index">
+                            <td>
+                              <label class="container-check">
+                                <input type="checkbox" id="{{item.sensorId}}" name="{{item.sensorId}}"
+                                  value="{{item.sensorId}}" [(ngModel)]="trackerDetails[item.sensorId]"
+                                  (change)="checkboxes($event.target.value)" />
+                                {{item.sensorName}}
+                                <span class="checktick"></span>
+                              </label>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </ng-container>
+      <ng-container class="app-modal-footer">
+        <!-- clearSearch(); -->
+        <button type="button" class="btn btn-danger" (click)="modalRoot.hide()">
+          <i class="fa fa-close"></i> {{'TrClose'|translate}} </button>
+        &nbsp;
+        <button type="submit" class="btn btn-success" [disabled]="disableSaveButton">
+          <i class="fa fa-save"></i> {{'TrSave'|translate}} </button>
+
+      </ng-container>
+    </app-modal>
+
+  </form>
+</div>
+
+
+<table id="trackerTable" class="table table-striped">
+  <thead class="table-head-background">
+    <tr>
+      <th>{{'TrFriendlyName'|translate}}</th>
+      <th style="width:130px;">{{'TrRegNo'|translate}}</th>
+      <th style="width:130px;">{{'IMEI'|translate}}</th>
+      <th>{{'TrAsset Type'|translate}}</th>
+      <th>{{'TrSpeedLimit'|translate}}</th>
+      <th>{{'TrValidity'|translate}}</th>
+      <th>{{'TrOwner Name'|translate}}</th>
+      <th>{{'TrSelectTimeZone'|translate}}</th>
+      <th>{{'TrAction'|translate}}</th>
+    </tr>
+
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of trackerList">
+      <td>
+        {{item.assetName}}
+      </td>
+      <td>
+        {{item.assetRegNo}}
+      </td>
+      <td>
+        {{item.IMEIId}}
+      </td>
+      <td>
+        {{item.assetTypeName}}
+      </td>
+      <td>
+        {{item.speedLimit}}
+      </td>
+      <td>
+        {{dateConverion(item.assetValidity.month + "/" + item.assetValidity.day + "/" +item.assetValidity.year)}}
+      </td>
+      <!-- <td>
+        {{item.assetValidity.month + "/" + item.assetValidity.day + "/" +item.assetValidity.year}}
+      </td> -->
+      <td>
+        {{item.ownerName}}
+      </td>
+      <td>
+        <!-- {{item.descr}} -->
+        {{item.timeZoneName}}
+      </td>
+
+      <td>
+        <i (click)="OpenModal(item.IMEIId,'update')" class="fa fa-edit"
+          style="padding-left:30px;font-size:18px;cursor:pointer" title="{{'TrEdit'|translate}}"></i>
+      </td>
+
+    </tr>
+  </tbody>
+</table>
+
+
+<style>
+  .inputColor {
+    color: #010305;
+  }
+
+
+  .has-quick-search-fields {
+    border-right: none;
+  }
+
+
+  a.quick-search-field {
+    padding: 0 13px 0 3px;
+    background: #ffffff no-repeat right 5px;
+    float: right;
+    font-size: 11px;
+    height: 28px;
+    line-height: 25px;
+    cursor: pointer;
+    margin-right: 1px;
+    color: #0090d9;
+    border: 1px solid #aaa;
+    border-radius: 0 4px 4px 0;
+    border-style: solid solid solid none;
+  }
+
+  element.style {
+    margin-top: 80px;
+    margin-left: 296px;
+    width: 873px;
+  }
+/*  custom checkbox css starts */
+
+.container-check {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .container-check input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checktick {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border: 2px solid #4D9DE0;
+  }
+
+  .container-check input:checked~.checktick {
+    background-color: #4D9DE0;
+  }
+
+  .checktick:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .container-check input:checked~.checktick:after {
+    display: block;
+  }
+
+
+  .container-check .checktick:after {
+    left: 5px;
+    top: 1px;
+    width: 7px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  /*  custom checkbox css end */
+
+
+
+</style>

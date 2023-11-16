@@ -1,0 +1,137 @@
+<div style="margin-bottom:5px;">
+
+  <div class="row">
+
+    <div class="col-md-12" style="float:left; margin-bottom: 10px;">
+      <div class="row">
+        <div class="col-md-4">
+          <i class="fa fa-list-ul fa-2x" (click)="changeView('live')" title="List View"
+            style="cursor: pointer; margin-right: 1%;"></i> &nbsp;
+          <!-- <i class="fa fa-thumb-tack fa-2x" *ngIf='hasDBpin' (click)="changeView('pin')" title="Dashboard Pin"
+            style="cursor: pointer; margin-right: 1%;"></i> -->
+          <i class="fa fa-map fa-2x" (click)="changeView('map')" title="Map View"
+            style="cursor: pointer; margin-right: 1%;"></i> &nbsp;
+          <i class="fa fa-th-large fa-2x" style="cursor: pointer; margin-right: 1%;color:#3598DC;"
+            title="Temperature View"></i>
+            <i class="fa fa-bolt fa-2x" *ngIf='hasEnergy'  (click)="changeView('energy')" title="Energy View"
+        style="cursor: pointer;    margin-left: 3%;"></i>
+          <!-- <i class="fa fa-area-chart fa-2x" *ngIf='hasChart' (click)="changeView('chart')" title="Charts View"></i> -->
+          <!-- <i class="fa fa-camera fa-2x" *ngIf='hasSurv' (click)="changeView('image')" title="Recordings"
+              style="cursor: pointer;"></i> -->
+
+        </div>
+        <div class="col-md-2">
+          <ng-select [items]="clientRegions" [(ngModel)]="selectedRegion" name="region" (change)="changeRegion()"
+            bindLabel='regionName' bindValue='regionId' placeholder='Location'>
+          </ng-select>
+          <ng-template ng-label-temp let-item='item'>
+            {{item.regionName}}
+          </ng-template>
+        </div>
+        <div class="col-md-2">
+          <ng-select [items]="FilteredDeviceIdList" (change)="displayDevice()" [(ngModel)]="deviceId" name="devicess"
+            bindLabel="deviceName" bindValue="deviceId" placeholder="Select Device">
+          </ng-select>
+          <ng-template ng-label-tmp let-item="item">
+            {{item.deviceName}}
+          </ng-template>
+        </div>
+        <div class="col-md-2">
+          <ng-select [items]="deviceState" [(ngModel)]="selectedState" name="state" (change)="changeState()"
+            bindLabel='state' bindValue='colorCode' placeholder='State'>
+          </ng-select>
+          <ng-template ng-label-temp let-item='item'>
+            {{item.state}}
+          </ng-template>
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <ng-select [items]="SensorList" [multiple]=true [(ngModel)]='selectedSensorIdList' style="color:#212121"
+            bindLabel="sensorName" bindValue="sensorId" placeholder="Sensor" (change)="changeselectedSensor()">
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div *ngIf="selectedSensorIdList.length === SensorList.length">
+                All (Default)
+              </div>
+              <div *ngIf="selectedSensorIdList.length != SensorList.length">
+                <div class="ng-value" *ngIf="items.length > 0">
+                  <span class="ng-value-label">{{items.length}} Selected...</span>
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" style="overflow-y: scroll;height: 530px;">
+  <div *ngFor="let item of respTempLiveFilterData">
+    <div>
+      <div class="col-md-3">
+        <div style="background-color: #FFF;
+            border-radius: 5px;
+            border: solid 1px #a4a5a7;
+            text-align: center;    margin-bottom: 10px;
+    padding-bottom: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+          <!-- <div style="height: 10px;margin-bottom: 20px;"> -->
+          <div style="background-color: #2565AE;color: #fff;    margin-left: 0%;
+          margin-right: 0%;font-size: small;" class="row">
+            <div class="col-md-12" style="text-align: center;
+            height: 25px;
+            padding-top: 4px;">{{item.deviceName}}</div>
+            <!--{{item.deviceName}} : {{item.sensorName}}-->
+            <!-- <div class="col-md-2" style="text-align: center;padding-right: 0%;padding-left: 0%">|</div>
+            <div class="col-md-5" style="text-align: center;padding-left: 0%"></div> -->
+          </div>
+          <!-- </div> -->
+          <div>
+            {{item.sensorName}}
+          </div>
+          <div style="font-weight: bold;" [style.color]="item.colorCode">
+            <span *ngIf='item.SensorValue==="FV.0"'> <i class="fa fa-exclamation-triangle fa-3x" title="Sensor Fault"
+                style="color: #FDBB11;">
+              </i></span>
+            <span *ngIf='item.SensorValue!=="FV.0"'>
+              <span style="height: 60px;
+           font-size: 25px;"> {{item.SensorValue}} </span><span
+                style="font-size: small;vertical-align: top;">{{item.uom}}</span>
+            </span> <i *ngIf='item.reporting==1' class="fa fa-line-chart"
+              style="cursor: pointer; color:#337AB7;padding-left:10%;"
+              (click)="showTrend(item.deviceId,item.sensorId,item.deviceName)"></i>
+          </div>
+          <div>
+            <!-- <b>Last Updated :</b> {{item.sensorTime}} -->
+            {{item.sensorTime}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #modalTrend [modalTitle]="[TrendName]" [width]="745" [maximizable]="true">
+  <ng-container class="app-modal-body">
+    <div style="height: 300px;">
+      <div class="row">
+        <div class="col-md-11">
+          <div id="trendChart" style="height: 300px;">
+          </div>
+          <div>
+            <div class="row" *ngIf="hasRules" style="margin-top:-20px;padding-left:10%;">
+              <div class="col-md-2"> <i class="fa fa-circle" style="color:#DC202D;"></i>
+                Critical</div>
+              <div class="col-md-2"> <i class="fa fa-circle" style="color:#FDBB11;"></i>
+                Warning</div>
+              <div class="col-md-2"> <i class="fa fa-circle" style="color:#00A651;"></i>
+                Good
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-modal>

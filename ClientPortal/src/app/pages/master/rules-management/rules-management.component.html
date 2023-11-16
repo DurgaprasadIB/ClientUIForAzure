@@ -1,0 +1,468 @@
+<!-- <div class="row" style="text-align: center;color: white;margin-bottom: 1%;">
+    <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+        <div (click)="showDiv('defaultRules')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+            Default Rules
+        </div>
+        <div *ngIf="showDefaultRules" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+        </div>
+    </div>
+    <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+        <div (click)="showDiv('rules')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+            <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+            Advanced Rules
+        </div>
+        <div *ngIf="showRules" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+        </div>
+    </div>
+</div> -->
+<div class="row">
+
+    <div><!--*ngIf='showRules'-->
+        <div class="place-holder-style">
+            <div class="row col-md-1">
+                <button type="button" (click)="openRuleModel();" value="Add Rule" class="btn">
+                    <i class="ion-plus-round"></i>
+                    <span> Rule</span>
+                </button>
+            </div>
+            <div class="row col-md-2" style="margin-bottom:2px;margin-left: 10px;">
+                <ng-select [items]="clientRegions" [(ngModel)]="selectedRegionRules" name="regionRule" (change)="changeRegionRule()"
+                    bindLabel='regionName' bindValue='regionId' placeholder='Location'>
+                </ng-select>
+                <ng-template ng-label-temp let-item='item'>
+                    {{item.regionName}}
+                </ng-template>
+            </div>
+        </div>
+
+        <table id="rulesData" class="table table-striped" style="width:100%;">
+            <thead class="table-head-background">
+                <tr>
+                    <th style="width:100px;">Device Type</th>
+                    <th style="width:150px;">Device Name</th>
+                    <th style="width:150px;">Sensor</th>
+                    <th style="width:200px;">Condition</th>
+                    <th>Status</th>
+                    <th>Trigger Alert</th>
+                    <!-- <th>Email</th> -->
+                    <th>Status</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+
+<app-modal #modalRule [modalTitle]="[RuleType]" [width]="900" [maximizable]="true">
+    <ng-container class="app-modal-body">
+
+        <form #newRuleFrm="ngForm" (ngSubmit)="newRuleFrm.form.valid" autocomplete="off" style="height: 300px;">
+            <div *ngIf="showEditRules">
+                <div class="row" style="text-align: center;color: white;margin-bottom: 1%;">
+                    <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+                        <div (click)="showDiv('defaultRules')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+                            <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+                            Default Rules
+                        </div>
+                        <div *ngIf="showDefaultRules" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+                        </div>
+                    </div>
+                    <div class="col-md-2" style=" padding-left: 2px; padding-right: 2px">
+                        <div (click)="showDiv('rules')" class="tabStyle" style="cursor: pointer; background-color: #03243B;">
+                            <span class="fa fa-file-text-o" style="margin-right: 3%;"></span>
+                            Advanced Rules
+                        </div>
+                        <div *ngIf="showRules" style="height: 3px;background-color: #3375AD;margin-top:1px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div *ngIf='showDefaultRules'>
+                <!-- <div>
+                    <img src="assets/Images/underConstruction.jpg" height="500px">
+                </div> -->
+                <div class="row" style="padding-left: 1%; margin-bottom: 1%;">
+                    <div class="col-md-2">
+                        <span>Location</span>
+                        <ng-select [items]="clientRegions" [(ngModel)]="selectedRegion" name="region" (change)="changeRegion()"
+                            bindLabel='regionName' bindValue='regionId' placeholder='Location'>
+                        </ng-select>
+                        <ng-template ng-label-temp let-item='item'>
+                            {{item.regionName}}
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p style="padding-left: 5.5%;
+                        font-size: medium;
+                        font-weight: bold;">Devices</p>
+                        <div class="row" style="height: 220px;overflow-y: auto;">
+                            <div class="col-md-12" *ngFor="let item of userDevicesByLocation" (click)="getDefaultRules(item.deviceId)"
+                                style="padding-left: 12%;
+                                padding-bottom: 2%;">
+                                <div style="cursor: pointer;
+                                font-size: 14px;
+                                background-color: #fff;padding: 4%;">
+                                    {{item.deviceName}}
+                                    <i class="fa fa-arrow-right" style="float: right;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <p style="font-size: medium;
+                        font-weight: bold;">Default Rules | {{_deviceName}}</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row" style="font-weight: bold;">
+                                    <div class="col-md-2">
+                                        Sensor
+                                    </div>
+                                    <div class="col-md-2">
+                                        Minimum
+                                    </div>
+                                    <div class="col-md-2">
+                                        Maximum
+                                    </div>
+                                    <div class="col-md-2">
+                                        Tolerance
+                                    </div>
+                                </div>
+        
+                            </div>
+                        </div>
+                        <div class="row" style="height: 220px;overflow-y: auto;">
+                            <div class="col-md-12" *ngFor="let item of defaultSensorRules">
+                                <div class="row">
+                                    <div class="col-md-2" style="padding-top: 1%;">
+                                        <div class="floating-label">
+                                            {{item.sensorName}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+        
+                                        <div class="floating-label">
+                                            <input type="text" class="floating-input" [(ngModel)]="item.min"
+                                                name="{{item.sensorName}}1" value="{{item.min}}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="floating-label">
+                                            <input type="text" class="floating-input" [(ngModel)]="item.max"
+                                                name="{{item.sensorName}}2" value="{{item.max}}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="floating-label">
+                                            <input type="text" class="floating-input" [(ngModel)]="item.tolerance"
+                                                name="{{item.sensorName}}3" value="{{item.tolerance}}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="floating-label">
+                                            <input type="button" style="float:right" class="btn btn-primary" value="Apply"
+                                                (click)="createRule(item)" />
+                                        </div>
+                                    </div>
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showRules">
+                <div class="col-md-12" style="margin-bottom: 10px;" *ngIf="isDeleteShow">
+                    <div class="form-group">
+                        <button type="button" *ngIf="isDeleteShow" (click)="DeleteRule()" class="btn btn-warning"
+                            [attr.disabled]=""><!--style="margin-right:0.25em; margin-top:0.25em"-->
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            Remove</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="floating-label">
+                            <label>Device Model</label>
+                            <ng-select [items]="userHwTypes" [disabled]="!blockSome" (change)="getDevices()"
+                                [(ngModel)]="selectHW" name="selectHW" bindLabel="name" placeholder="Model" bindValue="id">
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item}}
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="col-md-2" *ngIf="blockSome">
+                        <div class="floating-label">
+                            <label>Location</label>
+                            <ng-select [items]="clientRegions" [(ngModel)]="CRSelectedRegion" name="region"
+                                (change)="changeRegionCR()" bindLabel='regionName' bindValue='regionId'
+                                placeholder='Location'>
+                            </ng-select>
+                            <ng-template ng-label-temp let-item='item'>
+                                {{item.regionName}}
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="floating-label">
+                            <label>Device Name</label>
+                            <ng-select [items]="devices" [disabled]="!blockSome" [(ngModel)]="ruleMt.DeviceName"
+                                name="DeviceName" bindValue="DeviceName" bindLabel="DeviceName" placeholder="Device"
+                                required>
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.DeviceName}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="display: none;">
+                        <div class="floating-label">
+                            <label>Rule type</label>
+                            <div>
+                                <label class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="mode" [value]="true"
+                                        (change)="onSingle();" [(ngModel)]="com.mode">
+                                    Single
+                                </label> &nbsp;&nbsp;
+                                <label class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="mode" [value]="false"
+                                        (change)="onCombination();" [(ngModel)]="com.mode">
+                                    Combination
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+    
+                    <div class="col-md-3">
+                        <div class="floating-label">
+                            <label>Sensor</label>
+                            <ng-select [items]="dataFormat" *ngIf="!isRuleEdit" [(ngModel)]="format._key" bindLabel="_name"
+                                bindValue="_key" name="_name" #roleId="ngModel" (change)="showOptions($event)"
+                                placeholder="Sensor List">
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item._name}}
+                                </ng-template>
+                            </ng-select>
+                            <div class="divStyle" *ngIf="isRuleEdit"><label>{{sensor1Name}}</label> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-3 floating-label" *ngIf="isEnergy">
+                                <label>Consumption</label>
+                                <ng-select [items]="cummPeriod" [(ngModel)]="cummId" bindLabel="name" bindValue="id"
+                                    name="cummId" placeholder="Select">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item.name}}
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3 floating-label" *ngIf="isNTms">
+                                <label>Operator</label>
+                                <ng-select [items]="assignmentOpr" [(ngModel)]="assignOpr.operatorMin"
+                                    (change)="checkForRange($event)" bindLabel="Operator" bindValue="Operator"
+                                    name="operatorMin" placeholder="Select">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item.Operator}}
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-2" *ngIf="isNTms" style="padding-top: 25px;">
+                                <div class="floating-label">
+                                    <input type="text" class="floating-input" name="MinValue" [(ngModel)]="MinValue"
+                                        placeholder=" " required>
+                                    <label class="labClass">{{pHMinVal1}}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2" *ngIf="showRange" style="padding-top: 40px;">
+                                AND
+                            </div>
+    
+                            <div class="col-md-2" *ngIf="showRange" style="padding-top: 25px;">
+    
+                                <div class="floating-label">
+    
+                                    <input type="text" class="floating-input" name="MaxValue" [(ngModel)]="MaxValue"
+                                        placeholder=" " required>
+                                    <label class="labClass">Max Value</label>
+                                </div>
+    
+                            </div>
+                            <div class="col-md-3" *ngIf="isBool">
+                                <div class="floating-label">
+                                    <label>Operator</label>
+                                    <ng-select [items]="boolVals" [(ngModel)]="setBool" name="setBool"
+                                        placeholder="Select mode" bindLabel="state" bindValue="val">
+                                        <ng-template ng-label-tmp let-item="item">
+                                            {{item.val}}
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-md-3" *ngIf="isBool" style="padding-top: 3%;">
+                                <div class="floating-label">
+    
+                                    <input type="text" class="floating-input" name="OpenOrCloseTime"
+                                        [(ngModel)]="OpenOrCloseTime" placeholder=" " required>
+                                    <label class="labClass">Duration (Mins)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="combi" class="col-md-2">
+                        AND
+                    </div>
+    
+                </div>
+                <div *ngIf="combi">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="floating-label">
+                                <label>Sensor</label>
+                                <ng-select [items]="dataFormat2Filtered" *ngIf="!isRuleEdit" [(ngModel)]="format2._key"
+                                    bindLabel="_name" bindValue="_key" name="_name" [dropdownPosition]="' top'"
+                                    (change)="showOptions2($event)" placeholder="Sensor List">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item._name}}
+                                    </ng-template>
+                                </ng-select>
+                                <div class="divStyle" *ngIf="isRuleEdit"><label>{{sensor2Name}}</label> </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-3 floating-label" *ngIf="isNTms2">
+                                    <label>Operator</label>
+                                    <ng-select [items]="assignmentOpr" [(ngModel)]="assignOpr.operatorMin2"
+                                        bindLabel="Operator" [dropdownPosition]="'top'" bindValue="Operator"
+                                        (change)="checkForRange2($event)" name="operatorMin2" placeholder="Select">
+                                        <ng-template ng-label-tmp let-item="item">
+                                            {{item.Operator}}
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-2" *ngIf="isNTms2" style="padding-top: 25px;">
+                                    <div class="floating-label">
+                                        <input type="text" class="floating-input" name="MinValue2" [(ngModel)]="MinValue2"
+                                            placeholder=" " required>
+                                        <label class="labClass">{{pHMinVal2}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" *ngIf="showRange2" style="padding-top: 40px;">
+                                    AND
+                                </div>
+    
+                                <div class="col-md-2" *ngIf="showRange2" style="padding-top: 25px;">
+                                    <div class="floating-label">
+                                        <input type="text" class="floating-input" name="MaxValue2" [(ngModel)]="MaxValue2"
+                                            placeholder=" " required>
+                                        <label class="labClass">Max Value</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" *ngIf="isBool2">
+                                    <div class="floating-label">
+                                        <label>Operator</label>
+    
+                                        <ng-select [items]="boolVals" [(ngModel)]="setBool2" name="setBool2"
+                                            placeholder="Select mode" bindLabel="state" bindValue="val">
+                                            <ng-template ng-label-tmp let-item="item">
+                                                {{item.val}}
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" *ngIf="isBool2" style="padding-top: 3%;">
+                                    <div class="floating-label">
+    
+                                        <input type="text" class="floating-input" name="OpenOrCloseTime2"
+                                            [(ngModel)]="OpenOrCloseTime2" placeholder=" " required>
+                                        <label class="labClass">Duration (Mins)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-9" style="padding-right: 10px;">
+                                <div class="floating-label">
+                                    <label>State</label>
+                                    <ng-select [items]="states" [(ngModel)]="state" bindLabel="Operator"
+                                        bindValue="Operator" name="state" placeholder="State" [dropdownPosition]="'top'"
+                                        (change)="selectColor();">
+                                        <ng-template ng-label-tmp let-item="item">
+                                            {{item.Operator}}
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-md-3" style="padding-right: 10px;padding-top: 17%;">
+                                <div *ngIf='isGreen'
+                                    style="height: 25px;width: 30px; background-color: green;padding-left: 5px;border-radius: 5px;">
+                                </div>
+                                <div *ngIf='isBlue'
+                                    style="height: 25px;width: 30px;background-color: blue;padding-left: 5px;border-radius: 5px;">
+                                </div>
+                                <div *ngIf='isOrng'
+                                    style="height: 25px;width: 30px;background-color: orange;padding-left: 5px;border-radius: 5px;">
+                                </div>
+                                <div *ngIf='isRed'
+                                    style="height: 25px;width: 30px;background-color: red;padding-left: 5px;border-radius: 5px;">
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <div class="col-md-2">
+                        <div class="floating-label">
+                            <label>Buffer Mins</label>
+                            <ng-select [items]="buffMins" [(ngModel)]="bufferMin" bindLabel="min" bindValue="minId"
+                                name="bufferMin" placeholder="Buffer Mins" [dropdownPosition]="'top'">
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.min}}
+                                </ng-template>
+                            </ng-select>
+                            <img src="./assets/Images/information.svg"
+                                title="Check the alert till given duration then triggers" alt="info" />
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="padding-top: 3%;">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="Escalate" [(ngModel)]="Escalate" data-md-icheck>Trigger
+                                Alert?</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="padding-top: 3%;">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="isActive" [(ngModel)]="isActive"
+                                    data-md-icheck>IsActive?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-container class="app-modal-footer">
+        <!-- <button type="button" class="btn btn-danger" (click)="modalRule.hide();">
+            <i class="fa fa-close"></i> Close</button> &nbsp; -->
+        <button *ngIf="showRules" type="submit" class="btn btn-success" [attr.disabled]="disabled ? '' : null"
+            (click)="saveNewRule(newRuleFrm.value)">
+            <i class="fa fa-save"></i> Save</button>
+
+    </ng-container>
+</app-modal>

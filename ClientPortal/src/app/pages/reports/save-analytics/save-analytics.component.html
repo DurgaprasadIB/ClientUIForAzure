@@ -1,0 +1,223 @@
+<div style="padding: 0px;margin-bottom: 10px;">
+  <div class="row">
+    <div class="col-md-12" style="padding: 15px;">
+      <div style="background-color: #FFF; border-radius: 5px;padding: 10px;  margin-top: -20px">
+        <div class="row">
+          <div class="col-md-2 col-sm-6 col-xs-12" *ngIf='isMultipleHW'>
+            <label>Device Type</label>
+            <ng-select [items]="userHwTypes" (change)="getDevices()" [(ngModel)]="selectHW" name="selectHW"
+              bindLabel="name" bindValue="id" placeholder="Select">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item}}
+            </ng-template>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12">
+            <label>Device</label>
+            <ng-select [items]="FilterDeviceList" [multiple]=true [closeOnSelect]="false" [(ngModel)]='deviceSelectedList'
+              style="color:#212121" bindLabel="deviceName" bindValue="sensorId" placeholder="Select"
+              name="deviceSelect">
+              <ng-template ng-header-tmp>
+                <div class="selectionButtons">
+                  <button type="button" class="btn btn-success" [disabled]="disabledeviceSelectAll"
+                    (click)="ondevSelectAll()">
+                    <i class="fa fa-check" title="Select All"></i></button>
+                  <button type="button" style="margin-left: 5px;" class="btn btn-warning"
+                    [disabled]="disabledeviceUnSelectAll" (click)="ondevDeSelectAll()">
+                    <i class="fa fa-times" title="Deselect All"></i>
+                  </button>
+                </div>
+              </ng-template>
+
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div *ngIf="deviceSelectedList.length === DeviceList.length">
+                  All (Default)
+                </div>
+                <div *ngIf="deviceSelectedList.length !== DeviceList.length">
+                  <div class="ng-value">
+                    <span class="ng-value-label">{{items.length}} Selected...</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12">
+            <label>Sensor</label>
+            <ng-select [items]="SensorList" style="border: solid 1px #c1c1c1;
+        border-radius: 5px;" [(ngModel)]='sensorSelectedList' (change)="getMathFun($event);" bindLabel="keyName"
+              bindValue="key" placeholder="Select" name="sensorSelect">
+              <ng-template ng-label-tmp let-item="item">
+                {{item.keyName}}
+              </ng-template>
+
+            </ng-select>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12">
+            <label>Report Type</label>
+            <ng-select [items]="SensorMathFiltered" style="border: solid 1px #c1c1c1;
+        border-radius: 5px;" [(ngModel)]='mathSelectedList' bindLabel="functionName" bindValue="mathId"
+              placeholder="Select" name="mathSelect">
+              <ng-template ng-label-tmp let-item="item">
+                {{item.functionName}}
+              </ng-template>
+
+            </ng-select>
+
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12">
+            <label>Analysis Name</label>
+            <div class="floating-label" style="margin-top: 0px;">
+              <input type="text" class="floating-input" name="reportName" (keypress)="checkSpecialChar($event)" [(ngModel)]="reportName"
+                placeholder="Analysis Name" required>
+              <!-- <img src="./assets/Images/information.svg" title="Report Name should be less than 25 characters "
+          alt="info" /> -->
+
+
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12">
+            <label>Period</label>
+            <ng-select [items]="DateRangeList" style="    border: solid 1px #c1c1c1;
+    border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId"
+              placeholder="Select" (change)="checkDateRange($event)">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+              {{item.dtName}}
+            </ng-template>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-md-2" *ngIf="isDates" style="margin-top:5px;">
+            <!-- <label>From Date</label> -->
+            <label>
+              <input [max]="maxDate" [min]="minDate" style="width: 160px;    height: 30px;" [owlDateTimeTrigger]="dt1"
+                [owlDateTime]="dt1" name="fromDate" id="fromDate" [(ngModel)]="fromDate" placeholder="From Date"
+                class="date-picker-styles" required readonly>
+              <owl-date-time #dt1></owl-date-time>
+            </label>
+          </div>
+          <div class="col-md-2" *ngIf="isDates" style="margin-top:5px;">
+            <!-- <label>To Date</label> -->
+            <label>
+              <input [max]="maxDate" [min]="minDate" style="width: 160px;    height: 30px;" [owlDateTimeTrigger]="dt2"
+                [owlDateTime]="dt2" name="toDate" id="toDate" [(ngModel)]="toDate" placeholder="To Date"
+                class="date-picker-styles" required readonly>
+              <owl-date-time #dt2></owl-date-time>
+            </label>
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-12" style="margin-top:5px;">
+            <button type="button" class="btn btn-primary" (click)="GetReportDetails()">
+              Go <i class="fa fa-angle-right"></i></button>&nbsp;
+            <button type="button" class="btn btn-success" [attr.disabled]="isDates ? '' : null" (click)="saveReport()">
+              <i class="fa fa-save"></i> Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="hasSavedReports" style="height: 420px;overflow-y: auto; margin-top: -10px;">
+
+  <div class="col-md-3" style="height: 420px;  overflow-y: auto; ">
+    <div *ngFor="let item of allsavedReports">
+      <div class="col-md-12" style="height: 40px;
+          border: solid 1px #324599;background-color: #FFF;
+          padding-top: 10px; padding-left: 10px; border-radius: 5px; margin-bottom: 10px;">
+        <div class="row">
+          <div class="col-md-7" [title]="item.reportName" style="font-size: 95%;padding-right:0px;">
+            {{item.displayName}}
+          </div>
+          <div class="col-md-5" style="padding-right:0px;">
+            <i class="fa fa-thumb-tack" title="Tag to Dashboard" *ngIf="item.showinDB==0"
+              style="color:#B7B8BF; cursor: pointer;" (click)="pintToDB(item.reportId)"></i>
+            <i class="fa fa-thumb-tack" title="Tag to Dashboard" *ngIf="item.showinDB==1"
+              style="color:#3598DC; cursor: pointer;" (click)="pintToDB(item.reportId)"></i>&nbsp;
+            <i class="fa fa-play" title="Generate Report" style="color:#3598DC;cursor: pointer;"
+              (click)="getReport(item.reportId,item.mathfunctions,item.reportName)"></i>&nbsp;
+            <i class="fa fa-pencil-square-o" title="Edit" style="color:#3598DC;cursor: pointer;"
+              (click)="getSavedReports(item.reportId,item.shortCode)"></i>&nbsp;
+            <i class="fa fa-trash" style="color:#E01F26;cursor: pointer;" title="Delete"
+              (click)="deleteReport(item.reportId)"></i>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9" style="height: 420px;  overflow-y: auto; ">
+    <div class="row" style="margin-bottom: 5px;">
+      <div class="col-md-2">
+        <button type="button" [disabled]="isPrevDisabled" style="float: left;" (click)="plotPrev()" class="btn">
+          <i class="fa fa-chevron-left"></i>
+          <span> Previous</span>
+        </button>
+      </div>
+      <div class="col-md-8" style="text-align: center; font-size: large;">
+        {{reportNameTop}}
+      </div>
+      <div class="col-md-2">
+        <button type="button" [disabled]="isNextDisabled" style="float: right;" (click)="plotNext()" class="btn">
+          <span>Next </span>
+          <i class="fa fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="!isTrendType" style=" background-color: #FFF;">
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="RChart1" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="RChart2" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="RChart3" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="RChart4" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="RChart5" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="RChart6" style="height: 150px;">
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isTrendType" style=" background-color: #FFF;">
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="trChart1" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="trChart2" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="trChart3" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="trChart4" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="trChart5" style="height: 150px;">
+        </div>
+      </div>
+      <div class="col-md-6" style="border: solid 1px #EDEEF4;margin-bottom: 5px;">
+        <div id="trChart6" style="height: 150px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="!hasSavedReports" style="height: 420px;overflow-y: auto; margin-top: -10px;text-align: center;">
+  <h3>Create your own reports here</h3>
+</div>

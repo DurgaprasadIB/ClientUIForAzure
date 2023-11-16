@@ -1,0 +1,142 @@
+<div style="margin-bottom:5px;">
+	<span style="color:#03243B"> Live Status <i class="fa fa-angle-double-right"></i></span>&nbsp;Sensor Summary
+</div>
+
+
+
+<div class="row" style="margin: 0px">
+	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widget">
+		<div class="stats-left moving">
+			<h5></h5>
+			<h5>-</h5>
+		</div>
+		<div class="stats-right moving">
+			<label>{{VehiclemovingCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isMoving">
+			<hr class="moving">
+		</div>
+	</div>
+	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widget states-mdl">
+		<div class="stats-left idle">
+			<h5></h5>
+			<h5>-</h5>
+		</div>
+		<div class="stats-right idle">
+			<label>{{VehicleidleCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isIdle">
+			<hr class="idle">
+		</div>
+	</div>
+	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widget">
+		<div class="stats-left stopped">
+			<h5></h5>
+			<h5>-</h5>
+		</div>
+		<div class="stats-right stopped">
+			<label>{{VehiclestoppedCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isStopped">
+			<hr class="stopped">
+		</div>
+	</div>
+
+	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widget states-mdl">
+		<div class="stats-left noGps">
+			<h5></h5>
+			<h5>-</h5>
+		</div>
+		<div class="stats-right noGps">
+			<label>{{VehiclenoGpsCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isNoGps">
+			<hr class="noGps">
+		</div>
+	</div>
+	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widget">
+		<div class="stats-left noPolling">
+			<h5></h5>
+			<h5>-</h5>
+		</div>
+		<div class="stats-right noPolling">
+			<label>{{VehiclenoPollingCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isNoPolling">
+			<hr class="noPolling">
+		</div>
+	</div>
+	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widget states-mdl"	style="padding: 5px 0px 5px 0;">
+		<div class="stats-left all">
+			<h5></h5>
+			<h5>{{'All'|translate}}</h5>
+		</div>
+		<div class="stats-right all">
+			<label>{{VehicleAllCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isAll">
+			<hr>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-10" style="float:left; margin-bottom: 10px;">
+		<img src="./assets/Images/timer.svg" height="32px" width="34px" style="margin: 0;">
+		<!-- <input type="image"  id="bimgTimer" title="Timer" src="./assets/images/alarm-clock.png" style="height:30px;width:30px;margin-left: 10px; margin-top: 3px;"> -->
+		<div id="UpdatePanel5" class="" style="float: left;">
+			<select id="deviceddlTimer" (change)="selectChangeHandler($event)" class="dropdown arrow "
+				style="color: #212121;width: 70px;height: 32px;">
+				<option value="00">{{'Off'|translate}}</option>
+				<option selected="selected" value="10">10 {{"sec"|translate}}</option>
+				<option value="30">30 {{"sec"|translate}}</option>
+				<option value="45">45 {{"sec"|translate}}</option>
+				<option value="60">60 {{"sec"|translate}}</option>
+				<option value="120">120 {{"sec"|translate}}</option>
+			</select>
+		</div>
+
+		<!-- <span [hidden]="!processing">
+			<i class="fa fa-refresh fa-spin fa-lg fa-fw"></i>
+		</span> -->
+
+	</div>
+	<div class="col-md-2" style="float:left; margin-bottom: 10px;">
+		<div class="row">
+			<div class="col-md-12">
+				<div style="cursor: pointer;float: left;padding-bottom:2px;">
+					<i class="fa fa-th-list fa-2x" (click)="changeView('List')"></i>
+					&nbsp;
+					<i class="fa fa-map fa-2x" (click)="changeView('Map')"></i>
+				</div>
+			</div>
+			<div class="col-md-12" style="height: 8px;">
+				<div *ngIf="listView" style="height: 5px;width:28px;background-color: #03243B;float: left;"></div>
+				<div *ngIf="mapView" style="height: 5px;width:28px;background-color: #03243B;float: left;margin-left:39px"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-12">
+	<div #mapDiv class="MapviewContainer" *ngIf="mapView">
+	</div>
+	<table id="snrSumTable" *ngIf="listView" class="table table-striped" style="width:100%;">
+		<thead class="table-head-background">
+			<tr>
+				<th>Device No</th>
+				<th>Sensor Name</th>
+				<th>Sensor Value</th>
+				<th>Last updated</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>

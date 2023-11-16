@@ -1,0 +1,112 @@
+<div class="page-bar text-pageheader" style="margin-left:-23px;">
+	<ul class="page-breadcrumb" style="list-style-type: none;">
+		<li>
+			<span style="color:#03243B"> People <i class="fa fa-angle-double-right"></i> </span>
+			<b> People Summary</b>
+		</li>
+	</ul>
+</div>
+
+
+<div class="row" style="margin: 0px">
+	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 widgetPeople" (click)="onPeopleMovingVehicles()">
+		<div class="stats-left moving">
+			<h5></h5>
+			<h5> Moving</h5>
+		</div>
+		<div class="stats-right moving">
+			<label>{{peopleMovingCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isPeopleMoving">
+			<hr class="moving">
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 widgetPeople states-mdl" (click)="onPeopleStationaryVehicles()">
+		<div class="stats-left stopped">
+			<h5></h5>
+			<h5>Stationary</h5>
+		</div>
+		<div class="stats-right stopped">
+			<label> {{peopleStationaryCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isPeopleStationary">
+			<hr class="stopped">
+		</div>
+	</div>
+
+	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 widget" (click)="onNoPollingPeople()">
+		<div class="stats-left noPolling">
+			<h5></h5>
+			<h5> No Polling</h5>
+		</div>
+		<div class="stats-right noPolling">
+			<label>{{peopleNoPollingCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isNoPollingPeople">
+			<hr class="noPolling">
+		</div>
+	</div>
+
+	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 widgetPeople states-mdl" (click)="onPeopleAllVehicles()">
+		<div class="stats-left all">
+			<h5></h5>
+			<h5>All</h5>
+		</div>
+		<div class="stats-right all">
+			<label>{{peopleAllCntindex}}</label>
+		</div>
+		<div class="clearfix"> </div>
+		<div *ngIf="isPeopleAll">
+			<hr>
+		</div>
+	</div>
+</div>
+
+	<div id="UpdatePanel5" class="" style="float: left;    margin-top: 4px;">
+		<select id="ddlTimer" (change)="selectChangeHandler($event)" class="dropdown arrow "
+			style="margin-left: 5px;color: #212121;width: 70px;height: 32px;">
+			<option value="00">Off</option>
+			<option selected="selected" value="30">30 sec</option>
+			<option value="45">45 sec</option>
+			<option value="60">60 sec</option>
+			<option value="120">120 sec</option>
+		</select>
+	</div>
+	<div style="float:left;">
+		<img src="./assets/Images/timer.svg" height="32px" width="34px" style="margin: 0;">
+	</div>
+	<div role="alert" style="padding-top:7px">
+		<span [hidden]="!processing">
+			<i class="fa fa-refresh fa-spin fa-lg fa-fw"></i>
+		</span>
+	</div>
+
+<div class="row" style="margin:5px 1px;">
+
+	<!-- <div class="jioTable-default1">
+		<div>
+			<angular-slickgrid gridId="grid1" [columnDefinitions]="columnDefinitionsPeople" [gridOptions]="gridOptions"
+				[dataset]="dataset" (onAngularGridCreated)="angularGridReady($event)">
+			</angular-slickgrid>
+		</div>
+	</div> -->
+
+	<div class="tableFixHead">
+		<table id="ppleSumTable" class="table  table-striped" style="width:100%;">
+		  <thead class="table-head-background">
+			<tr>
+			  <th>Tracker Name</th>
+			  <th></th>
+			  <th>GPS</th>
+			  <th>Last Updated</th>
+			  <th>Live Track</th>
+			</tr>
+		  </thead>
+		  <tbody>
+		  </tbody>
+		</table>
+	  </div>
+</div>

@@ -1,0 +1,888 @@
+<div style="margin-bottom:5px;">
+    <div class="row">
+        <div class="col-md-4" style="float:left; margin-bottom: 10px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="float: left;padding-bottom:2px;">
+                        <i class="fa fa-list-ul fa-2x" style="color:#3598DC;" title="List View"></i> &nbsp;
+                        <i class="fa fa-map fa-2x" *ngIf='hasMap' (click)="changeView('map')" title="Map View"
+                            style="cursor: pointer;"></i> &nbsp; 
+                        <i class="fa fa-thermometer-half fa-2x" *ngIf='hasTemp' (click)="changeView('temp')"
+                            title="Temperature View" style="cursor: pointer;"></i> &nbsp;
+                        <!-- <i class="fa fa-area-chart fa-2x" *ngIf='hasChart' (click)="changeView('chart')"
+                            title="Charts View" style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-thumb-tack fa-2x" *ngIf='hasDBpin' (click)="changeView('pin')"
+                            title="Dashboard Pin" style="cursor: pointer;"></i> &nbsp;
+                        <i class="fa fa-camera fa-2x" *ngIf='hasSurv' (click)="changeView('image')" title="Recordings"
+                            style="cursor: pointer;"></i> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" *ngIf='isMultipleHW' style="float:right; margin-bottom: 10px;">
+            <div class="col-md-6" style="margin-top: 5px;font-weight:bold;text-align: right;">
+                Model :
+            </div>
+            <div class="col-md-6" style="float:right;">
+                <ng-select [items]="userHwTypes" (change)="refreshData()" [(ngModel)]="selectHW" name="selectHWs"
+                    bindLabel="name" bindValue="id">
+                </ng-select>
+                <ng-template ng-label-tmp let-item="item">
+                    {{item}}
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <span style="color:#03243B"> Live Status <i class="fa fa-angle-double-right"></i></span>&nbsp;Sensor Summary -->
+<!-- <span class="fa fa-list-ul fa-2x" (click)="changeView('listDetails')"></span>
+<span class="fa fa-area-chart fa-2x" (click)="changeView('chart')"></span> -->
+
+
+
+
+<div class="row">
+    <div class="col-lg-2 col-md-2" style="padding: 5px 15px 5px 15px;">
+        <div class="tileDiv" style="background-color: #0081bd">
+            <div class="tileTopLeft" style="font-size: x-large;">{{DeviceAllCntindex}}
+            </div>
+            <div class="tileBottomLeft">
+                Total
+            </div>
+            <div class="tileTopRight">
+                <i class="fa fa-list-ul fa-2x" style="color: whitesmoke"></i>
+            </div>
+            <div class="tileBottom" (click)="AllSensor()">view
+                <i class="fa fa-chevron-circle-right"></i>
+            </div>
+        </div>
+        <div *ngIf="isAll">
+            <hr class="all" />
+        </div>
+
+    </div>
+
+    <div class="col-lg-2 col-md-2" style="padding-right: 2%;
+    padding-top: 0px;float: right;margin-top:-15px">
+        <div class="row tileDiv" style="margin-left:0px;margin-right:0px;">
+            <span style="color: #000;font-size: small;width: 100%;">{{opDevice}}</span>
+            <div class="row" style="margin-left:0px;margin-right:0px;">
+                <div class="col-md-9"
+                    style="padding-top: 3%;text-align: center;background-color: #0080BF;height: 70px;">
+                    {{tileSnr1}}<br />
+                    {{tileSnr2}}<br />
+                    {{tileSnr3}}
+                </div>
+                <div class="col-md-3" style="background-color: #36C6EB;height: 70px;
+            padding-left: 4%;
+            padding-top: 4%;">
+
+                    <img src='../assets/Images/on.png' *ngIf='tileOn1' height='20px' />
+                    <img src='../assets/Images/off.png' *ngIf='!tileOn1' height='20px' />
+                    <br />
+                    <img src='../assets/Images/on.png' *ngIf='tileOn2' height='20px' />
+                    <img src='../assets/Images/off.png' *ngIf='!tileOn2' height='20px' />
+                    <br />
+                    <img src='../assets/Images/on.png' *ngIf='tileOn3' height='20px' />
+                    <img src='../assets/Images/off.png' *ngIf='!tileOn3' height='20px' />
+
+
+                </div>
+            </div>
+        </div>
+        <!-- <div
+            style="background-color: #04498c; text-align: center;margin-left: -15px;margin-right: -15px; height: 20px;font-size: 12px;color: #fff;border-radius: 0px 0px 5px 5px;">
+            {{tileDeviceShow}}
+        </div> -->
+    </div>
+    <div class="col-lg-2 col-md-2" style="padding: 5px 15px 5px 15px;float: right;">
+
+        <div class="tileDiv" style="background-color: #34C6EB">
+            <div class="tileTopLeft" style="font-size: x-large;">{{SensorLiveCntindex}} / <span
+                    style="font-size: large;">{{DeviceAllCntindex}}</span>
+            </div>
+            <div class="tileBottomLeft">
+                Live
+            </div>
+            <div class="tileTopRight">
+                <i class="fa fa-check fa-2x" style="color: whitesmoke"></i>
+            </div>
+            <div class="tileBottom" (click)="LiveSensor()">view
+                <i class="fa fa-chevron-circle-right"></i>
+            </div>
+        </div>
+        <div *ngIf="islive">
+            <hr class="live" />
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2" style="padding: 5px 15px 5px 15px;float: right;">
+
+        <div class="tileDiv" style="background-color: #7590A1">
+            <div class="tileTopLeft" style="font-size: x-large;">{{SensorNrCntindex}} / <span
+                    style="font-size: large;">{{DeviceAllCntindex}}</span>
+            </div>
+            <div class="tileBottomLeft">
+                Non.Live
+            </div>
+            <div class="tileTopRight">
+                <i class="fa fa-times fa-2x" style="color: whitesmoke"></i>
+            </div>
+            <div class="tileBottom" (click)="nrSensor()">view
+                <i class="fa fa-chevron-circle-right"></i>
+            </div>
+        </div>
+        <div *ngIf="isNR">
+            <hr class="noPolling" />
+        </div>
+
+    </div>
+
+    <!-- <div class="col-lg-2 col-md-2" *ngIf="SensorGoodCntindex!==0" style="padding: 5px 15px 5px 15px;float: left;">
+        <div class="tileDiv" style="background-color: #00A65A">
+            <div class="tileTopLeft" style="font-size: x-large;"> {{SensorGoodCntindex}}
+            </div>
+            <div class="tileBottomLeft">
+                Good
+            </div>
+            <div class="tileTopRight">
+                <i class="fa fa-thumbs-o-up fa-2x" style="color: whitesmoke"></i>
+            </div>
+            <div class="tileBottom" (click)="goodList()"> view <i class="fa fa-chevron-circle-right"></i></div>
+        </div>
+        <div *ngIf="isGood">
+            <hr class="good">
+        </div>
+    </div> -->
+    <!--   -->
+    <div class="col-lg-2 col-md-2" *ngIf="SensorWarnCntindex!==0" style="padding: 5px 15px 5px 15px;float: left;">
+        <div class="tileDiv" style="background-color: #e7c219">
+            <div class="tileTopLeft" style="font-size: x-large;"> {{SensorWarnCntindex}}
+            </div>
+            <div class="tileBottomLeft">
+                Warning
+            </div>
+            <div class="tileTopRight">
+                <i class="fa fa-exclamation-circle fa-2x" style="color: whitesmoke"></i>
+            </div>
+            <div class="tileBottom" (click)="warningList()"> view <i class="fa fa-chevron-circle-right"></i>
+            </div>
+        </div>
+        <div *ngIf="isWarning">
+            <hr class="warning">
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-lg-2 col-md-2" *ngIf="SensorCriticalCntindex!==0" style="padding: 5px 15px 5px 15px;float: left;">
+        <div class="tileDiv" style="background-color: #e01f26">
+            <div class="tileTopLeft" style="font-size: x-large;"> {{SensorCriticalCntindex}}
+            </div>
+            <div class="tileBottomLeft">
+                Critical
+            </div>
+            <div class="tileTopRight">
+                <i class="fa fa-bullhorn fa-2x" style="color: whitesmoke"></i>
+            </div>
+            <div class="tileBottom" (click)="criticalList()"> view <i class="fa fa-chevron-circle-right"></i>
+            </div>
+        </div>
+        <div *ngIf="isCritical">
+            <hr class="critical">
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="bothSN">
+    <div class="col-md-3" *ngIf="!isRCLiveLoad" style="padding-left: 30px;
+  padding-right: 30px;">
+        <div class="col-md-6" style="padding-left: 0px;
+      padding-right: 1px;">
+            <div style="
+      border-radius: 5px;
+      border: solid 1px #a4a5a7;
+      text-align: center;
+      background-color: #04498c;
+      color: #fff;">
+                <div style="height: 6px;
+                margin-bottom: 20px;
+                padding-top: 2px;">
+                    {{rcTrendSName1}}
+                </div>
+                <div *ngIf="isRCLive" style="height: 68px;
+                font-size: 25px;
+                font-weight: bold;
+                color: gray;
+                background-color: #B4E0FB;
+                padding-top: 12%;" [style.color]="rcTrendS1Color">
+                    <span *ngIf='RoomTempVal==="FV"'>
+                        <i class="fa fa-exclamation-triangle" title="Sensor Fault" style="color: #FDBB11;"></i>
+                    </span>
+                    <span *ngIf='RoomTempVal==="NC"'>
+                        <i class="fa fa-ban fa-2x" title="Sensor Fault" style="color: #68686b;"></i>
+                    </span>
+                    <span *ngIf='RoomTempVal!=="FV" && RoomTempVal!=="NC"'>{{RoomTempVal}}</span>
+                    <span *ngIf='RoomTempVal!=="FV" && RoomTempVal!=="NC"'
+                        style="font-size: small;vertical-align: top;">{{rcTrendSUoM1}}</span>
+                </div>
+                <div *ngIf="!isRCLive" style="height: 80px;">
+                    <i class="fa fa-exclamation-triangle fa-3x" style="color: #7590A1;"></i>
+                </div>
+                <div *ngIf="isRCLive" style="padding-bottom: 2px;
+                padding-top: 2px;font-weight: bold;
+                background-color: #B4E0FB;color: #000;">
+                    {{rcDevName}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" style="padding-left: 1px;
+      padding-right: 0px;">
+            <div style="border-radius: 5px;
+      border: solid 1px #a4a5a7;
+      text-align: center;
+      background-color: #04498c;
+      color: #fff;">
+                <div style="height: 6px;
+                margin-bottom: 20px;
+                padding-top: 2px;">
+                    {{rcTrendSName2}}
+                </div>
+                <div *ngIf="isRCLive" style="height: 68px;
+                font-size: 25px;
+                font-weight: bold;
+                color: gray;
+                background-color: #B4E0FB;color:#000;
+                padding-top: 12%;" [style.color]="rcTrendS2Color">
+                    <span *ngIf='CoilTempVal==="FV"'>
+                        <i class="fa fa-exclamation-triangle" title="Sensor Fault" style="color: #FDBB11;"></i>
+                    </span>
+                    <span *ngIf='CoilTempVal==="NC"'>
+                        <i class="fa fa-ban fa-2x" title="Sensor Fault" style="color: #68686b;"></i>
+                    </span>
+                    <span *ngIf='CoilTempVal!=="FV" && CoilTempVal!=="NC"'>{{CoilTempVal}}</span>
+                    <span *ngIf='CoilTempVal!=="FV" && CoilTempVal!=="NC"'
+                        style="font-size: small;vertical-align: top;">{{rcTrendSUoM2}}</span>
+                </div>
+                <div *ngIf="!isRCLive" style="height: 80px;">
+                    <i class="fa fa-exclamation-triangle fa-3x" style="color: #7590A1;"></i>
+                </div>
+                <div *ngIf="isRCLive" style="padding-bottom: 2px;
+                padding-top: 2px;font-weight: bold;
+                background-color: #B4E0FB;color: #000;">
+                    {{rcDevName}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" *ngIf="isRCLiveLoad" style="padding-left: 30px;
+    padding-right: 30px;">
+        <div style="background-color: #fff;
+        border-radius: 5px;
+        height: 111px;
+        border: solid 1px #a4a5a7;
+        text-align: center;padding-left: 5%;
+  padding-top: 15%;">
+            <i class="fa fa-spinner fa-3x fa-spin"></i>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div style="height: 120px;
+      background-color: #fff;
+      border-radius: 5px;
+      border: solid 1px #a4a5a7;
+      text-align: center;">
+            <div id="trendBRCChart" style="height: 110px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" *ngIf="onlyNSN">
+    <div class="col-md-3" *ngIf="!isRCLiveLoad" style="padding-left: 30px;
+  padding-right: 30px;">
+        <div style="background-color: #04498c;
+      border-radius: 5px;
+      border: solid 1px #a4a5a7;
+      text-align: center;color: #fff;">
+            <div style="height: 6px;
+            margin-bottom: 20px;
+            padding-top: 2px;">
+                {{rcTrendSName1}}
+            </div>
+            <div *ngIf="isRCLive" style="height: 68px;
+      font-size: 30px;font-weight: bold;background-color: #B4E0FB;   padding-top: 5%;" [style.color]="rcTrendS1Color">
+                <span *ngIf='RCTempVal==="FV"'>
+                    <i class="fa fa-exclamation-triangle" title="Sensor Fault" style="color: #FDBB11;"></i>
+                </span>
+                <span *ngIf='RCTempVal!=="FV"'>{{RCTempVal}}</span><span
+                    style="font-size: small;vertical-align: top;">{{rcTrendSUoM1}}</span>
+            </div>
+            <div *ngIf="!isRCLive" style="height: 80px;">
+                <i class="fa fa-exclamation-triangle fa-3x" style="color: #7590A1;"></i>
+            </div>
+            <div *ngIf="isRCLive" style="padding-bottom: 2px;
+            padding-top: 2px;font-weight: bold;
+                background-color: #B4E0FB;color: #000;">
+                {{rcDevName}}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" *ngIf="isRCLiveLoad" style="padding-left: 30px;
+    padding-right: 30px;">
+        <div style="background-color: #fff;
+        height: 111px;
+        border-radius: 5px;
+        border: solid 1px #a4a5a7;color:#000;
+        text-align: center;padding-left: 5%;
+  padding-top: 15%;">
+            <i class="fa fa-spinner fa-3x fa-spin"></i>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div style="height: 120px;
+      background-color: #fff;
+      border-radius: 5px;
+      border: solid 1px #a4a5a7;
+      text-align: center;">
+            <div id="trendRCChart" style="height: 110px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="padding-top: 2px;padding-bottom: 2px;">
+    <div class="col-md-1" style="float: right;cursor: pointer;padding-right: 15px;
+    text-align: right;padding-top: 0.5%;width:5%" (click)="openSensorShow()">
+        <i class="fa fa-cog fa-2x"></i>
+    </div>
+    <div class="col-md-4" style="float: right;">
+        <div class="col-md-4" style='padding-right:0px;'>
+            <ng-select [items]="perPage" [(ngModel)]="pageCount" name="period" (change)='resetPaging()' bindLabel="pVal"
+                bindValue="pCnt" [clearable]='false' [searchable]='false' placeholder="Page records">
+            </ng-select>
+            <ng-template ng-label-tmp let-item="item">
+                {{item.pVal}}
+            </ng-template>
+        </div>
+        <div class="col-md-4" style="padding-right: 1%;float: left; text-align: center;padding-top: 3%;">
+            {{pageStartView}} - {{pageEnd}} of {{totalRows}}
+        </div>
+        <div class="col-md-4" style="padding-right: 1%;float: left;">
+            <div class="row">
+                <div class="col-md-1" style="margin-right: 10px;">
+                    <div *ngIf='!pageStartDisable' class="pageDiv" style="background-color: #fff;"
+                        (click)='ShiftRecords(-1)'>
+                        <i class="fa fa-angle-double-left fa-2x" style="padding-top: 5%;cursor:pointer;"></i>
+                    </div>
+                    <div *ngIf='pageStartDisable' class="pageDiv">
+                        <i class="fa fa-angle-double-left fa-2x"
+                            style="padding-top: 5%;color: #9a9d9e;cursor:not-allowed;"></i>
+                    </div>
+                </div>
+                <div class="col-md-1" style="margin-left: 10px;">
+                    <div *ngIf='!pageEndDisable' class="pageDiv" style="background-color: #fff;"
+                        (click)='ShiftRecords(+1)'>
+                        <i class="fa fa-angle-double-right fa-2x" style="padding-top: 5%;cursor:pointer;"></i>
+                    </div>
+                    <div *ngIf='pageEndDisable' class="pageDiv">
+                        <i class="fa fa-angle-double-right fa-2x"
+                            style="padding-top: 5%;color: #9a9d9e;cursor:not-allowed;"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <!-- <table id="newSnrTable" class="table table-striped" style="width:100%;">
+            <thead class="table-head-background">
+                <tr style="text-align: center">
+                    <th *ngFor="let item of snNames">
+                        {{item}}
+                    </th>
+                    <th>More</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let item of snVals">
+                    <td *ngFor="let item2 of snVals[item.index].snsrVal">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div *ngIf="item2.includes('$')">
+                                        <div *ngIf='item2.split("$")[1].includes(",")'>
+                                            <img src='{{item2.split("$")[1].split(",")[1]}}'
+                                                title='{{item2.split("$")[1].split(",")[0]}}' style="height: 20px;" />
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div *ngIf="!item2.includes('|Trend')"
+                                        [innerHTML]='item2.split("_")[0].split("#")[0]+" "+item2.split("_")[0].split("#")[1]'
+                                        style="padding-left:5px;"> </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td>
+                        <i class="fa fa-list-alt" style="cursor: pointer;color: #337AB7;"
+                            (click)="showMoreDetails(snVals[item.index].snsrVal[0].split('_')[0])"></i>&nbsp;
+                        <i class="fa fa-line-chart" style="cursor: pointer;color: #337AB7;"
+                            (click)="plotRCTrend(snVals[item.index].snsrVal[0].split('_')[0])"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table> -->
+        <table id="newSnrTable" *ngIf="snVals.length>0" class="table table-striped" style="width:100%;">
+
+            <thead class="table-head-background">
+                <tr>
+                    <th *ngFor="let item of snVals[0].live[0].snsr" style="text-align: center;">
+                        {{item}}
+                    </th>
+                    <th style="text-align: center;padding-right: 15px;">More</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let idx of snVals[0].live;">
+                    <td style="text-align: -webkit-center;text-align: -moz-center"
+                        *ngFor="let item2 of idx.snsrVal;let gr=index">
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <div *ngIf="item2.includes('$')">
+                                        <div *ngIf='item2.split("$")[1].includes(",")'>
+                                            <img src='{{item2.split("$")[1].split(",")[1]}}'
+                                                title='{{item2.split("$")[1].split(",")[0]}}' style="height: 20px;" />
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <i *ngIf='item2.split("_")[0].split("#")[0]==="FV"'
+                                        class="fa fa-exclamation-triangle" title="Sensor Fault" style="color: #FDBB11;">
+                                        <!-- {{item2.split("_")[0].split("#")[1]}} -->
+                                    </i>
+                                    <div *ngIf="item2.split('_')[0].split('#')[0]!=='FV' && !item2.includes('|Trend')"
+                                        [innerHTML]='item2.split("_")[0].split("#")[0]+" "+item2.split("_")[0].split("#")[1]'
+                                        style="padding-left:5px;">
+                                    </div>
+                                </td>
+                                <td *ngIf="gr==0 && idx.status=='inactive'">
+                                    <div style="padding-left:5%">
+                                        <div class="inactive">{{idx.status}}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td style="text-align: center;padding-right: 15px;">
+                        <i class="fa fa-list-alt" style="cursor: pointer;color: #337AB7;" title="More Details"
+                            (click)="showMoreDetails(idx.snsrVal[0].split('_')[0])">
+                            <!-- snVals[0].live[idx.index].snsrVal[0].split('_')[0], -->
+                        </i>
+                        &nbsp;
+                        <i class="fa fa-dot-circle-o" style="cursor: pointer;color: #337AB7;" title="Trend and Outputs"
+                            (click)="plotRCTrend(idx.snsrVal[0].split('_')[0])"></i>
+                        <!-- snVals[0].live[idx.index].snsrVal[0].split('_')[0] -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <app-modal #modalLiveSensor [modalTitle]="'Sensors in Live'" (close)="closeSensorShow()" [width]="400"
+            [maximizable]="true">
+            <ng-container class="app-modal-body">
+                <table id="tblSensorShow" class="table table-striped">
+                    <thead class="table-head-background">
+                        <tr>
+                            <th>Hardware Type</th>
+                            <th *ngIf="!isSuperAdmin">Sensor</th>
+                            <th *ngIf="isSuperAdmin">Display Name</th>
+                            <th>Show In Live</th>
+                            <th>Pin Trend</th>
+                            <th>Pin To Tile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of LiveSensorResp;let i=index;">
+                            <td>{{item.ShortCode}}</td>
+                            <td *ngIf="!isSuperAdmin">{{item.SName}}</td>
+                            <td *ngIf="isSuperAdmin">
+                                <input type="text" [(ngModel)]="item.SName" value="{{item.SName}}"
+                                    name="{{item.ShortCode}}{{i}}">
+                            </td>
+                            <td>
+                                <input type="checkbox" [checked]="item._ShowInLive" name="chk_{{item.ShortCode}}{{i}}"
+                                    (change)="checkChange(item)">
+                            </td>
+                            <td>
+                                <input type="checkbox" [checked]="item.pinTrend" name="chk_{{item.SName}}{{i}}"
+                                    (change)="checkPinTrendChange(item)">
+                            </td>
+                            <td>
+                                <input type="checkbox" [checked]="item.pinTile" *ngIf="item.showTileChk"
+                                    name="chkT_{{item.SName}}{{i}}" (change)="checkPinTile(item)">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-container class="app-modal-footer">
+                <button class="btn btn-close" class="btn btn-danger" (click)="closeSensorShow()">
+                    <i class="fa fa-close"></i> Close </button> &nbsp;
+                <button class="btn btn-success" (click)="saveShowLiveSnsr()">
+                    <i class="fa fa-save"></i> Save </button>
+            </ng-container>
+        </app-modal>
+
+        <app-modal #modalAllSensor [modalTitle]="showMoreDevice" (close)="closeMoreDetails()" [width]="900"
+            [maximizable]="true">
+            <ng-container class="app-modal-body">
+                <div style="height: 400px;overflow-y: auto;overflow-x: hidden;">
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="col-md-4">
+                            <p style="font-weight: 600">Last Updated</p>
+                            <p style="margin: -10px;padding: 0 10px;">{{deviceTime}}</p>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 4%;padding-left: 2%;padding-right: 2%;">
+                        <div class="col-md-12"
+                            style="border:solid 2px #36595f;padding-top:2%;padding-bottom:2%;border-radius: 5px;">
+                            <div *ngFor="let item of moreInfoResp.live;let i =index">
+                                <div *ngIf="i!==0 && i%4==0" style="height: 60px;"></div>
+                                <div class="col-md-3" style="
+                                padding: 1%;
+                                border: solid 1px #a9a9a9;border-radius: 5px;height: 74px;">
+                                    <!-- <div> -->
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    {{item.name}}
+                                                </th>
+                                                <th *ngIf='!item.dFdtype && item.rwType && hasMqtt && !item.binaryType'
+                                                    style="padding-left: 2px;">
+                                                    <!-- <div> -->
+                                                    &nbsp;({{item.writeRange}})
+                                                    <!-- </div> -->
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div style="height: 34px;line-height: 34px;">
+                                        <table>
+                                            <tr>
+                                                <td *ngIf="item.value.includes('$')">
+                                                    <div style="margin-right: 5px;"
+                                                        *ngIf='item.value.split("$")[1].includes(",")'>
+                                                        <img src='{{item.value.split("$")[1].split(",")[1]}}'
+                                                            title='{{item.value.split("$")[1].split(",")[0]}}'
+                                                            height='15px' />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span *ngIf='item.value.split("_")[0]==="FV"'
+                                                        class="fa fa-exclamation-triangle" style="color: #FDBB11;"
+                                                        title="Sensor Fault"></span>
+                                                    <span
+                                                        *ngIf='item.value.split("_")[0]!=="FV"'>{{item.value.split('_')[0]}}</span>
+                                                </td>
+                                                <!-- item.isReporting && item.rwType && hasMqtt && !item.binaryType -->
+                                                <td> {{item.uom}}
+                                                    <div *ngIf="item.rwType" style="margin-left:10px;">
+                                                        <input *ngIf='!item.dFdtype' style="width: 33%;" type="text"
+                                                            name="item.snsrId"
+                                                            [attr.disabled]="item.writeRange.includes('undefined') ? '':null"
+                                                            [(ngModel)]="item.cmdVal" value="cmdVal"
+                                                            placeholder="value">
+
+                                                        <img *ngIf='!item.dFdtype' src='../assets/Images/send.png'
+                                                            height="20px"
+                                                            (click)="commandVal(item.deviceId, item.snsrId,item.writeRange,item.cmdVal, item.name)"
+                                                            title="send setpoint" />
+                                                        <ng-select *ngIf="item.dFdtype" style="width: 100%;"
+                                                            [items]="item.dfdDetails" [(ngModel)]="name" name="dfdName"
+                                                            bindLabel="name" bindValue="pos" placeholder="Control"
+                                                            (change)="setdFdCommand($event,item.snsrId)"
+                                                            [clearable]="false" [searchable]="false" required>
+                                                        </ng-select>
+                                                        <ng-template ng-label-tmp let-item="item">
+                                                            {{item.name}}
+                                                        </ng-template>
+                                                    </div>
+                                                </td>
+                                                <td *ngIf='item.showTrend && !item.dFdtype'>
+                                                    <i class="fa fa-line-chart" style="color:#337AB7;padding-left:10%;"
+                                                        (click)="showTrend(item.deviceId,item.snsrId,item.uom,item.name)"></i>
+                                                </td>
+
+                                                <td *ngIf='item.rwType && !item.dFdtype'>
+                                                    <div *ngIf='hasMqtt && item.binaryType'>
+                                                        <ui-switch [checked]="item.valueState" switchColor="#fcfcfc"
+                                                            size="small"
+                                                            (change)="command(item.deviceId, item.snsrId,item.value.split('_')[0])">
+                                                        </ui-switch>
+                                                    </div>
+                                                    <!-- <div *ngIf='item.dFdtype && hasMqtt && !item.binaryType'>
+
+
+                                                    </div> -->
+
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 4%;padding-left: 2%;padding-right: 2%;">
+                        <p style="padding-left: 15px;">
+                            <span style="font-weight: bold;">Setpoint : </span>
+                            <span *ngIf="showSPconfigIcon" style="float: right; padding-right: 1%;cursor: pointer;"
+                                (click)="showSPsConfig()" title="Setpoint Configuration" class="fa fa-gear">
+                            </span>
+                        </p>
+                        <div class="col-md-12"
+                            style="border:solid 2px #36595f;padding-top:2%;padding-bottom:2%;border-radius: 5px;">
+
+                            <div class="row">
+                                <div *ngFor="let item of moreInfoResp.setpoints;let i =index">
+                                    <div class="row" style="padding-bottom: 1px;padding-top: 1px;"
+                                        *ngIf='item.rwType && hasMqtt && !item.binaryType'>
+                                        <div class="col-md-2">
+                                            {{item.name}}
+                                        </div>
+                                        <div class="col-md-2" style="width: 11%;">
+                                            <img src='{{item.value.split("$")[1].split(",")[1]}}'
+                                                title='{{item.value.split("$")[1].split(",")[0]}}' height='15px' />
+                                            &nbsp;
+                                            <span *ngIf='item.value.split("_")[0]==="FV"'
+                                                class="fa fa-exclamation-triangle" style="color: #FDBB11;"
+                                                title="Sensor Fault"></span>
+                                            <span
+                                                *ngIf='item.value.split("_")[0]!=="FV"'>{{item.value.split('_')[0]}}</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input *ngIf='item.rwType && hasMqtt && !item.binaryType' style="
+                                            width: 45%;" type="text" name="item.snsrId"
+                                                [attr.disabled]="item.writeRange.includes('undefined') ? '':null"
+                                                [(ngModel)]="item.cmdVal" value="cmdVal" placeholder="value">
+                                            ({{item.writeRange}})
+                                        </div>
+                                        <div class="col-md-1">
+                                            <img *ngIf='item.rwType && hasMqtt && !item.binaryType'
+                                                src='../assets/Images/send.png' height="20px"
+                                                (click)="commandVal(item.deviceId, item.snsrId,item.writeRange,item.cmdVal, item.name)"
+                                                title="Config Setpoint" />
+                                        </div>
+                                        <div class="col-md-1" *ngIf='showSPconfig'>
+                                            <input style="width: 90%;" type="text" name="item.snsrId{{i}}"
+                                                [attr.disabled]="item.writeRange.includes('undefined') ? '':null"
+                                                [(ngModel)]="item.configcmdMin" value="cmdMinVal" placeholder="Min">
+                                        </div>
+                                        <div class="col-md-1" *ngIf='showSPconfig'>
+                                            <input style="width: 90%;" type="text" name="item.snsrId{{i}}{{i}}"
+                                                [attr.disabled]="item.writeRange.includes('undefined') ? '':null"
+                                                [(ngModel)]="item.configcmdMax" value="cmdMaxVal" placeholder="Max">
+                                        </div>
+                                        <div class="col-md-1" *ngIf='showSPconfig'>
+                                            <img src='../assets/Images/set.png' height="20px"
+                                                (click)="spConfig(item.deviceId, item.snsrId,item.configcmdMin,item.configcmdMax)"
+                                                title="Config Setpoint Range" />
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 4%;padding-left: 2%;padding-right: 2%;">
+                        <p style="padding-left: 15px;">
+                            <span style="font-weight: bold;">Fault : </span>
+                            <span style="float: right; padding-right: 2%;">
+                                <span><img src='../assets/Images/fault.png' height='10px' />
+                                    <b>Fault</b></span>
+                                <span><img src='../assets/Images/off.png' height='10px' />
+                                    <b>Ok</b></span>
+                                <span><img src='../assets/Images/manual.png' height='10px' />
+                                    <b>Manual</b></span>
+                                <span><img src='../assets/Images/auto.png' height='10px' />
+                                    <b>Auto</b></span>
+                                <span><img src='../assets/Images/manual.png' height='10px' />
+                                    <b>Switch ON</b></span>
+                                <span><img src='../assets/Images/off.png' height='10px' />
+                                    <b>Switch OFF</b></span>
+                                <span><img src='../assets/Images/nc.png' height='10px' />
+                                    <b>Not Connected</b></span>
+                            </span>
+                        </p>
+                        <div class="col-md-12" style="border:solid 2px #36595f;padding-top:2%;border-radius: 5px;">
+                            <div *ngFor="let item of moreInfoResp.fault">
+                                <!-- style="width: 100px;margin-right:10px;" -->
+                                <div class="col-md-2" style="padding-left: 0px;padding-right: 0px;">
+                                    <div style="margin-bottom: 5px;text-align: center;font-weight: bold;">
+                                        {{item.name}}
+                                        <!-- <table>
+                                            <tr>
+                                                <th style="align-items: center;">
+                                                   
+                                                </th>
+                                            </tr>
+                                        </table> -->
+                                    </div>
+                                    <div style="margin-bottom: 15px;text-align: center;">
+                                        <img src='{{item.value.split("$")[1].split(",")[1]}}'
+                                            title='{{item.value.split("$")[1].split(",")[0]}}' height='15px' />
+                                        <!-- <table>
+                                            <tr>
+                                                <td style="align-items: center;">
+                                                    <div *ngIf="item.value.includes('$')">
+                                                        <div *ngIf='item.value.split("$")[1].includes(",")'>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                               
+                                            </tr>
+                                        </table> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 4%;padding-left: 2%;padding-right: 2%;">
+                        <p style="padding-left: 15px;">
+                            <span style="font-weight: bold;">Out put : </span>
+                            <span style="float: right; padding-right: 2%;">
+                                <span><img src='../assets/Images/on.png' height='10px' /> <b>On</b></span>
+                                <span><img src='../assets/Images/off.png' height='10px' /> <b>Off</b></span>
+                                <span><img src='../assets/Images/nc.png' height='10px' />
+                                    <b>Not Connected</b></span>
+                            </span>
+                        </p>
+                        <div class="col-md-12" style="border:solid 2px #36595f;padding-top:2%;border-radius: 5px;">
+
+                            <div *ngFor="let item of moreInfoResp.op">
+                                <!-- style="width: 100px;margin-right:10px;" -->
+                                <div class="col-md-2" style="padding-left: 0px;padding-right: 0px;">
+                                    <div style="margin-bottom: 5px;text-align: center;font-weight: bold;">
+                                        {{item.name}}
+                                    </div>
+                                    <div style="margin-bottom: 15px;text-align: center;">
+                                        <img src='{{item.value.split("$")[1].split(",")[1]}}'
+                                            title='{{item.value.split("$")[1].split(",")[0]}}' height='15px' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </app-modal>
+
+        <app-modal #modalTrend [modalTitle]="[TrendName]" [width]="745" [maximizable]="true">
+            <ng-container class="app-modal-body">
+                <div style="height: 300px;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <ng-select [items]="DateRangeList" [(ngModel)]="dateRange" name="dateRange"
+                                bindLabel="dtName" bindValue="dtId" placeholder="Duration"
+                                (change)="checkDateRange($event)" required>
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.dtName}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-2">
+                            <ng-select [items]="periodRangeFilter" [(ngModel)]="period" name="period" bindLabel="pVal"
+                                bindValue="pId" placeholder="Period" required>
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.pVal}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-5" style="margin-right:-25px;" *ngIf="isDates">
+                            <div class="row">
+                                <div class="col-md-6" style="padding-left: 5px;">
+                                    <label>
+                                        <input [max]="maxDate" style="width: 130px;    height: 30px;"
+                                            [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate"
+                                            [(ngModel)]="deviceInsightsobj.fromDate" placeholder="From Date"
+                                            class="date-picker-styles" required readonly>
+                                        <owl-date-time #dt1></owl-date-time>
+                                    </label>
+                                </div>
+                                <div class="col-md-6" style="margin-left:-20px;">
+                                    <label>
+                                        <input [max]="maxDate" style="width: 130px;    height: 30px;"
+                                            [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" name="toDate" id="toDate"
+                                            [(ngModel)]="deviceInsightsobj.toDate" placeholder="To Date"
+                                            class="date-picker-styles" required readonly>
+                                        <owl-date-time #dt2></owl-date-time>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left: 5px;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <button class="btn" type="button" (click)="getTrend()">
+                                        GO <i class="fa fa-angle-right"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-6" *ngIf="showTrendDownload">
+                                    <div class="dropdownload" style="margin-top:-10px;">
+                                        <i class="btn dropbtn fa fa-download" aria-hidden="true"></i>
+                                        <div class="dropdownload-content" style="cursor: pointer;">
+                                            <!-- <span (click)="downloadData('excel')"><i class="fa fa-file-excel-o"></i>
+                                              Download Excel</span> -->
+                                            <span (click)="downloadData('pdf')"><i class="fa fa-file-pdf-o"></i>
+                                                Download PDF</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div id="trendChart" style="height: 300px;">
+                            </div>
+                            <div>
+                                <div class="row" *ngIf="hasRules" style="margin-top:-20px;padding-left:10%;">
+                                    <div class="col-md-2"> <i class="fa fa-circle" style="color:#DC202D;"></i>
+                                        Critical</div>
+                                    <div class="col-md-2"> <i class="fa fa-circle" style="color:#FDBB11;"></i>
+                                        Warning</div>
+                                    <div class="col-md-2"> <i class="fa fa-circle" style="color:#00A651;"></i>
+                                        Good
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </app-modal>
+
+    </div>
+    <!-- [ngStyle]="{'background-image': 'url(' + bgImage + ')'}" style="background-repeat: repeat-x;" -->
+
+</div>

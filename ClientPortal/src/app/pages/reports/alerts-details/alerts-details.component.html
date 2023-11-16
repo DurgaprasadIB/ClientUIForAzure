@@ -1,0 +1,662 @@
+<button class="btn" type="button" title="Refresh" (click)="ResetData(AlertsDetailsObj)">
+    Live Alerts</button>
+
+<span (click)="openSettings();" style="float: right;cursor: pointer;" title="Alert Settings">
+    <i class="fa fa-cog fa-2x"></i>
+</span>
+<div>
+    <form #frmAlertDetails="ngForm" (ngSubmit)="GetAlertsDetails('Filter')">
+
+        <div class="row">
+            <div class="col-md-12" style="padding: 15px;">
+                <div style="background-color: #FFF; border-radius: 5px;padding: 10px;">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                            <label>Location</label>
+                            <ng-select [items]="clientRegions" [(ngModel)]="selectedRegion" name="region"
+                                (change)="changeRegion()" bindLabel='regionName' bindValue='regionId'
+                                placeholder='Location'>
+                            </ng-select>
+                            <ng-template ng-label-temp let-item='item'>
+                                {{item.regionName}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                            <label>Device Model</label>
+                            <ng-select [items]="userHwTypes" style="border: 1px solid #ccc;border-radius: 4px;"
+                                (change)="getDevices('Model')" [(ngModel)]="selectHW" name="selectHW" bindLabel="name"
+                                bindValue="id" placeholder="Select">
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                            <label>Device</label>
+                            <ng-select [items]="DeviceList" [multiple]=true [closeOnSelect]="false"
+                                [(ngModel)]='deviceSelectedList' style="color:#212121" bindLabel="deviceName"
+                                bindValue="sensorId" placeholder="Select" name="deviceSelect">
+                                <ng-template ng-header-tmp>
+                                    <div class="selectionButtons">
+                                        <button type="button" class="btn btn-success" [disabled]="disabeleRegSelectAll"
+                                            (click)="onSelectAll(frmAlertDetails.form.valid,frmAlertDetails.value)">
+                                            <i class="fa fa-check" title="Select All"></i></button>
+                                        <button type="button" style="margin-left: 5px;" class="btn btn-warning"
+                                            [disabled]="disableRegUnSelectAll" (click)="onDeSelectAll()">
+                                            <i class="fa fa-times" title="Deselect All"></i>
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                    <div *ngIf="deviceSelectedList.length === DeviceList.length">
+                                        All (Default)
+                                    </div>
+                                    <div *ngIf="deviceSelectedList.length != DeviceList.length">
+                                        <div class="ng-value" *ngIf="items.length > 0">
+                                            <span class="ng-value-label">{{items.length}} Selected...</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                            <label>Sensor</label>
+                            <ng-select [items]="SensorList" [multiple]=true [closeOnSelect]="false"
+                                [(ngModel)]='sensorSelectedList' style="color:#212121" bindLabel="keyName"
+                                bindValue="key" placeholder="Select" name="sensorSelect">
+                                <ng-template ng-header-tmp>
+                                    <div class="selectionButtons">
+                                        <button type="button" class="btn btn-success" [disabled]="disabeleSnsrSelectAll"
+                                            (click)="onsnsrSelectAll(frmAlertDetails.form.valid,frmAlertDetails.value)">
+                                            <i class="fa fa-check" title="Select All"></i></button>
+                                        <button type="button" style="margin-left: 5px;" class="btn btn-warning"
+                                            [disabled]="disableSnsrRegUnSelectAll" (click)="onsnsrDeSelectAll()">
+                                            <i class="fa fa-times" title="Deselect All"></i>
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                    <div *ngIf="sensorSelectedList.length === SensorList.length">
+                                        All (Default)
+                                    </div>
+                                    <div *ngIf="sensorSelectedList.length != SensorList.length">
+                                        <div class="ng-value" *ngIf="items.length > 0">
+                                            <span class="ng-value-label">{{items.length}} Selected...</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                            <label>Status</label>
+                            <ng-select [items]="statusList" [multiple]=true [closeOnSelect]="false"
+                                [(ngModel)]='statusSelectedList' style="color:#212121" bindLabel="status"
+                                bindValue="status" placeholder="Select" name="statusSelect">
+                                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                    <!-- <div class="ng-value" *ngFor="let item of (items ? items.slice(0,1): [])">
+                  <span class="ng-value-label"> {{item.status}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div> -->
+                                    <div class="ng-value" *ngIf="items.length > 0">
+                                        <span class="ng-value-label">{{items.length}} Selected...</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                            <label>Period</label>
+                            <ng-select [items]="DateRangeList" style="    border: solid 1px #c1c1c1;
+              border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId"
+                                placeholder="Period" (change)="checkDateRange($event)">
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.dtName}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-2" *ngIf="isDates">
+                            <label>Date Range</label>
+                            <div style="border: solid 1px #c1c1c1;
+                            border-radius: 5px;width: 98%;">
+                                <input [max]="maxDate" style="width: 145px; height: 35px;" [owlDateTimeTrigger]="dt1"
+                                    [owlDateTime]="dt1" name="fromDate" id="fromDate" [selectMode]="'range'"
+                                    [(ngModel)]="AlertsDetailsObj.fromDate" placeholder="Date Range"
+                                    class="date-picker-styles" required readonly>
+                                <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="isTimes"><!--*ngIf=" isTimes && isSensorReading"-->
+                            <label>Time Range (24hrs format)<span style="color: red;">*</span></label>
+                            <div class="floating-input" style="border-bottom:none;padding-top: 3px;">
+                              <input type="text" style="width: 13%;" name="reportFHr" maxlength="2"
+                                (keypress)="checkNumericsFHr($event)" [(ngModel)]="reportFHR" placeholder="HH">
+                              : 00
+                              ~
+                              <input type="text" style="width: 13%;" name="reportTHr" maxlength="2"
+                                (keypress)="checkNumericsTHr($event)" [(ngModel)]="reportTHR" placeholder="HH">
+                              : 00
+                            </div>
+                          </div>
+                        <div class="col-md-2 col-sm-2 col-xs-2">
+                            <label>Operational Status</label>
+                            <ng-select [items]="operationalStatus" style="border: 1px solid #ccc;border-radius: 4px;"
+                                [(ngModel)]="selectopStatus" name="selectopStatus" bindLabel="name" bindValue="id"
+                                placeholder="Select">
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-3 col-sm-4 col-xs-4 btn-with-ion-plus-round resetButtongroup"
+                            style="padding-top: 2%;">
+                            <button type="submit" class="btn" title="Fetch" style="font-family: Helvetica;">
+                                Fetch
+                            </button>
+                            <div class="dropdownload" *ngIf="excelShowHide" style="margin-right: 5px;">
+                                <i class="btn dropbtn fa fa-download" aria-hidden="true"></i>
+                                <div class="dropdownload-content">
+                                    <span (click)="exportPDF('Alerts')" style="width: 190px;">Download Alert
+                                        Summary</span>
+                                    <span (click)="exportPDF('CAPA')">Download CAPA Summary</span>
+                                </div>
+                            </div>
+                            <button type="button" (click)="OpenAlertReport();" *ngIf="isSuperAdmin"
+                                title="Alert Reports" id="btnAlertSet" class="btn">
+                                <span style="font-family: Helvetica;">Schedule</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <div style="z-index: 9;
+    position: absolute;
+    margin-top: 10px;
+    padding-left: 1%;
+    font-size: medium;">{{TableType}}</div>
+    <div style="background-color: #FFF; border-radius: 5px;padding: 10px;height: 65vh;overflow-y: auto;">
+
+        <div class="tableFixHead">
+
+            <table id="alertRpTable" class="table table-striped" style="width:100%;">
+                <thead class="table-head-background">
+                    <tr>
+                        <th style="width: 200px;">Location</th>
+                        <th style="width: 200px;">Device</th>
+                        <th style="width: 120px;">Sensor</th>
+                        <th style="width: 60px;">Alert</th>
+                        <th style="width: 300px;">Reason</th>
+                        <th style="width: 200px;">Time</th>
+                        <th style="width: 100px;">Value</th>
+                        <th style="width: 200px;">Duration</th>
+                        <th style="width: 60px;">CAPA</th>
+                        <th style="width: 100px;">Oprl.Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+    <app-modal id="ZindexCss" #modelAlertSet [modalTitle]="'Alert Settings'" [width]="800" [maximizable]="true">
+        <ng-container class="app-modal-body">
+
+            <table id="alertData" class="table table-striped" style="width:100%;">
+                <thead class="table-head-background">
+                    <tr>
+                        <th>Device No</th>
+                        <th>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="smsCheck" [(ngModel)]="smsCheck" (click)="checkSMS();">
+                                </div>
+                                <div class="col-md-2" style="margin-top: 3px;">
+                                    SMS
+                                </div>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="emailCheck" [(ngModel)]="emailCheck"
+                                        (click)="checkEmail();">
+                                </div>
+                                <div class="col-md-2" style="margin-top: 3px;">
+                                    Email
+                                </div>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <input type="checkbox" name="notifCheck" [(ngModel)]="notifCheck"
+                                        (click)="checkNotif();">
+                                </div>
+                                <div class="col-md-3" style="margin-top: 3px;">
+                                    Notification
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </ng-container>
+    </app-modal>
+
+
+
+    <app-modal id="ZindexCss" #modalAlertCause [modalTitle]="'CAPA Details'" [width]="1050">
+        <ng-container class="app-modal-body">
+
+            <form #newCauseFrm="ngForm" autocomplete="off">
+                <div class="row">
+                    <div class="col-md-4" style="width: 30%;">
+                        <div class="row" style="background-color: #fff;
+                        border: solid 0.5px;
+                        margin-left: -3%;
+                        margin-right: -3%;
+                        border-radius: 3px;
+                        height: 413px;">
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Location</div>
+                                    <div class="col-md-8">{{causedLocation}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Device</div>
+                                    <div class="col-md-8">{{causedDevice}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Sensor</div>
+                                    <div class="col-md-8">{{causedSensor}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Alert</div>
+                                    <div class="col-md-8">{{causedAlert}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Reason</div>
+                                    <div class="col-md-8">{{causedAlertReason}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Start Time</div>
+                                    <div class="col-md-8">{{causedAlertTime}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">End Time</div>
+                                    <div class="col-md-8">{{causedAlertToTime}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 4%;
+                                padding-bottom: 4%;">
+                                    <div class="col-md-4" style="font-weight: bold;">Duration</div>
+                                    <div class="col-md-8">{{causedAlertDuration}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row"
+                            style="height: 220px;overflow-y: auto;border: solid 0.5px #ceced1;background-color: #FFF;">
+                            <div class="col-md-12" *ngFor="let item of alertCauses">
+                                <div class="row" [ngClass]="item.sameUser?'sameUserCls':'diffUserCls'">
+                                    <div class="col-md-12" style="padding-top: 1%;font-size: smaller;">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div *ngIf="!item.sameUser" class="row">
+                                                    <div class="col-md-6">
+                                                        <span class="fa fa-user-circle-o fa-2x"></span>
+                                                        <span>&nbsp;&nbsp;{{item.userName}}</span>
+                                                    </div>
+                                                    <div class="col-md-6" style="    padding-top: 2%;">
+                                                        {{item.updatedAt}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-5">
+                                                <div *ngIf="item.sameUser" class="row">
+                                                    <div class="col-md-6">
+                                                        <span class="fa fa-user-circle-o fa-2x"></span>
+                                                        <span>&nbsp;&nbsp;{{item.userName}}</span>
+                                                    </div>
+                                                    <div class="col-md-6" style="    padding-top: 2%;">
+                                                        {{item.updatedAt}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" *ngIf="item.hasAttach" style="padding-top: 1%;">
+                                        <img src='{{item.attchment}}' height="50px" style="cursor: pointer;"
+                                            (click)="openImage(item.attchment)">
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 1%;" *ngIf="item.rootCause">
+                                        <span style="white-space: pre-line"> <span style="font-size: smaller;">Root
+                                                Cause</span> : {{item.rootCause}}</span>
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 1%;" *ngIf="item.correctiveAction">
+                                        <span style="white-space: pre-line"><span style="font-size: smaller;">Corrective
+                                                Action</span> : {{item.correctiveAction}}</span>
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 1%;" *ngIf="item.preventionAction">
+                                        <span style="white-space: pre-line"><span style="font-size: smaller;">Preventive
+                                                Action</span> : {{item.preventionAction}}</span>
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 1%;" *ngIf="item.TargetCompletionDate">
+                                        <span style="white-space: pre-line"><span style="font-size: smaller;">Target
+                                                Completion Date</span> : {{item.TargetCompletionDate}}</span>
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 1%;">
+                                        <span style="white-space: pre-line"> <span
+                                                style="font-size: smaller;">Comments</span> : {{item.comment}}</span>
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 1%;">
+                                        <span style="white-space: pre-line;font-size: smaller;">Status :
+                                            {{item.operationalStatus}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="background-color: #ceced1;">
+                                <div class="row">
+                                    <div class="col-md-3" style="padding-top: 1%;">
+                                        <div class="floating-label">
+                                            <label style="font-size: smaller;">Root Cause</label>
+                                            <textarea rows="3" name="rootcause" [(ngModel)]="rootcause"
+                                                placeholder="Enter your text" cols="3" id="rootcause"
+                                                class="floating-input" maxlength="1000"
+                                                style="widows: 100%;resize: vertical; min-height: 80px;">
+                                         </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="padding-top: 1%;">
+                                        <div class="floating-label">
+                                            <label style="font-size: smaller;">Corrective Action</label>
+                                            <textarea rows="3" name="correctiveaction" [(ngModel)]="correctiveaction"
+                                                placeholder="Enter your text" cols="3" id="correctiveaction"
+                                                class="floating-input" maxlength="1000"
+                                                style="widows: 100%;resize: vertical; min-height: 80px;">
+                                         </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="padding-top: 1%;">
+                                        <div class="floating-label">
+                                            <label style="font-size: smaller;">Preventive Action</label>
+                                            <textarea rows="3" name="preventionaction" [(ngModel)]="preventionaction"
+                                                placeholder="Enter your text" cols="3" id="preventionaction"
+                                                class="floating-input" maxlength="1000"
+                                                style="widows: 100%;resize: vertical; min-height: 80px;">
+                                         </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="padding-top: 1%;">
+                                        <div class="floating-label">
+                                            <label style="font-size: smaller;">Comments <span
+                                                    style="color:red">*</span></label>
+                                            <textarea rows="3" id="alertCause" name="alertCause"
+                                                [(ngModel)]="alertCause" placeholder="Enter your text" cols="3"
+                                                id="txtdescription" class="floating-input" maxlength="1000"
+                                                style="widows: 100%;resize: vertical; min-height: 80px;">
+                                         </textarea>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-6" style="padding-top: 2.5%;">
+                                        <label>Time Range (24hrs format)<span style="color: red;">*</span></label>
+                                        <div class="floating-input" style="border-bottom:none;padding-top: 3px;">
+                                          <input type="text" style="width: 13%;" name="reportFHr" maxlength="2"
+                                            (keypress)="checkNumericsTHr($event)" [(ngModel)]="reportHR" placeholder="HH">
+                                          : 
+                                          <input type="text" style="width: 13%;" name="reportFHr" maxlength="2"
+                                            (keypress)="checkNumericsMin($event)" [(ngModel)]="reportMM" placeholder="MM">
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- pop-input-margin -->
+                            <div class="col-md-12" style="background-color: #ceced1;">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label style="font-size: smaller;">Target Completion Date</label>
+                                        <input [min]="maxDateCause"
+                                            style="width: 150px;height: 35px; border-radius: 5px;"
+                                            [selectMode]="'single'" [owlDateTimeTrigger]="dt11" [owlDateTime]="dt11"
+                                            name="targetDate" id="targetDate" [(ngModel)]="targetDate"
+                                            placeholder="Target Date" class="date-picker-styles" readonly>
+                                        <owl-date-time [pickerType]="'calendar'" #dt11></owl-date-time>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-3">
+                                        <label style="font-size: smaller;">Operational Status<span
+                                            style="color:red">*</span></label>
+                                        <ng-select [dropdownPosition]="'top'" [items]="operationalStatus"
+                                            style="border: 1px solid #ccc;border-radius: 4px;"
+                                            [(ngModel)]="selectopStatusCause" name="selectopStatusCause"
+                                            bindLabel="name" bindValue="id" placeholder="Select">
+                                        </ng-select>
+                                        <ng-template ng-label-tmp let-item="item">
+                                            {{item}}
+                                        </ng-template>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 3.6%;">
+                                        <label for="AttachamentsFile" type="button" class="btn"
+                                            style="width: 95px;color: black;"><span
+                                                style="font-family: Helvetica;font-size: x-small;vertical-align: middle;">Upload
+                                                <i class="fa fa-paperclip fa-lg" title="Attchment"></i>
+                                            </span></label>
+                                        <input #AttachamentFile class="bl_feedback__form email" placeholder="Name"
+                                            id="AttachamentsFile" tabindex="15" name="filePath" style="display:none;"
+                                            type="file" (change)="imageUpload($event)" accept=".png,.jpg,.jpeg"
+                                            multiple="true">
+                                        <button type="button" (click)="downloadCause()" id="btnexportChat" class="btn"
+                                            style="width: 100px;color: black;margin-left: 10px;">
+                                            <span style="font-family: Helvetica;font-size: x-small;"> Export Chat</span>
+                                            <img src="assets/Images/downloadChat.png"
+                                                style="height: 18px; width: 18px;text-align: end;"
+                                                title="Export Chat" />
+                                        </button>
+                                        <button type="button" class="btn" (click)="updateCause(AttachamentFile.files)"
+                                            style="width: 100px;margin-left: 10px;background-color: #32CD32;color: black;">
+                                            <span style="font-family: Helvetica;font-size: x-small;">Submit
+                                                <i class="fa fa-paper-plane-o fa-lg" title="send"
+                                                    style="text-align: end;"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <!-- <div class="col-md-2" style="margin-top: 4%;">
+                                        
+                                            
+                                        
+                                    </div>
+                                    
+                                    <div class="col-md-2" style="margin-top: 4%;">
+                                        
+                                    </div> -->
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-4">
+                                        <div class="thumbnail" style="background-color: #2121;"
+                                            *ngIf="basedOnLogoFileValidate">
+                                            <!-- <span></span> -->
+                                            <span class="fa fa-close" (click)="removeLogo()">{{logoFileName}}</span>
+                                            <!-- <img id="DisplayLogoImage" src="#" style="width: 100%; margin: 0 auto;"
+                alt=""> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </ng-container>
+    </app-modal>
+    <app-modal id="ZindexCss" #modalAlertReport [modalTitle]="'Create Alert Report'" [width]="800">
+        <ng-container class="app-modal-body">
+            <div class="row">
+                <div class="col-md-12" style="padding-top: 2%;padding-bottom: 0.5%;">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+
+                        <div style="padding: 2% 5% 2% 5%; background-color: #fff; border-radius: 5px; height: 60px;">
+                            <label>Report Format <span style="color: red;">*</span></label>
+                            <div class="row">
+                                <div class="col-md-3" *ngFor="let item of reportFormatList">
+                                    <input type="radio" [(ngModel)]="radioSelected" name="list_name"
+                                        value="{{item.value}}" (change)="onItemChange(item)" />
+                                    <span style="    padding-left: 2%;
+                                          position: absolute;
+                                          padding-top: 4%;">{{item.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <label>Period<span style="color: red;">*</span></label>
+                        <ng-select [items]="DateRangeListAlert" style="    border: solid 1px #c1c1c1;
+                          border-radius: 5px;" [(ngModel)]="dateRangeAlert" name="dateRangeAlert" bindLabel="dtName"
+                            bindValue="dtId" placeholder="Period" (change)="checkDateRange($event)">
+                        </ng-select>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.dtName}}
+                        </ng-template>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <label>Status<span style="color: red;">*</span></label>
+                        <ng-select [items]="statusListAlert" [multiple]=true [closeOnSelect]="false"
+                            [(ngModel)]='statusAlertSelectedList' style="color:#212121" bindLabel="status"
+                            bindValue="status" placeholder="Select" name="statusSelectAlert">
+                            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                <!-- <div class="ng-value" *ngFor="let item of (items ? items.slice(0,1): [])">
+              <span class="ng-value-label"> {{item.status}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div> -->
+                                <div class="ng-value" *ngIf="items.length > 0">
+                                    <span class="ng-value-label">{{items.length}} Selected...</span>
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+
+                </div>
+                <div class="col-md-12 col-sm-6 col-xs-12" style="padding-top: 0.5%;padding-bottom: 0.5%;">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <label>Frequency <span style="color: red;">*</span></label>
+                        <ng-select [items]="frequencyRange" [(ngModel)]="frequency" (change)="setFrequency()"
+                            name="freName" bindLabel="fVal" bindValue="frequency" placeholder="Frequency">
+                        </ng-select>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.fVal}}
+                        </ng-template>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12" *ngIf="!isDaily">
+                        <label>Day <span style="color: red;">*</span></label>
+                        <img *ngIf="is15Days" src="./assets/Images/information.svg"
+                            title="15Days Report Cycle will be started from selected Day" alt="info" />
+                        <ng-select [items]="dayRange" [(ngModel)]="day" name="dayName" bindLabel="dVal" bindValue="dId"
+                            placeholder="Day">
+                        </ng-select>
+                        <ng-template ng-label-tmp let-item="item">
+                            {{item.dVal}}
+                        </ng-template>
+                    </div>
+                    <div class="col-md-3 col-sm-2 col-xs-12">
+                        <label>Time (24hrs format)<span style="color: red;">*</span></label>
+                        <div class="floating-input" style="border-bottom:none;padding-top: 0px; display: contents;">
+                            <input type="text" style="width: 22%;" name="reportHr" maxlength="2"
+                                (keypress)="checkNumericsHr($event)" [(ngModel)]="reportHR" placeholder="HH">
+                            :
+                            <input type="text" style="width: 22%;" name="reportMM" maxlength="2"
+                                (keypress)="checkNumericsMin($event)" [(ngModel)]="reportMM" placeholder="MM">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <label>To MailID(s) <span style="color: red;">*</span></label>
+                        <ng-select [items]="reportUserMailIds" [multiple]=true [closeOnSelect]="false"
+                            [(ngModel)]='toMailids' style="color:#212121" bindLabel="mailid" bindValue="mailid"
+                            placeholder="Select" name="toMail" [dropdownPosition]="'top'">
+                            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                <div *ngIf="toMailids.length === reportUserMailIds.length">
+                                    All (Default)
+                                </div>
+                                <div *ngIf="toMailids.length !== reportUserMailIds.length">
+                                    <div class="ng-value" style="  width:1px; word-wrap: break-word;">
+                                        <span class="ng-value-label">{{toMailids.length}} Selected</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-6 col-xs-12" style="padding-top: 0.5%;padding-bottom: 0.5%;">
+                   
+                    <!-- <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div style="padding: 2% 5% 2% 5%; background-color: #fff; border-radius: 5px; height: 60px;">
+                            <label>Report With <span style="color: red;">*</span></label>
+                            <div class="row">
+                                <div class="col-md-3" *ngFor="let item of reportFormatListCAPA">
+                                    <input type="radio" [(ngModel)]="radioSelectedCAPA" name="list_name1"
+                                        value="{{item.value}}" (change)="onItemChange(item)" />
+                                    <span style="    padding-left: 2%;
+                                          position: absolute;
+                                          padding-top: 4%;">{{item.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer" style="align-items: last baseline;">
+            <!-- <button type="button" class="btn btn-danger" (click)="modalPdfTemp.hide()">
+              <i class="fa fa-close"></i> Close </button> &nbsp; -->
+            <button type="submit" class="btn btn-success" (click)="SaveAlertReport()">
+                <i class="fa fa-save"></i> Save </button>
+        </ng-container>
+    </app-modal>
+    <app-modal id="ZindexCss" #modalAlertCauseImage [width]="600" [modalTitle]="'Alert Causing'">
+        <ng-container class="app-modal-body">
+            <div class="row">
+                <div class="col-md-12" style="height: 400px;text-align: center;padding-top:10%">
+                    <img height="300px" src="{{imgPath}}">
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+</div>

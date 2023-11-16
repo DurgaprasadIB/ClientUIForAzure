@@ -1,0 +1,112 @@
+<!-- <div class="row" style="    margin-left: -25px;">
+  <button class="openbtn" (click)="  hidediv()" style="float:left ;" title="Show">☰</button>
+  <div class="col-sm-3">
+    <div id="mySidebar" class="sidebar" [ngStyle]="{'width':mySidebarwidth,'margin-left':mySidebarmargin}"
+      style="background-color: #154C87;height: 665px;">
+      <ul class="sidebar-menu tree" data-widget="treeview">
+        <h5 style="color: #B4C9DE;text-align: center;"> <B>Main Module</B> <i (click)="hidediv()" style="color: #B4C9DE; float: right;padding-right: 16px;padding-top:0px;
+          font-size: 26px;" class="fa fa-list" title="Hide"></i></h5>
+        <li routerLinkActive="active menu-open" class="treeview" *ngFor="let item of arrayList.help; let i=index">
+          <a href="javascript:;">
+            <i style="color:#02C27F;"></i>
+            <span style="color: #B4C9DE;font-size: 15px;">{{item.title}}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li [routerLinkActive]="['active']" *ngFor="let subItem of item.child">
+              <ng-container *ngIf="subItem.title=='Smart Meter'; else elseTemplate">
+                <a style="word-wrap: break-word; overflow-wrap: anywhere;" (click)="clickedFunction(subItem.href)"
+                  noresize="noresize" target="_blank" id="myframe">
+                  <i class="fa fa-circle-o">
+                  </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subItem.title}} sty</a>
+              </ng-container>
+              <ng-template #elseTemplate>
+                <a (click)="clickedFunction(subItem.link)" title="{{subItem.title}}">{{subItem.title}}</a>
+              </ng-template>
+            </li>
+          </ul>
+
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+  <div class="col-md-9">
+    <div id="main" [ngStyle]="{'margin-left':mainleftmargin,'width':mainleftwidth}" style="overflow: hidden">
+
+      <object [width]="objwidth" [attr.data]="fileName" type="application/pdf" style="height:620px;"></object>
+
+
+    </div>
+  </div> -->
+  <div class="row" style="    margin-left: -25px;">
+    <button class="openbtn" (click)="  hidediv()" style="float:left ;" title="Show">☰</button>
+    <div class="col-sm-3">
+      <div id="mySidebar" class="sidebar" [ngStyle]="{'width':mySidebarwidth,'margin-left':mySidebarmargin}"
+        style="background-color: #021D2F;height: 635px;">
+        <!-- <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display: block; position: static; margin-bottom: 5px; width: 180px; height: ;">
+          <h5 style="color: #B4C9DE;text-align: center;"> <B>Main Module</B> <i (click)="hidediv()" style="color: #B4C9DE; float: right;padding-right: 16px;padding-top:0px;
+            font-size: 26px;"class="fa fa-list" title="Hide"></i></h5>
+          <li class="divider"></li>
+          <li class="dropdown-submenu" *ngFor="let item of arrayList.help; let i=index">
+           c
+            <ul class="dropdown-menu"  >
+              <li><a class="sub" *ngFor="let subItem of item.child" (click)="clickedFunction(subItem.link)"tabindex="-1" >{{subItem.title}}</a></li>
+            
+            </ul>
+          </li>
+        </ul> -->
+        <!-- <nav id="nav_wrap">
+          <div id="navigation">
+              <ul class="top-level">
+                <h5 style="color: #B4C9DE;text-align: center;"> <B>Main Module</B> <i (click)="hidediv()" style="color: #B4C9DE; float: right;padding-right: 16px;padding-top:0px;
+                  font-size: 26px;"class="fa fa-list" title="Hide"></i></h5>
+                  <hr>
+                  <li *ngFor="let item of arrayList.help; let i=index">
+                    <a>{{item.title}}</a>
+  
+                      <ul class="sub-level">
+                        <li ><a style="height: 25px;padding-top: -15px;" *ngFor="let subItem of item.child" (click)="clickedFunction(subItem.link)" >{{subItem.title}}</a></li>
+  
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+      </nav> -->
+      <ul class="tree1"style="position: fixed;width:230px;height:45px">
+       
+        <h5 style="color: #B4C9DE;text-align: center;"> <B>Main Module</B> <i (click)="hidediv()" style="color: #B4C9DE; float: right;padding-right: 0px;padding-top:0px;
+          font-size: 26px;"class="fa fa-list" title="Hide"></i></h5>
+          </ul>
+          <ul class="tree" style="margin-top: 60px;">
+        <li class="section"*ngFor="let item of arrayList.help; let i=index" style="overflow-y: auto;">
+          <input  type="checkbox" id={{item.title}} >
+          <label for={{item.title}}>{{item.title}}</label>
+          <!-- <a href="javascript:;">
+            <i style="color:#02C27F;"></i>
+            <span style="color: #B4C9DE;font-size: 15px;">{{item.title}}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a> -->
+          
+          <ul class="sub-level">
+            <li id="subsec"  *ngFor="let subItem of item.child" ><a id="b" style="height: 30px; font-size: 12px; padding: 10px;"  (click)="clickedFunction(subItem.link)" >{{subItem.title}}</a></li>
+
+          </ul>
+        </li>
+      </ul>
+      </div>
+  
+    </div>
+    <div class="col-md-9">
+      <div id="main" [ngStyle]="{'margin-left':mainleftmargin,'width':mainleftwidth}" style="overflow: hidden">
+  
+        <object [width]="objwidth" [attr.data]="fileName" type="application/pdf" style="height:580px;"></object>
+  
+  
+      </div>
+    </div>

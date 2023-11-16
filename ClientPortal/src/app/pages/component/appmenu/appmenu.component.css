@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300');
+
+.down {
+  padding: 6px 0 0px;
+  text-align: center;
+  background: whitesmoke;
+}
+
+.down a img {
+  border-radius: 50%;
+  -o-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 28%;
+}
+
+.down a span {
+  border-radius: 50%;
+  -o-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
+span.name-caret {
+  font-size: 1vmax;
+  color: #03243B;
+  /* color: #063B58; */
+  display: block;
+  text-align: center;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.treeview-menu {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.treeview-menu>li>a {
+  padding: 8px 5px 8px 25px;
+  display: block;
+  font-size: 12px !important;
+}
+
+::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.4em;
+}
+
+::-webkit-scrollbar-button {
+  background: #ccc;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #021D2F;
+}
+
+
+::-moz-scrollbar {
+  width: 0.5em;
+  height: 0.4em;
+}
+
+::-moz-scrollbar-button {
+  background: #ccc;
+}
+
+::-moz-scrollbar-track-piece {
+  background: #eee;
+}
+
+::-moz-scrollbar-thumb {
+  background: #03243B;
+}
+
+
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .sidebar-menu>li .down {
+    display: none;
+  }
+}
+
+.bottom a {
+ 
+  display: flex;
+  position: fixed;
+  bottom: 0;
+}
+
+
+.notbottom {
+  position: relative;
+  margin: 0;
+  padding: 0;
+
+}
+.sidebar-menu {
+  white-space: nowrap;
+  /* overflow: hidden; */
+  overflow-y: hidden !important;
+  height: 675px !important;
+  
+}

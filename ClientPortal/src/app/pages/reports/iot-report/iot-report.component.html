@@ -1,0 +1,280 @@
+<div style="padding: 10px;">
+
+    <form #frmAlertDetails="ngForm" (ngSubmit)="GetReportDetails()">
+        <!-- GetReportDetails(frmAlertDetails.form.valid,frmAlertDetails.value) -->
+        <div class="row">
+            <div class="col-md-12" style="padding: 15px;">
+                <div style="background-color: #FFF; border-radius: 5px;padding: 10px;">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-6 col-xs-12" style="margin-top:12px;">
+                            <label>Coverage</label>
+                            <ng-select [items]="coverageList" style="border: solid 1px #c1c1c1;
+                    border-radius: 5px;" [(ngModel)]="coverageSelect" name="coverageSelect" bindLabel="coverageName"
+                                bindValue="covId" placeholder="Select">
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.coverageName}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12" style="margin-top:12px;">
+                            <label>Category</label>
+                            <ng-select [items]="categoryList" style="border: solid 1px #c1c1c1;
+              border-radius: 5px;" [(ngModel)]="categorySelected" name="categorySelect" bindLabel="categoryName"
+                                bindValue="catId" placeholder="Select">
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.categoryName}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12" style="margin-top:12px;">
+                            <label>Device</label>
+                            <ng-select [items]="DeviceList" style="border: solid 1px #c1c1c1;
+              border-radius: 5px;" [(ngModel)]='deviceSelected' bindLabel="deviceName" bindValue="sensorId"
+                                placeholder="Select" name="deviceSelect">
+                                <ng-template ng-label-tmp let-item="item">
+                                    {{item.deviceName}}
+                                </ng-template>
+
+                            </ng-select>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12" style="margin-top:12px;">
+                            <label>Sensor</label>
+                            <ng-select [items]="SensorList" [multiple]=true [closeOnSelect]="false"
+                                [(ngModel)]='sensorSelectedList' style="color:#212121" bindLabel="keyName"
+                                bindValue="key" placeholder="Select" name="sensorSelect">
+                                <ng-template ng-header-tmp>
+                                    <div class="selectionButtons">
+                                        <button type="button" class="btn btn-success" [disabled]="disabeleSnsrSelectAll"
+                                            (click)="onsnsrSelectAll(frmAlertDetails.form.valid,frmAlertDetails.value)">
+                                            <i class="fa fa-check" title="Select All"></i></button>
+                                        <button type="button" style="margin-left: 5px;" class="btn btn-warning"
+                                            [disabled]="disableSnsrRegUnSelectAll" (click)="onsnsrDeSelectAll()">
+                                            <i class="fa fa-times" title="Deselect All"></i>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                    <div *ngIf="sensorSelectedList.length === SensorList.length">
+                                        All (Default)
+                                    </div>
+                                    <div *ngIf="sensorSelectedList.length !== SensorList.length">
+                                        <div class="ng-value">
+                                            <span class="ng-value-label">{{items.length}} Selected...</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12" style="margin-top:12px;">
+                            <label>Period</label>
+                            <ng-select [items]="DateRangeList" style="    border: solid 1px #c1c1c1;
+                border-radius: 5px;" [(ngModel)]="dateRange" name="dateRange" bindLabel="dtName" bindValue="dtId"
+                                placeholder="Select" (change)="checkDateRange($event)">
+                            </ng-select>
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.dtName}}
+                            </ng-template>
+                        </div>
+                        <div class="col-md-2 col-sm-6 col-xs-12 btn-with-ion-plus-round resetButtongroup"
+                            style="padding-top: 26px;">
+                            <div class="dropdownload" style="margin-left: -10px;margin-right: 10px;">
+                                <i class="btn dropbtn fa fa-angle-right" aria-hidden="true"></i>
+                                <div class="dropdownload-content">
+                                    <span (click)="GetReportDetails()"><i class="fa fa-line-chart"></i> Plot
+                                        Chart</span>
+                                    <span (click)="SendReportMail('email')"><i class="fa fa-envelope-o"></i>
+                                        Email</span>
+                                    <span (click)="SendReportMail('pdf')"><i class="fa fa-file-pdf-o"></i> Download
+                                        PDF</span>
+                                </div>
+                            </div>
+                            <button class="btn" type="button" (click)="ResetData(AlertsDetailsObj)">
+                                <i class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row" style="margin-top:12px;">
+                        <div class="col-md-3" *ngIf="isDates">
+                            <label>
+                                <input [max]="maxDate" style="width: 160px;    height: 30px;" [owlDateTimeTrigger]="dt1"
+                                    [owlDateTime]="dt1" name="fromDate" id="fromDate"
+                                    [(ngModel)]="AlertsDetailsObj.fromDate" placeholder="From Date"
+                                    class="date-picker-styles" required readonly>
+                                <owl-date-time #dt1></owl-date-time>
+                            </label>
+                        </div>
+                        <div class="col-md-3" *ngIf="isDates">
+                            <label>
+                                <input [max]="maxDate" style="width: 160px;    height: 30px;" [owlDateTimeTrigger]="dt2"
+                                    [owlDateTime]="dt2" name="toDate" id="toDate" [(ngModel)]="AlertsDetailsObj.toDate"
+                                    placeholder="To Date" class="date-picker-styles" required readonly>
+                                <owl-date-time #dt2></owl-date-time>
+                            </label>
+                        </div>
+
+                        <div></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div style="background-color: #FFF; border-radius: 5px;padding: 10px;height:65vh;overflow-y: scroll;">
+
+        <div *ngIf="isSensorData">
+            <div class="col-md-6" [style.height]="divHeight+'px'">
+                <div id="trendChart1">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <!-- *ngStyle="{'display':isChart2 == true?'block':'none'}" -->
+            <div class="col-md-6" [style.height]="divHeight2+'px'">
+                <div id="trendChart2">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight3+'px'">
+                <div id="trendChart3">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight4+'px'">
+                <div id="trendChart4">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight5+'px'">
+                <div id="trendChart5">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight6+'px'">
+                <div id="trendChart6">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight7+'px'">
+                <div id="trendChart7">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight8+'px'">
+                <div id="trendChart8">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight9+'px'">
+                <div id="trendChart9">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divHeight10+'px'">
+                <div id="trendChart10">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="tableFixHead">
+
+            <table id="newSnrTable" class="table table-striped" style="width:100%;">
+                <thead class="table-head-background">
+                    <tr style="text-align: center">
+                        <th *ngFor="let item of snNames">
+                            {{item}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of snVals">
+                        <td *ngFor="let item2 of snVals[item.index].snsrVal">
+                            <div>
+                                <div [innerHTML]='item2'> </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div *ngIf="!isSensorData">
+            <div class="col-md-6" [style.height]="divexHeight+'px'">
+                <div id="exChart1">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6" [style.height]="divexHeight2+'px'">
+                <div id="exChart2">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight3+'px'">
+                <div id="exChart3">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight4+'px'">
+                <div id="exChart4">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight5+'px'">
+                <div id="exChart5">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight6+'px'">
+                <div id="exChart6">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight7+'px'">
+                <div id="exChart7">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight8+'px'">
+                <div id="exChart8">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight9+'px'">
+                <div id="exChart9">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+            <div class="col-md-6" [style.height]="divexHeight10+'px'">
+                <div id="exChart10">
+                    <div id="timeline-chart"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

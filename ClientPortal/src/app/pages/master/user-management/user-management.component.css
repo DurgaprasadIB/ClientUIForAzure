@@ -1,0 +1,51 @@
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    margin: 0 auto;
+    background-repeat: repeat-x;
+}
+
+@media screen and (max-width:1324px) {
+    .usermanagementTable {
+        overflow-x: scroll;
+        width: 98%;
+        height: 450px;
+    }
+}
+
+.margintop25px {
+    margin-top: 20px !important;
+}
+
+.floating-label {
+    margin: 10px 0;
+}
+
+.the-legend {
+    border-style: none;
+    border-width: 0;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0;
+    width: auto;
+    padding: 0 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.the-fieldset {
+    /*border: 1px solid #e0e0e0;*/
+    border: 1px solid #c9c0c0;
+    padding: 10px;
+    height: 150px;
+    width: 272px
+}
+
+.tabStyle{
+    height: 30px;
+    padding-top: 5px;
+    padding-left: 10px;
+    border-radius: 5px 5px 0px 0px;
+    color: #fff; 
+}

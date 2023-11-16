@@ -1,0 +1,247 @@
+<div style="margin-bottom:5px;">
+  <span style="color:#03243B"> Geofence <i class="fa fa-angle-double-right"></i></span>&nbsp;Assign Geofence
+</div>
+
+<div class="col-md-12" style="padding-left:0;margin-bottom:10px;">
+  <div class="s-QuickSearchBar ">
+    <span class="quick-search-icon">
+      <i></i>
+    </span>
+    <input type="text" #searchFilter (input)="filterData($event.target.value)"
+      class="s-QuickSearchInput text_ListColor " placeholder="Geofence Name" style="width:200px;" />
+  </div>
+</div>
+
+<div>
+  <div class="col-md-4">
+    <div class="list-group hover-Scroll" *ngIf="isRecordsCount">
+      <div *ngIf="isGeofencesCount">
+        <div class="timeline-panel msg" [ngClass]="geofence.geofenceID == activeElement ? 'active' : 'none'"
+          *ngFor="let geofence of  grofenceList1">
+
+          <div class="row">
+            <!--  -->
+            <div class="col-lg-12">
+              <div class="col-lg-12" style="padding: 8px 0px 10px 0px;">
+                <img src="./assets/Images/checkbox-blank-circle-outline.svg" />
+                <span style="line-height: 10px;font-size:22px;"> | </span>
+                <span class="marginleft5px" style="color:black;"> {{geofence.geofenceName ==""?"No Match
+                Found":geofence.geofenceName}}</span>
+
+                <span *ngIf="geofence.isModified" style="float:right;">
+                  <a style="cursor:pointer" (click)="AssignedTrackers(geofence,'G')">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                </span>
+              </div>
+              <div class="col-lg-12" style="padding: 8px 0px 10px 0px;">
+                <span><img src="./assets/Images/Map.svg" (click)="showonMap(geofence,'G')" /></span>
+                <span style="line-height: 10px;font-size:22px;"> | </span>
+                <a style="cursor:pointer" (click)="showPopUp(geofence)">
+                  <span style="margin-left: 5px;">Associated Trackers</span>
+                  <span> [{{ geofence.assignedTrackers }}]</span>
+                </a>
+              </div>
+            </div>
+            <div class="selectedDiv" attr.id="div{{geofence.geofenceID}}"></div>
+
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isPolygonsCount">
+        <div class="timeline-panel msg" [ngClass]="polygon.geofenceID == activeElement ? 'active' : 'none'"
+          *ngFor="let polygon of  polygonList1">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="col-lg-12" style="padding: 8px 0px 10px 0px;">
+                <img src="./assets/Images/hexagon-outline.svg" />
+                <span style="line-height: 10px;font-size:22px;"> | </span>
+                <span class="marginleft5px" style="color:black;"> {{polygon.geofenceName ==""?"No Match
+                Found":polygon.geofenceName}}</span>
+                <span *ngIf="polygon.isModified" style="float:right;">
+                  <a style="cursor:pointer" (click)="AssignedTrackers(polygon,'P')">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
+                </span>
+              </div>
+              <div class="col-lg-12" style="padding: 8px 0px 10px 0px;">
+                <span><img src="./assets/Images/Map.svg" (click)="showonMap(polygon,'P')" /></span>
+                <span style="line-height: 10px;font-size:22px;"> | </span>
+                <a style="cursor:pointer" (click)="modalRoot.show();showPopUp(polygon)">
+                  <span style="margin-left: 5px;">Associated Trackers</span>
+                  <span> [{{ polygon.assignedTrackers }}]</span>
+                </a>
+              </div>
+
+            </div>
+            <div class="selectedDiv" attr.id="div{{polygon.geofenceID}}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="map-layout">
+    <div #mapDiv class="addgeofence-map"></div>
+  </div>
+</div>
+
+<app-modal #modalRoot [modalTitle]="['Assign Trackers to   '+ DisplayName]" [width]="700" [maximizable]="true"
+  (close)="onCloseModal()">
+  <ng-container class="app-modal-body">
+    <!-- Body Starts Here -->
+    <form #newGeoFrm="ngForm" (ngSubmit)="newGeoFrm.form.valid" autocomplete="off">
+      <div>
+        <!-- {{modalHeader}} : {{ geofenceName }} -->
+      </div>
+
+      <div class="row margintop10px center">
+        <div class="col-lg-10 css16 Customcontainer center">
+          <div class="row align-items-center" [formGroup]="listBoxForm">
+            <div class="col-md-5 col-lg-5 col-sm-12">
+              <h4 class="vertical-spacing-5" style="font-size: 13px; font-weight: bold">{{availableText}}</h4>
+              <div class="s-QuickSearchBar margingbottom10px"
+                style="padding-left:0px;float:left;width: 100%;border-right: 0px">
+                <span class="quick-search-icon">
+                  <i></i>
+                </span>
+                <input type="text" class="s-QuickSearchInput text_ListColor borderColor"
+                  placeholder="{{availableFilterPlaceholder}}" formControlName="availableSearchInput"
+                  style="width:160px;margin-bottom:10px;" />
+              </div>
+
+              <select class="form-control list-box" formControlName="availableListBox"
+                style="border:1px solid #488Fcc;height: 200px;" multiple>
+                <option
+                  *ngFor="let item of availableItems | arrayFilter:['regNo', searchTermAvailable] | arraySort:['regNo', 'ASC'];trackBy:trackByValue"
+                  [value]="item?.value" (dblclick)="moveAvailableItemToSelected(item)">{{item?.regNo}}</option>
+              </select>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-12 center-block text-center">
+              <button type="button" class="col-md-8 atr top80 sm-spacing grater-button"
+                [disabled]="!availableListBoxControl.value?.length" (click)="moveMarkedAvailableItemsToSelected()">
+
+                <i class="fa fa-angle-right" style="color:white"></i>
+              </button>
+              <button type="button" class="col-md-8 stl vertical-spacing-5 sm-spacing less-button"
+                [disabled]="!selectedListBoxControl.value?.length" (click)="moveMarkedSelectedItemsToAvailable()">
+                <i class="fa fa-angle-left" style="color:white"></i>
+              </button>
+            </div>
+            <div class="col-md-5 col-lg-5 col-sm-12">
+              <!-- <h4 class="vertical-spacing-5">{{selectedText}}</h4> -->
+              <h4 class="vertical-spacing-5" style="font-size: 13px; font-weight: bold">{{'Assigned to '+ DisplayName}}
+              </h4>
+              <div class="s-QuickSearchBar margingbottom10px"
+                style="padding-left:0px;float:left;width: 100%;border-right: 0px">
+                <span class="quick-search-icon">
+                  <i></i>
+                </span>
+                <input type="text" class="s-QuickSearchInput text_ListColor borderColor"
+                  placeholder="{{availableFilterPlaceholder}}" formControlName="selectedSearchInput"
+                  style="width:160px; margin-bottom:10px;" />
+
+              </div>
+
+              <select class="form-control list-box" style="border:1px solid #488Fcc;height: 200px;"
+                formControlName="selectedListBox" multiple>
+                <option
+                  *ngFor="let item of selectedItems | arrayFilter:['regNo', searchTermSelected] | arraySort:['regNo', 'ASC'];trackBy:trackByValue"
+                  [value]="item?.value" (dblclick)="moveSelectedItemToAvailable(item)">{{item?.regNo}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+
+    <!-- Body ends Here-->
+  </ng-container>
+  <ng-container class="app-modal-footer">
+
+    <div class="paddingRight">
+
+      <button type="button" class="btn btn-danger" (click)="modalRoot.hide();onCloseModal()" tabindex="20">
+        <i class="fa fa-close"></i> Close</button>
+      &nbsp;
+      <button [disabled]="isButtonActive" type="submit" class="btn btn-success" tabindex="21" (click)="saveData()">
+        <i class="fa fa-save"></i> Save</button>
+    </div>
+  </ng-container>
+</app-modal>
+<style>
+  a:hover {
+    border-bottom: 1px solid #3598dc;
+    text-decoration: none;
+    color: green;
+  }
+
+  .msg1 {
+    padding: 5px;
+    border-left: 5px solid transparent;
+    border-bottom: 1px solid grey;
+  }
+
+  .timeline-panel {
+    color: #000 !important;
+    background-color: #f2f1f0 !important;
+    /* border-left: 6px solid #3598dc !important; */
+    height: auto;
+  }
+
+  .msg {
+    width: 100%;
+    padding: 5px;
+    border-left: 5px solid transparent;
+    position: relative;
+    border-bottom: 1px solid grey;
+    margin: 0 0 3px 0;
+  }
+
+
+  .pointer {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid transparent;
+    border-top-color: lightgrey;
+    border-left-color: lightgrey;
+    position: absolute;
+    top: 12px;
+    left: -11px;
+    transform: rotate(-45deg);
+    background: lightgrey;
+  }
+
+  .addgeofence-map {
+    border: 1px solid #E0E0E0;
+    height: 75vh;
+    width: 100%;
+  }
+
+  @media screen and (min-height:700px) {
+    .addgeofence-map {
+      height: 82vh;
+    }
+  }
+
+  .notification-layout {
+    display: inline-block;
+    width: 35%;
+  }
+
+  .map-layout {
+    display: inline-block;
+    width: 66%;
+  }
+
+  @media screen and (max-width:1199px) {
+    .map-layout {
+      width: 95%;
+    }
+  }
+
+  .active {
+    border-left: 5px solid #4ea1dc;
+  }
+</style>

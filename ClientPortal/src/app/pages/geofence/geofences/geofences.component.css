@@ -1,0 +1,17 @@
+.hover-Scroll{
+    height: 76vh;
+    overflow:hidden;
+}
+.hover-Scroll:hover{
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+@media screen and (min-height:700px){
+    .hover-Scroll{
+        height:70vh;
+        overflow-y:hidden;
+    }
+  }
+
+
+

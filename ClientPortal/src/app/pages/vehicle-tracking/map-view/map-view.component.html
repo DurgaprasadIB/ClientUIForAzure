@@ -1,0 +1,146 @@
+<div style="margin-bottom:5px;">
+  <span style="color:#03243B"> {{'Vehicle'|translate}} <i class="fa fa-angle-double-right"></i> </span>&nbsp;{{'Map View'|translate}}
+</div>
+
+<div class="col-md-12" style="padding:0;">
+  <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widgetPeople" (click)="onMovingVehicles()">
+    <div class="stats-left moving">
+      <h5></h5>
+      <h5> - </h5>
+    </div>
+    <div class="stats-right moving">
+      <label>{{VehiclemovingCntindex}}</label>
+    </div>
+    <div class="clearfix"> </div>
+    <div *ngIf="isMoving">
+      <hr class="moving">
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widgetPeople states-mdl" (click)="onIdleVehicles()">
+    <div class="stats-left idle">
+      <h5></h5>
+      <h5> - </h5>
+    </div>
+    <div class="stats-right idle">
+      <label> {{VehicleidleCntindex}}</label>
+    </div>
+    <div class="clearfix"> </div>
+    <div *ngIf="isIdle">
+      <hr class="idle">
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widgetPeople" (click)="onStoppedVehicles()">
+    <div class="stats-left stopped">
+      <h5></h5>
+      <h5> - </h5>
+    </div>
+    <div class="stats-right stopped">
+      <label>{{VehiclestoppedCntindex}}</label>
+    </div>
+    <div class="clearfix"> </div>
+    <div *ngIf="isStopped">
+      <hr class="stopped">
+    </div>
+  </div>
+
+  <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widgetPeople states-mdl" (click)="onNoGpsVehicles()">
+    <div class="stats-left noGps">
+      <h5></h5>
+      <h5> - </h5>
+    </div>
+    <div class="stats-right noGps">
+      <label> {{VehiclenoGpsCntindex}}</label>
+    </div>
+    <div class="clearfix"> </div>
+    <div *ngIf="isNoGps">
+      <hr class="noGps">
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widgetPeople" (click)="onNoPollingVehicles()">
+    <div class="stats-left noPolling">
+      <h5></h5>
+      <h5> - </h5>
+    </div>
+    <div class="stats-right noPolling">
+      <label>{{VehiclenoPollingCntindex}}</label>
+    </div>
+    <div class="clearfix"> </div>
+    <div *ngIf="isNoPolling">
+      <hr class="noPolling">
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 widgetPeople states-mdl" (click)="onAllVehicles()">
+    <div class="stats-left all">
+      <h5></h5>
+      <h5>{{'All'|translate}}</h5>
+    </div>
+    <div class="stats-right all">
+      <label>{{VehicleAllCntindex}}</label>
+    </div>
+    <div class="clearfix"> </div>
+    <div *ngIf="isAll">
+      <hr>
+    </div>
+  </div>
+</div>
+
+<main>
+  <input class="checkInput" id="toggle" type="checkbox" checked>
+  <label class="hidenLabel" for="toggle">
+    <i class="fa fa-bars" aria-hidden="true" style="position:relative;top:-6px;"></i>
+    <span [hidden]="!processing"  style="position: relative; left: 6px; bottom: 7px;">
+      <i class="fa fa-refresh fa-spin fa-lg fa-fw" style="font-size: 15px"></i>
+    </span>
+  </label>
+  
+  <div id="expand">
+    <div class="col-md-7" style="padding-left:0;margin-bottom: 5px;">
+      <div class="btn-421px">
+        <img src="./assets/Images/timer.svg" height="32px" width="34px" style="margin:0;">
+        <div id="UpdatePanel5" class="" style="float: left;">
+          <select id="vehicleddlTimer" (change)="selectChangeHandler($event)" class="dropdown arrow "
+            style="color: #212121;width: 70px;height: 32px;">
+            <option value="00">Off</option>
+            <option selected="selected"  value="30">30 sec</option>
+            <option value="45">45 sec</option>
+            <option value="60">60 sec</option>
+            <option value="120">120 sec</option>
+          </select>
+        </div>
+      </div>
+      <div class="mapView-showbtn">
+        <button type="button" [disabled]="!isShowStatus" (click)="ShowVehhicle()" class="btn">{{'Show'|translate}}</button>
+        <button type="button" [disabled]="!isShowAllStatus" style="margin-left:5px"
+        (click)="ShowAllVehicle(supportDataset)" class="btn"> <i class="fa fa-eye"></i>
+     </button>
+      </div>
+     
+    </div>
+
+    <div style="margin-top:3px;" >
+      <table id="vehMapTable" class="table  table-striped" style="width:100%;">
+        <thead>
+          <tr>
+            <th style="width:5%"></th>
+            <th style="width:10%;display: none">{{'IMEI'|translate}}</th>
+            <th style="width:20%" title="{{'Friendly Name'|translate}}">{{'FriendlyNam'|translate}}</th>
+            <th style="width:20%" title="{{'TrRegNo'|translate}}">{{'RegNo'|translate}}</th>
+            <th style="width:10%"title="{{'Status'|translate}}">{{'Status'|translate}}</th>
+            <th style="width:35%" title="{{'LastUpdated'|translate}} {{DateFormat}}">{{'LastUpdate'|translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <section class="contentSection" id="un-expand">
+    <div #mapDivVehicle class="MapviewContainer"></div>
+  </section>
+</main>
+<style>
+  .btn {
+    background-color: #4D9DE0;
+  }
+</style>

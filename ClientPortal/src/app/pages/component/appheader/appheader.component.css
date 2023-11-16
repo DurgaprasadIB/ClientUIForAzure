@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css?family=Gugi');
+@media (max-width: 991px) {}
+
+.DateNextline {
+    font-size: 10px;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+.menu a {
+    font-size: 12px !important;
+}
+
+.navbar-nav>.notifications-menu>.dropdown-menu>li .menu>li>a,
+.navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a,
+.navbar-nav>.tasks-menu>.dropdown-menu>li .menu>li>a {
+    border-color: #d9d9d9;
+}
+.main-header{
+    width: 100% !important;
+}
+.AppName{
+    font-weight: bold;
+    font-size: 25px;
+    margin-top: 6px;
+    float: left;
+}
+.langSeclet {
+    background: 0 0!important;
+    border-color: transparent;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.langSeclet option {
+    color: black;
+    padding: 2px;
+}
+
+.langSeclet:focus {
+    outline: none;
+}
+
+
+/* .selectSection::after{
+    content: "\f107";
+    width: 14px;
+    height: 14px;
+    display: block;
+    position: absolute;
+    top: 18px;
+    left: 201px;
+    background-size: contain;
+    z-index: -1;
+} */
+
+
+/* .logo-lg{
+    font-family: 'Gugi', cursive;
+} */
+
+.frame {
+    height: 50px;
+    /* equals max image height */
+    white-space: nowrap;
+    text-align: center;
+    /* margin: 1em 0; */
+    /* float: left; */
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.frame img {
+    background: transparent;
+    vertical-align: middle;
+    max-height: 200%;
+    max-width: 100%;
+}
+
+.viewlog{
+    font-size: 16px;
+    position: absolute;
+    top: 13px;
+    right: 25%;
+}

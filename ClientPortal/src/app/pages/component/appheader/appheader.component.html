@@ -1,0 +1,150 @@
+<header class="main-header" style="border-bottom:1px solid #fff;">
+    <!--  -->
+    <!-- Logo -->
+
+    <a class="logo">
+
+        <div class="row">
+            <div class="frame" style="padding-left: 0px;padding-right: 0px;height: 20px;">
+
+                <span class="helper"></span>
+                <img src="{{logoImage}}" />
+
+                <!-- <img src="{{logoImage}}" class="img-responsive" style="margin:0;" title="{{AppName}}" /> -->
+            </div>
+
+
+            <!-- <div class="col-md-7 col-sm-7" style="padding-left: 0px;">{{AppName}}</div> -->
+        </div>
+
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <!-- <span class="logo-mini">
+      <img src="{{logoImage}}"style="border-radius: 22px;">
+    </span> -->
+        <!-- logo for regular state and mobile devices -->
+        <!-- <div class="row">
+            <div class="col-md-2">
+                <img src="{{logoImage}}" height="40px" style="margin:0;">
+
+            </div>
+            <div class="col-md-10">
+                <span style="font-size:20px;" class="logo-lg">{{AppName}}</span>
+            </div>
+        </div> -->
+    </a>
+
+
+    <nav class="navbar navbar-fixed-top" style="height: 50px;">
+
+        <!-- <a href="javascript:;" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a> -->
+
+        <div class="AppName"> {{AppName}}</div>
+
+
+
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li class="dropdown notifications-menu" *ngIf="userType!=1" (click)="showAlertList()">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell-o" style="font-size:22px;"></i>
+                        <span *ngIf="bellalertTotalCounts>0" class="label label-danger">{{bellalertTotalCounts}}</span>
+                    </a>
+                    <ul class="dropdown-menu" style="width: 300px;" *ngIf="alertTotalCounts>0">
+                        <li class="header">
+                            <span>
+                                You have {{alertTotalCounts}} notifications
+                            </span>
+                        </li>
+                        <li>
+                            <ul class="menu">
+                                <li *ngFor="let item of alertData">
+                                    <a href="javascript:;">
+                                        <i class="fa fa-circle"
+                                            [style.color]="item.colorCode"></i><b>{{item.deviceName}} |
+                                            {{item.sensor}}</b>
+                                        <!-- <div class="DateNextline">{{item.state}} </div> -->
+                                        <div class="DateNextline">{{item.state}} | {{item.details}}</div>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </li>
+                        <li class="footer">
+                            <a href="javascript:;"></a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <!-- <a href="{{contactWebURL}}" target="_blank">
+                        <img src={{loginBottomLogo}} *ngIf='hasPdfTemplate' style="cursor: pointer;height: 25px;">
+                    </a> -->
+                </li>
+                <!-- <li>
+                    <a href="#/pages/master/userProfile" style="padding-top: 5px;">
+                        <img src="{{uploadImage}}" [title]="loginUserName"
+                            style="cursor: pointer;padding-left:1%; height: 20px;">
+                        <p>{{loginUserName}}</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="fa fa-power-off fa-2x" style="cursor: pointer;" (click)="LogOut()" title="Log out">
+                        </span>
+                    </a>
+                </li> -->
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" style="padding-bottom: 2px;padding-top:10px;height: 10px;"
+                        data-toggle="dropdown">
+                        <img src="{{uploadImage}}" [title]="loginUserName"
+                            style="cursor: pointer;padding-left:1%; height: 20px;">
+                        <p>{{loginUserName}}</p>
+                    </a>
+                    <ul class="dropdown-menu" style="width:100px;">
+                        <li style="text-align:left" class="user-footer" style="padding-top: 5px; padding-bottom: 5px;">
+                            <div class="row">
+                                <div class="col-md-2" style="padding-left: 15%;">
+                                    <!-- style="color:#3598DC;" -->
+                                    <i class="fa fa-address-card-o"></i>
+                                </div>
+                                <div class="col-md-9">
+                                    <a href="#/pages/master/userProfile"
+                                        style="font-family: Helvetica !important;text-decoration: none; cursor: pointer;">Edit
+                                        profile</a>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Menu Footer-->
+
+                        <li style="text-align:left" class="user-footer" style="padding-top: 5px; padding-bottom: 5px;">
+                            <div class="row">
+                                <div class="col-md-2" style="padding-left: 15%;">
+                                    <i class="fa fa-sign-out"></i>
+                                </div>
+                                <div class="col-md-9">
+                                    <a href="#"
+                                        style="font-family: Helvetica !important;text-decoration: none;cursor: pointer;"
+                                        (click)="LogOut()">Log
+                                        out</a>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+    </nav>
+
+</header>
+
+
+<style>
+    .navbar-custom-menu[_ngcontent-c2]>.navbar-nav[_ngcontent-c2]>li[_ngcontent-c2]>.dropdown-menu[_ngcontent-c2] {
+        width: 279px;
+    }
+</style>

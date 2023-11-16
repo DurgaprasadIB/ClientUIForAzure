@@ -1,0 +1,194 @@
+<div style="margin-bottom:5px;">
+  <span style="color:#03243B"> {{'Dashboard'|translate}}
+    <i class="fa fa-angle-double-right"></i>
+  </span>&nbsp;Over View
+
+  <div class="dropdownStyle" style="width:50%;">
+    <div style="display: inline;">
+
+      <span [owlDateTimeTrigger]="dt">
+        <i class="fa fa-calendar" style="cursor:pointer"></i>
+      </span>
+      <label>
+        <input [max]="maxDate" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" name="Date" id="Date"
+          [(ngModel)]="selectedDate" class="date-picker-styles" (dateTimeChange)="changeTrackerOrDate()"
+          placeholder="{{'PickaDate'|translate}}" style="    margin-top: 6px;">
+
+        <owl-date-time #dt afterPickerClosed="clearSelectedDates()" [pickerType]="'calendar'"></owl-date-time>
+      </label>
+
+      <!-- <span [owlDateTimeTrigger]="dt">
+        <i class="fa fa-calendar"></i>
+      </span>
+
+      <input [max]="maxDate" [owlDateTime]="dt" placeholder="Date" [(ngModel)]="selectedDate"
+        (dateTimeChange)="changeTrackerOrDate()" readonly>
+
+      <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> -->
+    </div>
+    <div style="float: right;width: 270px;">
+      <ng-select [multiple]="true" [items]="trackerList" name="ddTracker" bindLabel="regNo" bindValue="deviceNo"
+        placeholder="Select Device No" (change)="changeTrackerOrDate()" [(ngModel)]='nrSelect'>
+        <ng-template ng-label-tmp let-item="item">
+          {{item.regNo}}
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+
+<div class="row grid">
+  <div>
+    <div class="col-md-4" style="margin-bottom:10px;">
+      <div class="chartBox">
+        <!-- <div class="loaderOverlay" [hidden]="!DisplayLoader">
+          <img src="assets/Images/loader.gif" style="padding-top:90px;" width="50px;">
+        </div> -->
+        <div id="donut">
+          <div id="timeline-chart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8" style="margin-bottom:10px; padding-left: 0;">
+
+      <div class="loaderOverlay" [hidden]="!StatusLoader">
+        <img src="assets/Images/loader.gif" style="padding-top:90px;" width="50px;">
+      </div>
+      <div class="span-col-2 chartBox" style="height: 220px;">
+        <div class="headerDiv">
+          <div class="titleStyle">
+            <p>{{'Statistics'|translate}}</p>
+          </div>
+        </div>
+
+        <!-- <div class="innerGrid">
+          <div class="grid-box">
+            <div class="greenBox" style=" background: #008ffb;">
+              <p style="line-height: 0.5;">{{StatData.EngineRun}}</p>
+              <p>HRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'EngineRunTime'|translate}}</p>
+              <p class="tooltip">{{'EngineRunTime'|translate}}</p>
+              <img src="assets/Images/engine.svg" alt="" width="30px">
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #1cad4b;">
+              <p style="line-height: 0.5;">{{StatData.TravelTime}}</p>
+              <p>HRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'Travel Time'|translate}}</p>
+              <p class="tooltip">{{'Travel Time'|translate}}</p>
+              <i class="fa fa-clock-o" aria-hidden="true" style="font-size: 24px;color: #1cad4b; font-size: 24px;"></i>
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #cab700;">
+              <p style="line-height: 0.5;">{{StatData.IdleTime}}</p>
+              <p>HRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'Idle Time'|translate}}</p>
+              <p class="tooltip">{{'Idle Time'|translate}}</p>
+              <i class="fa fa-stop-circle-o" aria-hidden="true"
+                style="font-size: 24px;color: #cab700; font-size: 24px;"></i>
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #e01f26;">
+              <p style="line-height: 0.5;">{{StatData.StopTime}}</p>
+              <p>HRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'Stop Time'|translate}}</p>
+              <p class="tooltip">{{'Stop Time'|translate}}</p>
+              <i class="fa fa-hand-paper-o" aria-hidden="true"
+                style="font-size: 24px;color: #e01f26; font-size: 24px;"></i>
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #775dd0;">
+              <p style="line-height: 0.5;">{{StatData.Distance}}</p>
+              <p>KMS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'Distance'|translate}}</p>
+              <p class="tooltip">{{'Distance'|translate}}</p>
+              <i class="fa fa-road" style="font-size: 24px;color: #775dd0; font-size: 24px;"></i>
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #03243B;">
+              <p style="line-height: 0.5;">{{StatData.FuelFill}}</p>
+              <p>LTRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'FuelFill'|translate}}</p>
+              <p class="tooltip">{{'FuelFill'|translate}}</p>            
+              <img src="assets/Images/gas-station.svg" alt="" width="25px">
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #dd4b39;">
+              <p style="line-height: 0.5;">{{StatData.FuelTheft}}</p>
+              <p>LTRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'FuelTheft'|translate}}</p>
+              <p class="tooltip">{{'FuelTheft'|translate}}</p>
+              <img src="assets/Images/fuel-station-pump.svg" alt="" width="25px">
+            </div>
+          </div>
+          <div class="grid-box">
+            <div class="greenBox" style="    background: #8BC34A;">
+              <p style="line-height: 0.5;">{{StatData.FuelCons}}</p>
+              <p>LTRS</p>
+            </div>
+            <div class="content-box">
+              <p class="paragraph">{{'FuelConsumption'|translate}}</p>
+              <p class="tooltip">{{'FuelConsumption'|translate}}</p>
+              <img src="assets/Images/gas-station1.svg" alt="" width="25px">
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="chartBox">
+        <div class="loaderOverlay" [hidden]="!barChartLoader">
+          <img src="assets/Images/loader.gif" style="padding-top:90px;" width="50px;">
+        </div>
+        <div id="bar">
+          <div id="timeline-chart">
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="col-md-4" style="padding-left: 0;">
+      <div class="chartBox">
+        <div class="loaderOverlay" [hidden]="!LineChartLoader">
+          <img src="assets/Images/loader.gif" style="padding-top:90px;" width="50px;">
+        </div>
+        <div id="lineGradient">
+          <div id="timeline-chart"></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-4" style="padding-left: 0;">
+      <div class="chartBox">
+        <div class="loaderOverlay" [hidden]="!AreaChartLoader">
+          <img src="assets/Images/loader.gif" style="padding-top:90px;" width="50px;">
+        </div>
+        <div id="area">
+          <div id="timeline-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-md-3" style="margin-bottom: 10px;">
+    <ng-select [items]="DeviceIdList" [dropdownPosition]="'bottom'" required bindLabel="deviceName" bindValue="deviceId"
+      placeholder="Device Id" [(ngModel)]="deviceid" #device="ngModel" id="devlid" name="devoid"
+      (change)="getSensors()">
+      <ng-template ng-label-tmp let-item="item">
+        {{item.deviceId}}
+      </ng-template>
+    </ng-select>
+  </div>
+  <div class="col-md-3" style="margin-bottom: 10px;">
+    <ng-select [items]="sensorList" [dropdownPosition]="'bottom'" required bindLabel="keyName" bindValue="key"
+      placeholder="Sensor" [(ngModel)]="sensorId" #sensor="ngModel" id="snsrid" name="snsrid">
+      <ng-template ng-label-tmp let-item="item">
+        {{item.keyName}}
+      </ng-template>
+    </ng-select>
+  </div>
+  <div class="col-md-4" style="padding-left: 5px;">
+    <!-- <label>Date Range</label> -->
+    <input [max]="maxDate" [min]="minDate" style="width: 215px;    height: 35px; border-radius: 3px;" [selectMode]="'range'"
+      [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" name="fromDate" id="fromDate" [(ngModel)]="fromDate"
+      placeholder="Date Range" class="date-picker-styles" readonly>
+    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+    <!-- 
+   
+    <label>
+      <input [max]="maxDate" [min]="minDate" style="width: 130px;    height: 30px;" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1"
+        name="fromDate" id="fromDate" [(ngModel)]="fromDate" placeholder="From Date" class="date-picker-styles" required
+        readonly>
+      <owl-date-time #dt1></owl-date-time>
+    </label> -->
+  </div>
+  <!-- <div class="col-md-2" style="margin-left:-20px;">
+    <label>
+      <input [max]="maxDate" [min]="minDate" style="width: 130px;    height: 30px;" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
+        name="toDate" id="toDate" [(ngModel)]="toDate" placeholder="To Date" class="date-picker-styles" required
+        readonly>
+      <owl-date-time #dt2></owl-date-time>
+    </label>
+  </div> -->
+  <div class="col-md-2">
+    <button class="btn" type="button" (click)="getDeviceData()">
+      GO <i class="fa fa-angle-right"></i>
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="row" style="height: 450px; overflow-y: auto;overflow-x: hidden;">
+      <table id="tblDeviceData" class="table table-striped" style="width:420;">
+        <thead class="table-head-background">
+          <tr>
+            <th>Received Time</th>
+            <th>{{sensorName}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dataitem of SensorData;let i=index">
+            <td>{{ dataitem.time }} </td>
+            <td>
+              <input type="text" [(ngModel)]="dataitem.sensorValue" name="{{dataitem.sensorValue}}"
+                (keyup)="getSlno(dataitem.sensorTime)" (keypress)="allowNumericsAndDot($event,dataitem.sensorValue)"
+                value="{{dataitem.sensorValue}}">
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <button type="submit" class="btn btn-success" (click)="saveDevData()" [attr.disabled]="disabled ? '' : null">
+      <i class="fa fa-save"></i> Save </button>
+  </div>
+</div>

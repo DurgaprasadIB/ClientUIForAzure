@@ -1,0 +1,444 @@
+<div class="loginBackground" [ngStyle]="{'background-image': 'url(' + ClientloginBG + ')'}"
+    style="background-image: url('./assets/Images/login.png');background-size: cover;">
+    <!--/login-top-->
+    <!-- <h6 class="inner-tittle page"> 
+            <img src="assets/Images/JioLogo1.png" height="80px" width="80px">
+    </h6> -->
+    <div class="text-center" style="padding-top: 2%;">
+        <!-- <img src="assets/Images/logo2.png" height="80px" width="80px"> -->
+        <!-- <span> Compass
+        </span> -->
+    </div>
+    <div class="error-top">
+        <div class="text-center">
+            <!-- <img src="./assets/Images/logo5.png" class="loginDivlogo">-->
+            <img src={{ClientLogoPath}} class="loginDivlogo" style="height: 40px;
+            margin-bottom: 5%;">
+        </div>
+        <div class="login">
+
+            <!-- <h3 class="compassStyles"> <span style="color: #000; font-size: 20px;
+                font-weight: bold;">{{AppName}}</span>
+            </h3> -->
+            <div class="buttons login">
+                <div class="clearfix"></div>
+            </div>
+
+            <form #loginFrm="ngForm" (ngSubmit)="Login(loginFrm.form.valid,loginObj)" style="font-family: Helvetica;"
+                autocomplete="off">
+
+                <div class="col-md-12" style="color:black;">
+                    <div class="row">
+                        <span>User ID</span>
+                        <div style="margin-bottom: 10px;">
+                            <i class=""></i>
+                            <input type="email" tabindex="1"
+                                style="width: 100%;background: #fff; border-radius: 5px;margin:0px;color:black;padding:0.5em 0.5em 0.5em;"
+                                #userName="ngModel" name="UserName" [(ngModel)]="loginObj.UserName" placeholder=" "
+                                required autocomplete="new-password" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <span>Password</span>
+                        <div style="margin-bottom: 10px;margin-top:-20px;">
+                            <input id="password-field" type="password" class="textBoxcss"
+                                style="background: #fff; border-radius: 5px;margin:0px;color:black;padding:0.5em 0.5em 0.5em;"
+                                tabindex="2" placeholder=" " name="Password" #passWord="ngModel"
+                                [(ngModel)]="loginObj.Password" (click)="pasteCaptcha()" required autocomplete="off">
+                            <span style="cursor:pointer;font-size: 22px" toggle="#password-field"
+                                class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 2px;">
+                        <div class="col-md-8" style="padding-left: 0px;">
+                            <div class="captextBox"
+                                style="z-index: 10;position: absolute;background-image:URL('assets/Images/dots.png');border: solid 1px #111010;">
+                            </div>
+                            <div class="captextBox">
+                                <!-- Copperplate, Papyrus, fantasy -->
+                                <marquee scrollamount="4">
+                                    <label id="captcha"
+                                        style="color: #3f4158;font-family: Helvetica ;font-style: italic;">{{capvalue}}</label>
+                                </marquee>
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="padding-top: 1%;">
+                            <i (click)="randomString(6)" class="fa fa-refresh fa-2x" style="cursor: pointer;"></i>
+                            <!-- <button class="refreshButton" style="font-size:24px" type="submit"
+                                        (click)="randomString(6)"> <i class="fa fa-refresh"></i></button> -->
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 2px;">
+                        <div class="col-md-6" style="padding-left: 0px;">
+                            <input type="email" tabindex="2" style="background: #fff; border-radius: 5px;margin:0px;color:black;
+                                padding:0.5em 0.5em 0.5em;" name="capt" [(ngModel)]="capt" placeholder="Enter Captcha"
+                                required />
+
+                            <!-- <input id="text" type="text" name="value" [(ngModel)]="capt"
+                                        placeholder="Enter Captcha"> -->
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;padding-left: 10%;">
+                            <input type="submit" tabindex="3" style="border: 1px solid rgb(0, 150, 97);border-radius: 5px ; padding: 0px;
+                                    padding-top: 2px;
+    padding-bottom: 3px;height: 100%;background-color: #02C27F;" value="Login">
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- class="square_btn" -->
+
+                <div class="clearfix"></div>
+
+
+                <div class="new" style="padding-top: 1%;padding-bottom: 1%;">
+                    <p style="font-size:12px;">
+                        <label class="checkbox11" tabindex="4" style="color: black;">
+                            <input type="checkbox" name="checkbox" name="remember" id="remember" #remember> <i> </i>
+                            <span>Remember Me</span> </label>
+                        <label class="forget-password" tabindex="5"
+                            style="color: black;font-family: helvetica;cursor: pointer;"
+                            (click)="ForgotPassword(loginObj.UserName)">
+                            <i class="fa fa-lock"></i> Forgot
+                            Password? </label>
+
+                    </p>
+
+                    <!-- <span class="sign" (click)="ForgotPassword()" >Forgot Password? </span> -->
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="text-center" *ngIf="showcontactNum || showSupportMail">
+                    <p><img src={{loginBottomLogo}} height="30px"></p>
+                    <p style="font-family: Helvetica;" *ngIf="showcontactNum"><i class="fa fa-envelope-o"></i>
+                        {{supportMail}}</p>
+                    <p style="font-family: Helvetica;" *ngIf="showSupportMail"><i class="fa fa-phone"></i>
+                        {{contactNum}}
+                    </p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <!--//login-top-->
+    <!-- <div class="footerDiv">
+        <span class="footer-message1">Version {{versionNumber}}</span>
+        <span class="footer-message2">© {{YearLabel}} SensorConnect. All rights reserved.</span>
+    </div> -->
+</div>
+
+
+<form #newSignUpFrm="ngForm" autocomplete="off">
+    <app-modal #modalOTP [modalTitle]="'Verify Your Identity'" [width]="350" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+
+            <div class=" col-md-12 margintop25px">
+                <p>How would you like to get your OTP? </p>
+            </div>
+            <div class="row" [attr.disabled]="isFormDisabled ? '' : null">
+                <div class="col-md-12 margintop25px">
+
+                    <li class="list-group-item" style="border: 0px" *ngFor="let item of itemsList;let idx = index">
+                        <input type="radio" name="list_name" value="{{item.value}}" (change)="onItemChange(item)"
+                            [checked]="idx === 0" />
+                        <span style="position: relative;bottom: 4px;left: 5px;">{{item.name}}</span>
+                    </li>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+
+                    <button type="button" class="btn btn-success" style="margin-left: 0px;margin-top: 10px;"
+                        (click)="SendOTP()" [attr.disabled]="isDisabled ? '' : null">
+                        Send OTP</button>
+                </div>
+
+                <div *ngIf="isSend" class=" col-md-12  margintop25px">
+                    <p style="color: red;padding-top:10px;">{{showMsg}}</p>
+                    <div style="margin-top: 25px;">
+                        <div class="floating-label">
+                            <input type="text" placeholder=" " class="floating-input" #otp="ngModel"
+                                [(ngModel)]="OTPvalue" id="otp" name="otp" maxlength="6" required
+                                (keypress)="allowNumericsOnly($event)" />
+                            <label class="labClass">Enter OTP</label>
+                        </div>
+                    </div>
+
+                    <div class="margintop25px">
+                        <button type="button" class="btn" (click)="VerifyOTP(OTPvalue)">
+                            Verify OTP</button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </app-modal>
+
+</form>
+
+
+<form #newResetPswdFrm="ngForm" (ngSubmit)="saveResetPwd(newResetPswdFrm.form.valid,newResetPswdFrm.value)"
+    autocomplete="off">
+
+    <app-modal #modalResetPswd [modalTitle]="'Reset Your Password'" [width]="350" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+
+            <div class="row">
+
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+
+                        <input type="text" placeholder=" " class="floating-input" #uotp="ngModel" [(ngModel)]="OTPvalue"
+                            id="uotp" name="uotp" required />
+
+                        <label class="labClass">OTP</label>
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+
+                        <input type="password" id="Password" name="Password" appStrongpassword placeholder=" "
+                            class="floating-input" required maxlength="15" [(ngModel)]="resetObj.Password" />
+
+                        <label class="labClass">Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+
+                </div>
+
+                <div class="col-md-12">
+                    <div class="floating-label">
+                        <input type="password" placeholder=" " class="floating-input" id="ConfirmPassword"
+                            name="ConfirmPassword" appStrongpassword required maxlength="15"
+                            [(ngModel)]="resetObj.ConfirmPassword">
+                        <label class="labClass">Re-Enter Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+
+            <button type="button" (click)="modalResetPswd.hide();" class="btnClose" tabindex="20">
+                <img src='./assets/Images/close-outline.svg' title='Close ' height='20' width='20' />
+                Close </button>&nbsp;
+            <button type="submit" class="btn">
+                <img src='./assets/Images/lock-reset.svg' class="marginleft0px" title='Reset Password ' height='20'
+                    width='30' />
+                Reset
+            </button>
+        </ng-container>
+
+    </app-modal>
+
+</form>
+
+
+<form #newChangePswdFrm1="ngForm" autocomplete="off">
+    <app-modal #modalChangePswd1  [modalTitle]="[ModelPwdExpiry]" (close)='popupClose()'  [width]="330" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+
+            <div class="row">
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="oldPassword" [(ngModel)]="oldPassword"
+                            appStrongpassword autocomplete="new-password" required placeholder=" "
+                            #oldpassword="ngModel" tabindex="100" maxlength="15" />
+
+                        <label class="labClass">Current Password</label>
+                        <!-- <i class="fa fa-arrow-circle-right fa-2x" style="cursor: pointer; color: #5CB85C; position: absolute;right: 5px;top: 0px;"  tabindex="101" (click)="checkuserPwd()"></i> -->
+                    </div>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <!-- *ngIf="isInValidPwd" -->
+                    <!-- <div  style="margin-bottom: 20px;">Enter Password
+                    </div> -->
+                    <!-- *ngIf="isValidPwd" -->
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="password" [(ngModel)]="chngobj.password"
+                            appStrongpassword required placeholder=" " #password="ngModel" tabindex="102" maxlength="15"
+                            autocomplete="new-password"
+                            [ngClass]="{ 'is-invalid': newChangePswdFrm.submitted && password.invalid }" />
+                        <label class="labClass">Enter Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <!-- *ngIf="isInValidPwd" -->
+                    <!-- <div *ngIf="isInValidPwd">Re-Enter Password
+                    </div> -->
+                    <!-- *ngIf="isValidPwd" -->
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="confirmPassword"
+                            [(ngModel)]="chngobj.confirmPassword" appStrongpassword required placeholder=" "
+                            #confirmPassword="ngModel" tabindex="103" maxlength="15" autocomplete="new-password"
+                            [ngClass]="{ 'is-invalid': newChangePswdFrm.submitted && confirmPassword.invalid }" />
+                        <label class="labClass">Re-Enter Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+            <button type="submit" *ngIf="showSkip" class="btn btn-success" style="background-color: gray; margin-right: 10px;" (click)="skipChangePassword()">Skip</button>
+            <button type="submit" class="btn btn-success" (click)="saveChangePwd1(newChangePswdFrm.value)"
+                tabindex="104">
+                <i class="fa fa-save"></i> Save</button>
+        </ng-container>
+
+    </app-modal>
+
+</form>
+
+<form #newChangePswdFrm="ngForm" autocomplete="off">
+    <app-modal #modalChangePswd [modalTitle]="'Change Password'" [width]="500" [maximizable]="true">
+
+        <ng-container class="app-modal-body">
+
+            <div class="row">
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="text" placeholder=" " class="floating-input" #uFotp="ngModel"
+                            [(ngModel)]="FirstOTP" id="Fuotp" name="Fuotp" required />
+                        <label class="labClass">OTP</label>
+		    </div>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="password" [(ngModel)]="chngobj.password"
+                            appStrongpassword required placeholder=" " #password="ngModel" tabindex="1" maxlength="15"
+                            [ngClass]="{ 'is-invalid': newChangePswdFrm.submitted && password.invalid }" />
+                        <label class="labClass">Enter Password</label>
+                        <img src="./assets/Images/information.svg"
+                            title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+		    </div>
+                </div>
+
+                <div class="col-md-12 margintop25px">
+                    <div class="floating-label">
+                        <input type="password" class="floating-input" name="confirmPassword"
+                            [(ngModel)]="chngobj.confirmPassword" appStrongpassword required placeholder=" "
+                            #confirmPassword="ngModel" tabindex="1" maxlength="15"
+                            [ngClass]="{ 'is-invalid': newChangePswdFrm.submitted && confirmPassword.invalid }" />
+                        <label class="labClass">Re-Enter Password</label>
+                        <img src="./assets/Images/information.svg" title='The password must be at least 6 symbols long without spaces at the begin and at the end and contain upper and lower case characters, digit and special character (!@#$%)'
+                            alt="info" />
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+        <ng-container class="app-modal-footer">
+
+            <button type="submit" class="btn" (click)="saveChangePwd(newChangePswdFrm.value)">
+                <img src='./assets/Images/content-save-outline.svg' class="marginleft0px" title='Reset Password '
+                    height='20' width='30' />
+                Save
+            </button>
+        </ng-container>
+
+    </app-modal>
+
+</form>
+
+
+<style>
+    h6.inner-tittle.page {
+        text-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px;
+        position: absolute;
+        top: 5%;
+        left: 47.2%;
+        font-size: 400;
+        color: rgb(255, 255, 255);
+    }
+
+    .sign {
+        color: white !important;
+    }
+
+    .footer-message1 {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .footer-message2 {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .footerDiv {
+        /* color: white;
+        margin-top: -10px; */
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        color: white;
+        background-color: red;
+        text-align: center;
+    }
+
+    @media screen and (max-width:768px) {
+        .footer-message1 {
+            position: relative;
+            bottom: 0;
+            left: 10px;
+            font-size: 12px;
+        }
+
+        .footer-message2 {
+            position: relative;
+            bottom: 0;
+            right: 10px;
+            font-size: 12px;
+            float: right;
+        }
+
+        .footerDiv {
+            /* padding-top: 10%; */
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+    }
+
+    .loginDivlogo {
+        /* width: 80px; */
+        height: 90px;
+    }
+
+    .compassStyles {
+        text-align: center;
+        letter-spacing: 1.2px;
+        font-size: 2em;
+    }
+
+    .loginBackground {
+        height: 100vh;
+        background-size: cover;
+        /* background-size: 1300px 650px; */
+        background-repeat: no-repeat;
+    }
+</style>

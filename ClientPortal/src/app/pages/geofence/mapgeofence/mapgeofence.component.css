@@ -1,0 +1,99 @@
+.borderColor
+{
+    border:1px solid #488Fcc !important;
+    width: 87%;
+}
+
+.center
+{
+    margin:0 auto 0 auto !important;
+    float: none !important;
+}
+
+.searchBoxWidth{
+    width:160px;
+}
+
+.paddingRight
+{
+    width: 100%;
+    padding-right: 70px;
+}
+
+.btnwidth
+{
+    width: 90px;
+
+}
+
+.borderRadius
+{
+    border-radius: 5px;
+}
+
+.ui-modal-footer{
+    padding-right:90px !important;    
+}
+.grater-button {
+    margin-top: 150px;
+    margin-bottom: 6px;
+    background-color: #4D9DE0 ;
+    border: none;
+}
+.less-button {
+background-color: #4D9DE0 ; 
+border: none; 
+}
+@media screen and (max-width:992px){
+    .grater-button {
+        margin-top: 15px;
+        margin-bottom: 6px;
+        background-color: #4D9DE0 ;
+        border: none;
+        display: inline-block;
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+    .less-button {
+        background-color: #4D9DE0 ; 
+        border: none; 
+        margin: 0 10px;
+        display: inline-block;
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+        }
+
+}
+.hover-Scroll{
+    height:440px;
+    overflow:hidden;
+    margin-left:-20px;
+}
+.hover-Scroll:hover{
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+@media screen and (min-height:700px){
+    .hover-Scroll{
+        height:70vh;
+        overflow-y:hidden;
+        margin-left:-20px;
+    }
+  }
+.fa-exclamation-triangle{
+font-size: 18px;
+color: grey;
+cursor: pointer;
+}
+.fa-exclamation-triangle:hover{
+    color: green;
+}
+.msg1{
+    margin: 2px 0 0 30px;
+    width: 30%;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    position: absolute;
+    border-bottom: 1px solid grey;
+    top: 16%;
+}

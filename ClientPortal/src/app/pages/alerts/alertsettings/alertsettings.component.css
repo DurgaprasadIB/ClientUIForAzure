@@ -1,0 +1,73 @@
+.clockPosition{
+    float: right;
+    position: relative;
+    top: -30px;
+    right: 0px;
+}
+
+.top149{
+    margin-top: 149px;
+    background-color: #4D9DE0 ;  
+}
+.xsScreeninput{
+    margin: 20px 0;
+}
+
+@media screen and (max-width:768px){
+.modelpopFirstrowinputs input{
+    margin: 10px;
+
+}
+.activeInput{
+    margin: 10px;
+}
+.top149{
+    margin: 20px;
+}
+.xsScreeninput{
+    margin: 10px 0;
+}
+.right-left-button{
+    margin-top:20px !important;
+}
+.rotationBtn{
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Safari 3-8 */
+    transform: rotate(90deg);
+}
+}
+@media screen and (max-width:992px){
+    .smallScreeninput{
+        margin-bottom: 5px;
+    }
+    .xsScreeninput{
+        margin: 10px 0;
+    }
+
+    
+    
+}
+.addButton{
+    position: absolute;
+    top: 43px;
+    right: 15px;
+}
+.right-left-button{
+    margin-top: 149px;
+    background-color: #4D9DE0 ;
+}
+.chech-lable-style{
+position: relative;
+    left: 6px;
+    top: -4px;
+}
+.floating-label{
+    margin-bottom: 10px 0 !important;
+}
+/* .resp-border-left{
+    border-left: 1px solid rgb(170, 170, 170);
+}
+.resp-border-right{
+    border-right: 1px solid rgb(170, 170, 170);
+    height: 424px;
+} */
