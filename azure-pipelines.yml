@@ -9,6 +9,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  angularAppName: 'ClientUIForAzure'
 
 steps:
 - checkout: self
@@ -20,6 +21,7 @@ steps:
     echo "Contents of the Angular app directory:"
     dir
     npm install --legacy-peer-deps
+    if %errorlevel% neq 0 exit /b %errorlevel%
   displayName: 'Install Dependencies'
 
 - script: |
@@ -28,11 +30,12 @@ steps:
     echo "Contents of the Angular app directory:"
     dir
     npm run build -- --prod
+    if %errorlevel% neq 0 exit /b %errorlevel%
   displayName: 'Build Angular App'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/ClientUIForAzure/ClientPortal/dist'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/publish'
   displayName: 'Copy Build Artifacts'
@@ -48,7 +51,7 @@ steps:
   inputs:
     IISDeploymentType: 'IISWebsite'
     ActionIISWebsite: 'CreateOrUpdateWebsite'
-    CreateOrUpdateWebsiteName: 'YourIISWebsiteName'
+    CreateOrUpdateWebsiteName: 'IoTAdmin'
     PhysicalPath: '$(System.DefaultWorkingDirectory)/drop'
     AddBinding: true
     CreateOrUpdateAppPoolForWebsite: true
@@ -57,7 +60,7 @@ steps:
 
 - task: IISWebAppDeploymentOnMachineGroup@0
   inputs:
-    WebSiteName: 'IoTClientUI'
+    WebSiteName: 'IoTAdmin'
     VirtualApplication: '/'
     Package: '$(Build.ArtifactStagingDirectory)/publish'
     XmlVariableSubstitution: true
