@@ -13,7 +13,7 @@ jobs:
 
   - task: UseNode@1
     inputs:
-      versionSpec: '14.x'
+      versionSpec: '14.17.5'
       addToPath: true
 
   - script: |
@@ -49,8 +49,13 @@ jobs:
   steps:
   - task: UseNode@1
     inputs:
-      versionSpec: '14.x'
+      versionSpec: '14.17.5'
       addToPath: true
 
-  - script: npm test
+  - checkout: self
+    persistCredentials: true
+
+  - script: |
+      npm install
+      npm test
     displayName: 'Run Tests'
