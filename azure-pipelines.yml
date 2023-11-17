@@ -1,61 +1,48 @@
 trigger:
-- main
+  - main
 
 pool:
   vmImage: 'windows-latest'
 
 jobs:
-- job: Build
-  displayName: 'Build and Test'
-  steps:
-  - checkout: self
-    persistCredentials: true
+  - job: Build
+    displayName: 'Build and Test'
+    steps:
+      - checkout: self
+        persistCredentials: true
 
-  - task: UseNode@1
-    inputs:
-      versionSpec: '14.17.5'
-      addToPath: true
+      - task: UseNode@1
+        inputs:
+          versionSpec: '14.17.5'
+          addToPath: true
 
-  - script: |
-      npm install
-      npm run build
-      npm test
-    displayName: 'Install, Build, and Test'
+      - script: |
+          npm install
+          npm run build
+          npm test
+        displayName: 'Install, Build, and Test'
 
-  - task: ArchiveFiles@2
-    inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-      includeRootFolder: false
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/node-app.zip'
-      replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/node-app.zip'
+          replaceExistingArchive: true
 
-- job: Deploy
-  displayName: 'Deploy to IIS'
-  dependsOn: Build
-  steps:
-  - download: current
-    artifact: 'node-app'
-
-  - task: AzurePowerShell@5
-    inputs:
-      azureSubscription: 'IBIoT'
-      ScriptType: 'FilePath'
-      ScriptPath: '$(System.DefaultWorkingDirectory)/deploy.ps1'
-      ScriptArguments: '-sourcePath "$(System.DefaultWorkingDirectory)/node-app" -destinationPath "C:\inetpub\wwwroot" -appPoolName "IoTtesting"'
-
-- job: Test
-  displayName: 'Run Tests'
-  steps:
-  - task: UseNode@1
-    inputs:
-      versionSpec: '14.17.5'
-      addToPath: true
-
-  - checkout: self
-    persistCredentials: true
-
-  - script: |
-      npm install
-      npm test
+  - job: Test
     displayName: 'Run Tests'
+    dependsOn: Build
+    steps:
+      - task: UseNode@1
+        inputs:
+          versionSpec: '14.17.5'
+          addToPath: true
+
+      - checkout: self
+        persistCredentials: true
+
+      - script: |
+          npm install
+          npm test
+        displayName: 'Run Tests'
