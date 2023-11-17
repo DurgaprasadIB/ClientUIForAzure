@@ -1,0 +1,21 @@
+trigger:
+  - none
+
+jobs:
+  - job: Deploy
+    displayName: 'Deploy to IIS'
+    pool:
+      vmImage: 'windows-latest'
+    dependsOn: Build
+    steps:
+      - download: current
+        artifact: 'node-app'
+
+      - task: AzurePowerShell@5
+        inputs:
+          azureSubscription: 'IBIoT'
+          ScriptType: 'FilePath'
+          ScriptPath: '$(System.DefaultWorkingDirectory)/deploy.ps1'
+          ScriptArguments: '-sourcePath "$(System.DefaultWorkingDirectory)/node-app" -destinationPath "C:\inetpub\wwwroot" -appPoolName "IoTtesting"'
+
+  - template: test-pipeline.yml
