@@ -71,7 +71,6 @@ stages:
     - task: AzureWebApp@1
       inputs:
         azureSubscription: 'IBIoT'
-        appName: '$(appName)-$(productionEnvironment)'
-        package: '$(Pipeline.Workspace)/$(appName).zip'
+        appName: '$(IoTApplication)-$(productionEnvironment)'
+        package: '$(Pipeline.Workspace)/$(IoTApplication).zip'
         configurationSettings: 'NODE_ENV=production'
-
