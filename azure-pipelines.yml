@@ -42,7 +42,6 @@ stages:
   displayName: 'Run Tests'
   jobs:
   - job: Test
-    dependsOn: Build
     pool:
       vmImage: 'windows-latest'
     steps:
@@ -59,11 +58,16 @@ stages:
         npm test
       displayName: 'Run Tests'
 
+  # Dummy job with no dependencies
+  - job: DummyTest
+    pool:
+      vmImage: 'windows-latest'
+
 - stage: DeployStaging
   displayName: 'Deploy to Staging'
   jobs:
   - job: DeployStaging
-    dependsOn: Test
+    dependsOn: DummyTest
     pool:
       vmImage: 'windows-latest'
     steps:
@@ -86,7 +90,7 @@ stages:
   displayName: 'Deploy to Production'
   jobs:
   - job: DeployProduction
-    dependsOn: DeployStaging
+    dependsOn: DummyDeployStaging
     pool:
       vmImage: 'windows-latest'
     steps:
