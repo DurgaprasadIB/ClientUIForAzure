@@ -77,6 +77,11 @@ stages:
         package: '$(Pipeline.Workspace)/IoTApplication.zip'
         configurationSettings: 'NODE_ENV=staging'
 
+  # Dummy job with no dependencies
+  - job: DummyDeployStaging
+    pool:
+      vmImage: 'windows-latest'
+
 - stage: DeployProduction
   displayName: 'Deploy to Production'
   jobs:
@@ -94,3 +99,8 @@ stages:
         appName: '$(appName)-$(productionEnvironment)'
         package: '$(Pipeline.Workspace)/IoTApplication.zip'
         configurationSettings: 'NODE_ENV=production'
+
+  # Dummy job with no dependencies
+  - job: DummyDeployProduction
+    pool:
+      vmImage: 'windows-latest'
