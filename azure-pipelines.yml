@@ -1,67 +1,56 @@
 trigger:
-- master
-
-pr:
-- '*'
+- main
 
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  buildConfiguration: 'Release'
-  angularAppName: 'ClientUIForAzure'
+jobs:
+- job: Build
+  displayName: 'Build and Test'
+  steps:
+  - checkout: self
+    persistCredentials: true
 
-steps:
-- checkout: self
-  persistCredentials: true
-  clean: true
-  displayName: 'Checkout Repository'
+  - task: UseNode@1
+    inputs:
+      versionSpec: '14.x'
+      addToPath: true
 
-- script: |
-    echo "Current directory: $(System.DefaultWorkingDirectory)"
-    cd $(System.DefaultWorkingDirectory)/ClientPortal
-    echo "Contents of the Angular app directory:"
-    dir
-    npm install --legacy-peer-deps
-  displayName: 'Install Dependencies'
+  - script: |
+      npm install
+      npm run build
+      npm test
+    displayName: 'Install, Build, and Test'
 
-- script: |
-    echo "Current directory: $(System.DefaultWorkingDirectory)"
-    cd $(System.DefaultWorkingDirectory)/ClientPortal
-    echo "Contents of the Angular app directory:"
-    dir
-    npm run build -- --prod
-  displayName: 'Build Angular App'
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/node-app.zip'
+      replaceExistingArchive: true
 
-- script: |
-    echo "Zipping the build artifacts..."
-    cd $(System.DefaultWorkingDirectory)/ClientUIForAzure/ClientPortal/dist
-    zip -r $(Build.ArtifactStagingDirectory)/build-artifacts.zip .
-  displayName: 'Zip Build Artifacts'
+- job: Deploy
+  displayName: 'Deploy to IIS'
+  dependsOn: Build
+  steps:
+  - download: current
+    artifact: 'node-app'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-  displayName: 'Publish Build Artifacts'
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: 'YourAzureServiceConnectionName'
+      ScriptType: 'FilePath'
+      ScriptPath: '$(System.DefaultWorkingDirectory)/deploy.ps1'
+      ScriptArguments: '-sourcePath "$(System.DefaultWorkingDirectory)/node-app" -destinationPath "C:\inetpub\wwwroot" -appPoolName "IoTtesting"'
 
-- task: IISWebAppManagementOnMachineGroup@0
-  inputs:
-    IISDeploymentType: 'IISWebsite'
-    ActionIISWebsite: 'CreateOrUpdateWebsite'
-    CreateOrUpdateWebsiteName: 'IoTAdmin'
-    PhysicalPath: '$(System.DefaultWorkingDirectory)/drop'
-    AddBinding: true
-    CreateOrUpdateAppPoolForWebsite: true
-    AppPoolNameForWebsite: 'YourAppPoolName'
-  displayName: 'Create or Update IIS Website'
+- job: Test
+  displayName: 'Run Tests'
+  steps:
+  - task: UseNode@1
+    inputs:
+      versionSpec: '14.x'
+      addToPath: true
 
-- task: IISWebAppDeploymentOnMachineGroup@0
-  inputs:
-    WebSiteName: 'IoTAdmin'
-    VirtualApplication: '/'
-    Package: '$(Build.ArtifactStagingDirectory)/build-artifacts.zip'
-    XmlVariableSubstitution: true
-    TakeAppOfflineFlag: true
-  displayName: 'Deploy to IIS Website'
+  - script: npm test
+    displayName: 'Run Tests'
