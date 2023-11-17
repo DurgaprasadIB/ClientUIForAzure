@@ -75,11 +75,3 @@ stages:
         package: '$(Pipeline.Workspace)/$(appName).zip'
         configurationSettings: 'NODE_ENV=production'
 
-# Dummy job with no dependencies for DeployProduction stage
-- job: DummyJob
-  pool:
-    vmImage: 'windows-latest'
-  displayName: 'Dummy Job'
-  steps:
-  - script: echo This is a dummy job
-    displayName: 'Run Dummy Job'
