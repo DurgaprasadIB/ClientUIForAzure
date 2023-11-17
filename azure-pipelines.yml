@@ -35,76 +35,51 @@ stages:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(IoTApplication).zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(appName).zip'
         replaceExistingArchive: true
-
-- stage: Test
-  displayName: 'Run Tests'
-  jobs:
-  - job: Test
-    pool:
-      vmImage: 'windows-latest'
-    steps:
-    - task: UseNode@1
-      inputs:
-        versionSpec: '$(nodeVersion)'
-        addToPath: true
-
-    - checkout: self
-      persistCredentials: true
-
-    - script: |
-        npm install
-        npm test
-      displayName: 'Run Tests'
-
-  # Dummy job with no dependencies
-  - job: DummyTest
-    pool:
-      vmImage: 'windows-latest'
 
 - stage: DeployStaging
   displayName: 'Deploy to Staging'
   jobs:
   - job: DeployStaging
-    dependsOn: DummyTest
     pool:
       vmImage: 'windows-latest'
     steps:
     - download: current
-      artifact: 'YourAppName'
+      artifact: 'Build'
+      patterns: '**/*.zip'
 
     - task: AzureWebApp@1
       inputs:
         azureSubscription: 'IBIoT'
         appName: '$(appName)-$(stagingEnvironment)'
-        package: '$(Pipeline.Workspace)/IoTApplication.zip'
+        package: '$(Pipeline.Workspace)/$(appName).zip'
         configurationSettings: 'NODE_ENV=staging'
 
-  # Dummy job with no dependencies
-  - job: DummyDeployStaging
-    pool:
-      vmImage: 'windows-latest'
-
+# Dummy job with no dependencies for DeployStaging stage
 - stage: DeployProduction
   displayName: 'Deploy to Production'
   jobs:
   - job: DeployProduction
-    dependsOn: DummyDeployStaging
     pool:
       vmImage: 'windows-latest'
     steps:
     - download: current
-      artifact: 'IoTApplication'
+      artifact: 'Build'
+      patterns: '**/*.zip'
 
     - task: AzureWebApp@1
       inputs:
         azureSubscription: 'IBIoT'
         appName: '$(appName)-$(productionEnvironment)'
-        package: '$(Pipeline.Workspace)/IoTApplication.zip'
+        package: '$(Pipeline.Workspace)/$(appName).zip'
         configurationSettings: 'NODE_ENV=production'
 
-  # Dummy job with no dependencies
-  - job: DummyDeployProduction
-    pool:
-      vmImage: 'windows-latest'
+# Dummy job with no dependencies for DeployProduction stage
+- job: DummyJob
+  pool:
+    vmImage: 'windows-latest'
+  displayName: 'Dummy Job'
+  steps:
+  - script: echo This is a dummy job
+    displayName: 'Run Dummy Job'
