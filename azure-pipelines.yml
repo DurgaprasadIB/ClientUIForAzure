@@ -1,48 +1,96 @@
 trigger:
   - main
 
-pool:
-  vmImage: 'windows-latest'
+variables:
+  buildConfiguration: 'Release'
+  nodeVersion: '14.x'
+  stagingEnvironment: 'Staging'
+  productionEnvironment: 'TestProduction'
+  appName: 'IoTApplication'
 
-jobs:
+stages:
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
   - job: Build
-    displayName: 'Build and Test'
+    pool:
+      vmImage: 'windows-latest'
     steps:
-      - checkout: self
-        persistCredentials: true
+    - checkout: self
+      persistCredentials: true
 
-      - task: UseNode@1
-        inputs:
-          versionSpec: '14.17.5'
-          addToPath: true
+    - task: UseNode@1
+      inputs:
+        versionSpec: '$(nodeVersion)'
+        addToPath: true
 
-      - script: |
-          npm install
-          npm run build
-          npm test
-        displayName: 'Install, Build, and Test'
+    - script: |
+        npm install
+        npm run build
+        npm test
+      displayName: 'Install, Build, and Test'
 
-      - task: ArchiveFiles@2
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-          includeRootFolder: false
-          archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/node-app.zip'
-          replaceExistingArchive: true
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(IoTApplication).zip'
+        replaceExistingArchive: true
 
+- stage: Test
+  displayName: 'Run Tests'
+  jobs:
   - job: Test
-    displayName: 'Run Tests'
     dependsOn: Build
+    pool:
+      vmImage: 'windows-latest'
     steps:
-      - task: UseNode@1
-        inputs:
-          versionSpec: '14.17.5'
-          addToPath: true
+    - task: UseNode@1
+      inputs:
+        versionSpec: '$(nodeVersion)'
+        addToPath: true
 
-      - checkout: self
-        persistCredentials: true
+    - checkout: self
+      persistCredentials: true
 
-      - script: |
-          npm install
-          npm test
-        displayName: 'Run Tests'
+    - script: |
+        npm install
+        npm test
+      displayName: 'Run Tests'
+
+- stage: DeployStaging
+  displayName: 'Deploy to Staging'
+  jobs:
+  - job: DeployStaging
+    dependsOn: Test
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - download: current
+      artifact: 'YourAppName'
+
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'IBIoT'
+        appName: '$(appName)-$(stagingEnvironment)'
+        package: '$(Pipeline.Workspace)/IoTApplication.zip'
+        configurationSettings: 'NODE_ENV=staging'
+
+- stage: DeployProduction
+  displayName: 'Deploy to Production'
+  jobs:
+  - job: DeployProduction
+    dependsOn: DeployStaging
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - download: current
+      artifact: 'IoTApplication'
+
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'IBIoT'
+        appName: '$(appName)-$(productionEnvironment)'
+        package: '$(Pipeline.Workspace)/IoTApplication.zip'
+        configurationSettings: 'NODE_ENV=production'
