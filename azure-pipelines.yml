@@ -51,7 +51,6 @@ stages:
   jobs:
   - job: Deploy
     displayName: 'Deploy'
-    environment: 'production'
     pool:
       vmImage: 'windows-latest'
     steps:
