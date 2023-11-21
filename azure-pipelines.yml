@@ -52,12 +52,6 @@ stages:
         artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
 
-    - task: IISWebAppManagementOnMachineGroup@0
-      inputs:
-        IISDeploymentType: 'IISApplicationPool'
-        ActionIISApplicationPool: 'Stop'
-        StartStopRecycleAppPoolName: '$(IoTUI)'
-        StartupType: 'Automatic'
 
     - task: IISWebAppDeploymentOnMachineGroup@0
       displayName: 'Deploy to IIS'
