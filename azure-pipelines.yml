@@ -53,17 +53,16 @@ stages:
         downloadPath: '$(System.ArtifactsDirectory)'
 
     - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Stop IIS App Pool'
       inputs:
         IISDeploymentType: 'IISApplicationPool'
         ActionIISApplicationPool: 'Stop'
-        StartStopRecycleAppPoolName: '$(iisSiteName)'
+        StartStopRecycleAppPoolName: '$(IoTUI)'
         StartupType: 'Automatic'
 
     - task: IISWebAppDeploymentOnMachineGroup@0
       displayName: 'Deploy to IIS'
       inputs:
-        WebSiteName: '$(iisSiteName)'
+        WebSiteName: '$(IoTUI)'
         VirtualApplication: '/'
         Package: '$(System.ArtifactsDirectory)\drop'  # Remove "\*"
         RemoveAdditionalFilesFlag: true
