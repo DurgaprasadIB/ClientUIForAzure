@@ -57,15 +57,15 @@ stages:
       inputs:
         IISDeploymentType: 'IISApplicationPool'
         ActionIISApplicationPool: 'Stop'
-        StartStopRecycleAppPoolName: '$(IoTUI)'
+        StartStopRecycleAppPoolName: '$(iisSiteName)'
         StartupType: 'Automatic'
 
     - task: IISWebAppDeploymentOnMachineGroup@0
       displayName: 'Deploy to IIS'
       inputs:
-        WebSiteName: '$(IoTUI)'
+        WebSiteName: '$(iisSiteName)'
         VirtualApplication: '/'
-        Package: '$(System.ArtifactsDirectory)\drop\*'
+        Package: '$(System.ArtifactsDirectory)\drop'  # Remove "\*"
         RemoveAdditionalFilesFlag: true
 
     - task: IISWebAppManagementOnMachineGroup@0
@@ -73,5 +73,5 @@ stages:
       inputs:
         IISDeploymentType: 'IISApplicationPool'
         ActionIISApplicationPool: 'Start'
-        StartStopRecycleAppPoolName: '$(IoTUI)'
+        StartStopRecycleAppPoolName: '$(iisSiteName)'
         StartupType: 'Automatic'
