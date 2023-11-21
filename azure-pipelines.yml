@@ -1,76 +1,88 @@
 trigger:
-  - main
+- main
+
+pool:
+  vmImage: 'windows-latest'
 
 variables:
+  solution: '**/*.sln'
   buildConfiguration: 'Release'
-  nodeVersion: '14.x'
-  stagingEnvironment: 'Staging'
-  productionEnvironment: 'TestProduction'
-  appName: 'IoTApplication'
+  webAppName: 'IoTUI'
+  iisSiteName: 'IoTUI'
+  serverAddress: '98.70.42.23'
+  username: 'IBuser'
+  password: 'IBtesting#321'
 
 stages:
 - stage: Build
-  displayName: 'Build and Test'
+  displayName: 'Build and Publish'
   jobs:
   - job: Build
-    pool:
-      vmImage: 'windows-latest'
+    displayName: 'Build'
     steps:
-    - checkout: self
-      persistCredentials: true
-
-    - task: UseNode@1
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core SDK'
       inputs:
-        versionSpec: '$(nodeVersion)'
-        addToPath: true
+        version: '3.x'
+        includePreviewVersions: true
 
-    - script: |
-        npm install
-        npm run build
-        npm test
-      displayName: 'Install, Build, and Test'
-
-    - task: ArchiveFiles@2
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore and Build'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(appName).zip'
-        replaceExistingArchive: true
+        command: 'restore'
+        projects: '$(solution)'
 
-- stage: DeployStaging
-  displayName: 'Deploy to Staging'
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish'
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: 'Deploy to IIS'
   jobs:
-  - job: DeployStaging
+  - job: Deploy
+    displayName: 'Deploy'
+    environment: 'Sampleproduction'
     pool:
       vmImage: 'windows-latest'
     steps:
-    - download: current
-      artifact: 'Build'
-      patterns: '**/*.zip'
-
-    - task: AzureWebApp@1
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Build Artifacts'
       inputs:
-        azureSubscription: 'IBIoT'
-        appName: '$(appName)-$(stagingEnvironment)'
-        package: '$(Pipeline.Workspace)/$(appName).zip'
-        configurationSettings: 'NODE_ENV=staging'
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
 
-# Dummy job with no dependencies for DeployStaging stage
-- stage: DeployProduction
-  displayName: 'Deploy to Production'
-  jobs:
-  - job: DeployProduction
-    pool:
-      vmImage: 'windows-latest'
-    steps:
-    - download: current
-      artifact: 'Build'
-      patterns: '**/*.zip'
-
-    - task: AzureWebApp@1
+    - task: IISWebAppManagementOnMachineGroup@0
+      displayName: 'Stop IIS App Pool'
       inputs:
-        azureSubscription: 'IBIoT'
-        appName: '$(IoTApplication)-$(productionEnvironment)'
-        package: '$(Pipeline.Workspace)/$(IoTApplication).zip'
-        configurationSettings: 'NODE_ENV=production'
+        IISDeploymentType: 'IISApplicationPool'
+        ActionIISApplicationPool: 'Stop'
+        StartStopRecycleAppPoolName: '$(IoTUI)'
+        StartupType: 'Automatic'
+
+    - task: IISWebAppDeploymentOnMachineGroup@0
+      displayName: 'Deploy to IIS'
+      inputs:
+        WebSiteName: '$(IoTUI)'
+        VirtualApplication: '/'
+        Package: '$(System.ArtifactsDirectory)\drop\IoTUI.zip'
+        RemoveAdditionalFilesFlag: true
+
+    - task: IISWebAppManagementOnMachineGroup@0
+      displayName: 'Start IIS App Pool'
+      inputs:
+        IISDeploymentType: 'IISApplicationPool'
+        ActionIISApplicationPool: 'Start'
+        StartStopRecycleAppPoolName: '$(IoTUI)'
+        StartupType: 'Automatic'
