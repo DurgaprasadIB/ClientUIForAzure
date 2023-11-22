@@ -55,7 +55,7 @@ stages:
     - task: IISWebAppDeploymentOnMachineGroup@0
       displayName: 'Deploy to IIS'
       inputs:
-        WebSiteName: '$(iisSiteName)'
+        WebSiteName: '$(IoTUI)'
         VirtualApplication: '/'
         Package: '$(System.ArtifactsDirectory)/drop'
         RemoveAdditionalFilesFlag: true
