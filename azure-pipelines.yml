@@ -56,7 +56,7 @@ stages:
       displayName: 'Deploy to IIS'
       inputs:
         WebSiteName: '$(Ideabytes.iotui.com)'
-        VirtualApplication: '\C:\pipeline'
+        VirtualApplication: '/C:/pipeline'
         Package: '$(System.ArtifactsDirectory)/drop'
         RemoveAdditionalFilesFlag: true
 
