@@ -63,7 +63,7 @@ stages:
     - task: IISWebAppManagementOnMachineGroup@0
       displayName: 'Stop IIS App Pool'
       inputs:
-        IISDeploymentType: 'IISApplicationPool'
+        IISDeploymentType: 'Ideabytes.iotui.com'
         ActionIISApplicationPool: 'Stop'
         StartStopRecycleAppPoolName: '$(Ideabytes.iotui.com)'
         StartupType: 'Automatic'
@@ -71,7 +71,7 @@ stages:
     - task: IISWebAppManagementOnMachineGroup@0
       displayName: 'Start IIS App Pool'
       inputs:
-        IISDeploymentType: 'IISApplicationPool'
+        IISDeploymentType: 'Ideabytes.iotui.com'
         ActionIISApplicationPool: 'Start'
         StartStopRecycleAppPoolName: '$(Ideabytes.iotui.com)'  # Fix the typo here
         StartupType: 'Automatic'
