@@ -7,7 +7,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   webAppName: 'Ideabytes'
-  iisSiteName: 'IoTUI'
+  iisSiteName: 'Ideabytes.iotui.com'
   serverAddress: '98.70.42.23'
   username: 'IBuser'
   password: 'IBtesting#321'
@@ -55,7 +55,7 @@ stages:
     - task: IISWebAppDeploymentOnMachineGroup@0
       displayName: 'Deploy to IIS'
       inputs:
-        WebSiteName: '$(IoTUI)'
+        WebSiteName: '$(Ideabytes.iotui.com)'
         VirtualApplication: '\C:\pipeline'
         Package: '$(System.ArtifactsDirectory)/drop'
         RemoveAdditionalFilesFlag: true
@@ -65,7 +65,7 @@ stages:
       inputs:
         IISDeploymentType: 'IISApplicationPool'
         ActionIISApplicationPool: 'Stop'
-        StartStopRecycleAppPoolName: '$(IoTUI)'
+        StartStopRecycleAppPoolName: '$(Ideabytes.iotui.com)'
         StartupType: 'Automatic'
 
     - task: IISWebAppManagementOnMachineGroup@0
@@ -73,5 +73,5 @@ stages:
       inputs:
         IISDeploymentType: 'IISApplicationPool'
         ActionIISApplicationPool: 'Start'
-        StartStopRecycleAppPoolName: '$(IoTUI)'  # Fix the typo here
+        StartStopRecycleAppPoolName: '$(Ideabytes.iotui.com)'  # Fix the typo here
         StartupType: 'Automatic'
