@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  webAppName: 'IoTUI'
+  webAppName: 'Ideabytes'
   iisSiteName: 'IoTUI'
   serverAddress: '98.70.42.23'
   username: 'IBuser'
@@ -73,5 +73,5 @@ stages:
       inputs:
         IISDeploymentType: 'IISApplicationPool'
         ActionIISApplicationPool: 'Start'
-        StartStopRecycleAppPoolName: '$(IOTUI)'
+        StartStopRecycleAppPoolName: '$(IoTUI)'  # Fix the typo here
         StartupType: 'Automatic'
