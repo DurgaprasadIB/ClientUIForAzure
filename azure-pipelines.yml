@@ -1,35 +1,43 @@
-# CI/CD Pipeline
 trigger:
-  branches:
-    include:
-      - '*'
+- main
 
-jobs:
-- job: Build
-  displayName: 'Build and Test'
-  pool:
-    vmImage: 'windows-latest'
-  steps:
-  - checkout: self
-  - task: UseNode@1
-    inputs:
-      versionSpec: '14.x'
-      addToPath: true
-  - script: |
-      npm install
-      npm run build
+pr:
+- none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  webAppName: 'Ideabytes'
+  iisSiteName: 'Ideabytes.iotui.com'
+  serverAddress: '98.70.42.23'
+  username: 'IBuser'
+  password: 'IBtesting#321'
+
+stages:
+- stage: Build
+  displayName: 'Build and Publish'
+  jobs:
+  - job: Build
     displayName: 'Build'
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: 'src'  # Update this to the actual source folder
-      Contents: '**'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    displayName: 'Copy Files'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'drop'
-    displayName: 'Publish Artifacts'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build
+      displayName: 'Install and Build'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        pathtoPublish: '$(System.DefaultWorkingDirectory)'
+        artifactName: 'drop'
+        publishLocation: 'Container'
 
 - deployment: Deploy
   displayName: 'Deploy to Windows Server'
@@ -70,3 +78,4 @@ jobs:
             WebSiteName: '$(IOTUI)'
             ActionIISAppPool: 'RecycleAppPool'
             RecyclingAppPool: '$(IOTUI_Pool)'
+
