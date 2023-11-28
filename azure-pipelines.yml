@@ -19,6 +19,17 @@ jobs:
       npm install
       npm run build
     displayName: 'Build'
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: 'src'  # Update this to the actual source folder
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy Files'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'drop'
+    displayName: 'Publish Artifacts'
 
 - deployment: Deploy
   displayName: 'Deploy to Windows Server'
@@ -29,11 +40,10 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - task: CopyFiles@2
+        - task: DownloadBuildArtifacts@0
           inputs:
-            SourceFolder: '$(Build.ArtifactStagingDirectory)'
-            Contents: '**'
-            TargetFolder: 'C:\pipeline'
+            artifactName: 'drop'
+            downloadPath: '$(Build.ArtifactStagingDirectory)'
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -46,7 +56,7 @@ jobs:
           inputs:
             WebSiteName: '$(IOTUI)'
             VirtualApplication: ''
-            Package: 'C:\pipeline'
+            Package: '$(Build.ArtifactStagingDirectory)'
             SetParametersFile: ''
             TakeAppOfflineFlag: 'True'
             XmlTransformation: 'True'
