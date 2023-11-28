@@ -1,83 +1,58 @@
+# CI/CD Pipeline
 trigger:
-- main
+  branches:
+    include:
+      - '*'
 
-pr:
-- none
-
-pool:
-  vmImage: 'windows-latest'
-
-variables:
-  buildConfiguration: 'Release'
-  webAppName: 'Ideabytes'
-  iisSiteName: 'Ideabytes.iotui.com'
-  serverAddress: '98.70.42.23'
-  username: 'IBuser'
-  password: 'IBtesting#321'
-
-stages:
-- stage: Build
-  displayName: 'Build and Publish'
-  jobs:
-  - job: Build
+jobs:
+- job: Build
+  displayName: 'Build and Test'
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - checkout: self
+  - task: UseNode@1
+    inputs:
+      versionSpec: '14.x'
+      addToPath: true
+  - script: |
+      npm install
+      npm run build
     displayName: 'Build'
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-      displayName: 'Install Node.js'
 
-    - script: |
-        npm install
-        npm run build
-      displayName: 'Install and Build'
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact'
-      inputs:
-        pathtoPublish: '$(System.DefaultWorkingDirectory)'
-        artifactName: 'drop'
-        publishLocation: 'Container'
-
-- stage: Deploy
-  displayName: 'Deploy to IIS'
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy'
-    pool:
-      vmImage: 'windows-latest'
-    steps:
-    - task: DownloadBuildArtifacts@0
-      displayName: 'Download Build Artifacts'
-      inputs:
-        buildType: 'specific'
-        project: 'IdeabytesCICD'
-        pipeline: ''
-        runVersion: 'latestSuccessful'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-
-    - task: IISWebAppDeploymentOnMachineGroup@0
-      displayName: 'Deploy to IIS'
-      inputs:
-        WebSiteName: '$(Ideabytes.iotui.com)'
-        VirtualApplication: '/'
-        Package: '$(System.ArtifactsDirectory)/drop'
-        RemoveAdditionalFilesFlag: true
-
-    - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Stop IIS App Pool'
-      inputs:
-        IISDeploymentType: 'Ideabytes.iotui.com'
-        ActionIISApplicationPool: 'Stop'
-        StartStopRecycleAppPoolName: '$(Ideabytes.iotui.com)'
-        StartupType: 'Automatic'
-
-    - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Start IIS App Pool'
-      inputs:
-        IISDeploymentType: 'Ideabytes.iotui.com'
-        ActionIISApplicationPool: 'Start'
-        StartStopRecycleAppPoolName: '$(Ideabytes.iotui.com)'
-        StartupType: 'Automatic'
+- job: Deploy
+  displayName: 'Deploy to Windows Server'
+  dependsOn: Build
+  pool:
+    vmImage: 'windows-latest'
+  environment: 'deployment'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.ArtifactStagingDirectory)'
+            Contents: '**'
+            TargetFolder: 'C:\pipeline'
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $uniqueWebsiteName = "IOTUI_$(Build.BuildId)"
+              $uniqueAppPoolName = "IOTUI_Pool_$(Build.BuildId)"
+              Write-Host "##vso[task.setvariable variable=WebsiteName;isOutput=true]$uniqueWebsiteName"
+              Write-Host "##vso[task.setvariable variable=AppPoolName;isOutput=true]$uniqueAppPoolName"
+        - task: IISWebAppManage@0
+          inputs:
+            IISDeploymentType: 'IISWebsite'
+            ActionIISWebsite: 'CreateOrUpdateWebsite'
+            WebsiteName: '$(IOTUI)'
+            PhysicalPath: 'C:\pipeline'
+            Port: 80
+            AddBinding: true
+        - task: IISWebAppPoolManage@0
+          inputs:
+            IISDeploymentType: 'IISAppPool'
+            ActionIISAppPool: 'RecycleAppPool'
+            RecyclingAppPool: '$(IOTUI_Pool)'
