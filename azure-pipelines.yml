@@ -20,12 +20,11 @@ jobs:
       npm run build
     displayName: 'Build'
 
-- job: Deploy
+- deployment: Deploy
   displayName: 'Deploy to Windows Server'
-  dependsOn: Build
   pool:
     vmImage: 'windows-latest'
-  environment: 'deployment'
+  environment: 'YourEnvironmentName'
   strategy:
     runOnce:
       deploy:
