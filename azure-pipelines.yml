@@ -24,7 +24,7 @@ jobs:
   displayName: 'Deploy to Windows Server'
   pool:
     vmImage: 'windows-latest'
-  environment: 'deployment'
+  environment: 'YourEnvironmentName'
   strategy:
     runOnce:
       deploy:
@@ -55,8 +55,8 @@ jobs:
             ExcludeFilesFromAppDataFlag: 'False'
             AdditionalArguments: '-UseCheckSum'
             PowerShellVersion: 'LatestVersion'
-        - task: IISWebAppPoolManage@0
+        - task: IISWebAppDeploymentOnMachineGroup@0
           inputs:
-            IISDeploymentType: 'IISAppPool'
+            WebSiteName: '$(IOTUI)'
             ActionIISAppPool: 'RecycleAppPool'
             RecyclingAppPool: '$(IOTUI_Pool)'
