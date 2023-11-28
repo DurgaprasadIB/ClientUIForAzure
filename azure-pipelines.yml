@@ -51,7 +51,7 @@ stages:
       displayName: 'Download Build Artifacts'
       inputs:
         buildType: 'specific'
-        project: 'IdeabytesCICD'
+        project: 'IdeabytesCICD/IoTProject'
         pipeline: 'Your-CI-Pipeline-Name'  # Replace with your CI pipeline name
         runVersion: 'latestSuccessful'
         downloadType: 'single'
