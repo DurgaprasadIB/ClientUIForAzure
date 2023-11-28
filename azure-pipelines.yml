@@ -52,8 +52,8 @@ stages:
       inputs:
         buildType: 'specific'
         project: 'IdeabytesCICD/IoTProject'
-        pipeline: 'Your-CI-Pipeline-Name'  # Replace with your CI pipeline name
-        runVersion: 'latestSuccessful'
+        pipeline: ''
+        runVersion: 'latestSuccessful'  # Use the latest successful run of the CI pipeline
         downloadType: 'single'
         artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
