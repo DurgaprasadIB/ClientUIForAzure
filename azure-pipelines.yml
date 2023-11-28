@@ -20,28 +20,38 @@ jobs:
       npm run build
     displayName: 'Build'
 
-- job: Deploy
+- deployment: Deploy
   displayName: 'Deploy to Windows Server'
-  dependsOn: Build
   pool:
     vmImage: 'windows-latest'
-  steps:
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: '$(Build.ArtifactStagingDirectory)'
-      Contents: '**'
-      TargetFolder: 'C:\pipeline'
-
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        $uniqueWebsiteName = "IOTUI_$(Build.BuildId)"
-        $uniqueAppPoolName = "IOTUI_Pool_$(Build.BuildId)"
-        
-        # Your custom PowerShell script for IIS deployment
-        # Example: Create a new website in IIS
-        New-WebApp -Name $uniqueWebsiteName -PhysicalPath 'C:\pipeline' -Port 80
-
-        # Example: Recycle the application pool
-        Restart-WebAppPool -Name $uniqueAppPoolName
+  environment: 'YourEnvironmentName'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.ArtifactStagingDirectory)'
+            Contents: '**'
+            TargetFolder: 'C:\pipeline'
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $uniqueWebsiteName = "IOTUI_$(Build.BuildId)"
+              $uniqueAppPoolName = "IOTUI_Pool_$(Build.BuildId)"
+              Write-Host "##vso[task.setvariable variable=WebsiteName;isOutput=true]$uniqueWebsiteName"
+              Write-Host "##vso[task.setvariable variable=AppPoolName;isOutput=true]$uniqueAppPoolName"
+        - task: IISWebAppManage@0
+          inputs:
+            IISDeploymentType: 'IISWebsite'
+            ActionIISWebsite: 'CreateOrUpdateWebsite'
+            WebsiteName: '$(IOTUI)'
+            PhysicalPath: 'C:\pipeline'
+            Port: 80
+            AddBinding: true
+        - task: IISWebAppPoolManage@0
+          inputs:
+            IISDeploymentType: 'IISAppPool'
+            ActionIISAppPool: 'RecycleAppPool'
+            RecyclingAppPool: '$(IOTUI_Pool)'
