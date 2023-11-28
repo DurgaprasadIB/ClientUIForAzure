@@ -7,13 +7,6 @@ pr:
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  buildConfiguration: 'Release'
-  webAppName: 'IOTUI'
-  serverAddress: '98.70.42.23'
-  username: 'IBuser'
-  password: 'IBtesting#321'
-
 stages:
 - stage: Build
   displayName: 'Build and Publish'
