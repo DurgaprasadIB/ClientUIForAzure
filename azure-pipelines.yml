@@ -51,9 +51,9 @@ stages:
       displayName: 'Download Build Artifacts'
       inputs:
         buildType: 'specific'
-        project: 'IdeabytesCICD/IoTProject'
+        project: 'IdeabytesCICD'
         pipeline: ''
-        runVersion: 'latestSuccessful'  # Use the latest successful run of the CI pipeline
+        runVersion: 'latestSuccessful'
         downloadType: 'single'
         artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
