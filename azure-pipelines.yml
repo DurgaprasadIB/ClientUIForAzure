@@ -9,8 +9,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  webAppName: 'Ideabytes'
-  iisSiteName: 'Ideabytes.iotui.com'
+  webAppName: 'IOTUI'
   serverAddress: '98.70.42.23'
   username: 'IBuser'
   password: 'IBtesting#321'
@@ -39,43 +38,45 @@ stages:
         artifactName: 'drop'
         publishLocation: 'Container'
 
-- deployment: Deploy
+- stage: Deploy
   displayName: 'Deploy to Windows Server'
-  pool:
-    vmImage: 'windows-latest'
-  environment: 'YourEnvironmentName'
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - task: DownloadBuildArtifacts@0
-          inputs:
-            artifactName: 'drop'
-            downloadPath: '$(Build.ArtifactStagingDirectory)'
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              $uniqueWebsiteName = "IOTUI_$(Build.BuildId)"
-              $uniqueAppPoolName = "IOTUI_Pool_$(Build.BuildId)"
-              Write-Host "##vso[task.setvariable variable=WebsiteName;isOutput=true]$uniqueWebsiteName"
-              Write-Host "##vso[task.setvariable variable=AppPoolName;isOutput=true]$uniqueAppPoolName"
-        - task: IISWebAppDeploymentOnMachineGroup@0
-          inputs:
-            WebSiteName: '$(IOTUI)'
-            VirtualApplication: ''
-            Package: '$(Build.ArtifactStagingDirectory)'
-            SetParametersFile: ''
-            TakeAppOfflineFlag: 'True'
-            XmlTransformation: 'True'
-            XmlVariableSubstitution: 'True'
-            RemoveAdditionalFilesFlag: 'True'
-            ExcludeFilesFromAppDataFlag: 'False'
-            AdditionalArguments: '-UseCheckSum'
-            PowerShellVersion: 'LatestVersion'
-        - task: IISWebAppDeploymentOnMachineGroup@0
-          inputs:
-            WebSiteName: '$(IOTUI)'
-            ActionIISAppPool: 'RecycleAppPool'
-            RecyclingAppPool: '$(IOTUI_Pool)'
-
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy'
+    pool:
+      vmImage: 'windows-latest'
+    environment: 'deployment'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: 'drop'
+              downloadPath: '$(Build.ArtifactStagingDirectory)'
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                $uniqueWebsiteName = "IOTUI_$(Build.BuildId)"
+                $uniqueAppPoolName = "IOTUI_Pool_$(Build.BuildId)"
+                Write-Host "##vso[task.setvariable variable=WebsiteName;isOutput=true]$uniqueWebsiteName"
+                Write-Host "##vso[task.setvariable variable=AppPoolName;isOutput=true]$uniqueAppPoolName"
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            inputs:
+              WebSiteName: '$(IOTUI)'
+              VirtualApplication: ''
+              Package: '$(Build.ArtifactStagingDirectory)'
+              SetParametersFile: ''
+              TakeAppOfflineFlag: 'True'
+              XmlTransformation: 'True'
+              XmlVariableSubstitution: 'True'
+              RemoveAdditionalFilesFlag: 'True'
+              ExcludeFilesFromAppDataFlag: 'False'
+              AdditionalArguments: '-UseCheckSum'
+              PowerShellVersion: 'LatestVersion'
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            inputs:
+              WebSiteName: '$(IOTUI)'
+              ActionIISAppPool: 'RecycleAppPool'
+              RecyclingAppPool: '$(IOTUI_Pool)'
