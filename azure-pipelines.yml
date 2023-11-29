@@ -45,7 +45,7 @@ stages:
   jobs:
   - job: Deploy
     steps:
-    - task: NodeTool@2
+    - task: NodeTool@0
       inputs:
         versionSpec: '12.x'
       displayName: 'Install Node.js'
