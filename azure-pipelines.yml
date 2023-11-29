@@ -64,7 +64,13 @@ stages:
     - task: WinRM@0
       inputs:
         connectionType: 'WinRM'
-        machineName: '98.70.42.23'
+        machineName: '- task: IISWebAppDeploy@2
+  inputs:
+    machinesList: '98.70.42.23'
+    AdminUserName: 'IBuser'
+    AdminPassword: 'IBtesting#321'
+    WinRMProtocol: 'Https'
+    WebDeployPackage: '
         port: 5986
         action: 'Run Shell Script'
         scriptType: 'inline'
