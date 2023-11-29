@@ -61,23 +61,17 @@ stages:
         Contents: '**'
         TargetFolder: '$(build.artifactstagingdirectory)/deploy'
 
-    - task: WinRM@0
+    - task: IISWebAppDeploy@2
       inputs:
-        connectionType: 'WinRM'
-        machineName: '- task: IISWebAppDeploy@2
-  inputs:
-    machinesList: '98.70.42.23'
-    AdminUserName: 'IBuser'
-    AdminPassword: 'IBtesting#321'
-    WinRMProtocol: 'Https'
-    WebDeployPackage: '
-        port: 5986
+        machinesList: '98.70.42.23'
+        AdminUserName: 'IBuser'
+        AdminPassword: 'IBtesting#321'
+        WinRMProtocol: 'Http'
+        WebDeployPackage: '$(build.artifactstagingdirectory)/deploy'  # Replace with the correct path
+        WebsiteName: 'IOTUI'
         action: 'Run Shell Script'
         scriptType: 'inline'
         inlineScript: |
-          # Copy artifacts to the VM
-          Copy-Item -Path "$(System.DefaultWorkingDirectory)/deploy/*" -Destination 'C:\pipeline' -Recurse -Force
-
           # Install IIS (if not installed)
           Install-WindowsFeature -Name Web-Server -IncludeManagementTools
 
