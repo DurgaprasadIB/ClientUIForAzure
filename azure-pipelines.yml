@@ -43,8 +43,16 @@ stages:
 
 - stage: Deploy
   jobs:
+  - job: Prepare
+    steps:
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "This is a job without dependencies, serving as the starting point for the Deploy stage."
+
   - job: Deploy
-    dependsOn: Build
+    dependsOn: Prepare
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
