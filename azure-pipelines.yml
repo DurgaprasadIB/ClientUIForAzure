@@ -29,14 +29,14 @@ stages:
 
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(Build.SourcesDirectory)/dist'
+        SourceFolder: '$(Build.SourcesDirectory)/src'
         Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/drop'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/deploy'
       displayName: 'Copy Artifacts'
 
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/deploy'
         ArtifactName: 'drop'
         publishLocation: 'Container'
       displayName: 'Publish Artifacts'
@@ -84,8 +84,8 @@ stages:
         machinesList: '98.70.42.23'
         AdminUserName: 'IBuser'
         AdminPassword: 'IBtesting#321'
-        WinRMProtocol: 'Http'  # Switch to 'Https' if you've set up HTTPS for WinRM
-        WebDeployPackage: '$(System.ArtifactsDirectory)/drop'  # Path to the downloaded artifacts
+        WinRMProtocol: 'Http'
+        WebDeployPackage: '$(System.ArtifactsDirectory)/drop'
         WebsiteName: 'IOTUI'
         action: 'Run Shell Script'
         scriptType: 'inline'
