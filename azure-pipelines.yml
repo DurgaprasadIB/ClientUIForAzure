@@ -1,0 +1,85 @@
+trigger:
+- master
+
+pr:
+- '*'
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  azureSubscription: 'IOT'
+  appName: 'IOTUI'
+  buildConfiguration: 'production'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - task: UseNode@2
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build -- --configuration $(buildConfiguration)
+      displayName: 'Build Angular App'
+
+- stage: Test
+  jobs:
+  - job: Test
+    steps:
+    - task: UseNode@2
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run test
+      displayName: 'Run Tests'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    steps:
+    - task: UseNode@2
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build -- --configuration $(buildConfiguration)
+      displayName: 'Build Angular App'
+
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: '**'
+        TargetFolder: '$(build.artifactstagingdirectory)/deploy'
+
+    - task: WinRM@2
+      inputs:
+        connectionType: 'WinRM'
+        machineName: '98.70.42.23'
+        port: 5986  # Update this port if necessary
+        action: 'Run Shell Script'
+        scriptType: 'inline'
+        inlineScript: |
+          # Copy artifacts to the VM
+          Copy-Item -Path "$(System.DefaultWorkingDirectory)/deploy/*" -Destination 'C:\pipeline' -Recurse -Force
+
+          # Install IIS (if not installed)
+          Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+
+          # Create a new IIS site
+          New-WebSite -Name 'IOTUI' -PhysicalPath 'C:\pipeline' -BindingInformation '*:80:'
+
+          # Restart IIS on the VM
+          Restart-Service -Name 'W3SVC' -Force
+      displayName: 'Configure IIS and Restart'
+
+    # Additional deployment steps for your specific environment
