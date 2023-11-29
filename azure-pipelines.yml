@@ -27,16 +27,9 @@ stages:
         npm run build -- --configuration $(buildConfiguration)
       displayName: 'Build Angular App'
 
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(Build.SourcesDirectory)/src'
-        Contents: 'src/**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/deploy'
-      displayName: 'Copy Artifacts'
-
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/deploy'
+        PathtoPublish: '$(Build.SourcesDirectory)/dist'
         ArtifactName: 'drop'
         publishLocation: 'Container'
       displayName: 'Publish Artifacts'
