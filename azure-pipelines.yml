@@ -61,8 +61,9 @@ stages:
         Contents: '**'
         TargetFolder: '$(build.artifactstagingdirectory)/deploy'
 
-    - task: WinRM@2
+    - task: WinRM@0
       inputs:
+        connectionType: 'WinRM'
         machineName: '98.70.42.23'
         port: 5986
         action: 'Run Shell Script'
