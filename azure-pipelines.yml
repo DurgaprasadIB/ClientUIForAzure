@@ -17,35 +17,7 @@ stages:
   jobs:
   - job: Build
     steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-      displayName: 'Install Node.js'
-
-    - script: |
-        npm install
-        npm run build -- --configuration $(buildConfiguration)
-      displayName: 'Build Angular App'
-
-- stage: Test
-  jobs:
-  - job: Test
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-      displayName: 'Install Node.js'
-
-    - script: |
-        npm install
-        npm run test
-      displayName: 'Run Tests'
-
-- stage: Deploy
-  jobs:
-  - job: Deploy
-    steps:
-    - task: NodeTool@0
+    - task: NodeTool@2
       inputs:
         versionSpec: '12.x'
       displayName: 'Install Node.js'
@@ -57,17 +29,55 @@ stages:
 
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(Build.SourcesDirectory)'
+        SourceFolder: '$(Build.SourcesDirectory)/dist'
         Contents: '**'
-        TargetFolder: '$(build.artifactstagingdirectory)/deploy'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/drop'
+      displayName: 'Copy Artifacts'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+      displayName: 'Publish Artifacts'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    dependsOn: Build
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+      displayName: 'Download Artifacts'
+
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Configure TrustedHosts
+          Set-Item WSMan:\localhost\Client\TrustedHosts -Value "98.70.42.23" -Force
+
+          # Check WinRM Configuration
+          winrm get winrm/config
+
+          # If not using a domain, allow unencrypted traffic
+          winrm set winrm/config/client '@{AllowUnencrypted="true"}'
+
+          # Enable CredSSP authentication
+          winrm set winrm/config/client/auth '@{CredSSP="true"}'
+      displayName: 'Configure WinRM'
 
     - task: IISWebAppDeploy@2
       inputs:
         machinesList: '98.70.42.23'
         AdminUserName: 'IBuser'
         AdminPassword: 'IBtesting#321'
-        WinRMProtocol: 'Http'
-        WebDeployPackage: '$(build.artifactstagingdirectory)/deploy'  # Replace with the correct path
+        WinRMProtocol: 'Http'  # Switch to 'Https' if you've set up HTTPS for WinRM
+        WebDeployPackage: '$(System.ArtifactsDirectory)/drop'  # Path to the downloaded artifacts
         WebsiteName: 'IOTUI'
         action: 'Run Shell Script'
         scriptType: 'inline'
@@ -80,6 +90,4 @@ stages:
 
           # Restart IIS on the VM
           Restart-Service -Name 'W3SVC' -Force
-      displayName: 'Configure IIS and Restart'
-
-    # Additional deployment steps for your specific environment
+      displayName: 'Deploy and Configure IIS'
