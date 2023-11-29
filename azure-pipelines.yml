@@ -1,21 +1,18 @@
 trigger:
-- master
+- main
 
 pr:
-- '*'
+- none
 
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  azureSubscription: 'IOT'
-  appName: 'IOTUI'
-  buildConfiguration: 'production'
-
 stages:
 - stage: Build
+  displayName: 'Build and Publish'
   jobs:
   - job: Build
+    displayName: 'Build'
     steps:
     - task: NodeTool@0
       inputs:
@@ -24,16 +21,15 @@ stages:
 
     - script: |
         npm install
-        npm run build -- --configuration $(buildConfiguration)
-      displayName: 'Build Angular App'
+        npm run build
+      displayName: 'Install and Build'
 
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/dist'
-        ArtifactName: 'drop'
+        pathtoPublish: '$(System.DefaultWorkingDirectory)'
+        artifactName: 'drop'
         publishLocation: 'Container'
-      displayName: 'Publish Artifacts'
-
 - stage: Deploy
   jobs:
   - job: Prepare
