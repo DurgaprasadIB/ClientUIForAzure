@@ -17,7 +17,7 @@ stages:
   jobs:
   - job: Build
     steps:
-    - task: UseNode@2
+    - task: NodeTool@2
       inputs:
         versionSpec: '12.x'
       displayName: 'Install Node.js'
@@ -31,7 +31,7 @@ stages:
   jobs:
   - job: Test
     steps:
-    - task: UseNode@2
+    - task: NodeTool@2
       inputs:
         versionSpec: '12.x'
       displayName: 'Install Node.js'
@@ -45,7 +45,7 @@ stages:
   jobs:
   - job: Deploy
     steps:
-    - task: UseNode@2
+    - task: NodeTool@2
       inputs:
         versionSpec: '12.x'
       displayName: 'Install Node.js'
@@ -65,7 +65,7 @@ stages:
       inputs:
         connectionType: 'WinRM'
         machineName: '98.70.42.23'
-        port: 5986  # Update this port if necessary
+        port: 5986
         action: 'Run Shell Script'
         scriptType: 'inline'
         inlineScript: |
