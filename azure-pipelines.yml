@@ -63,7 +63,6 @@ stages:
 
     - task: WinRM@2
       inputs:
-        connectionType: 'WinRM'
         machineName: '98.70.42.23'
         port: 5986
         action: 'Run Shell Script'
