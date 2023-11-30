@@ -27,65 +27,26 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
       inputs:
-        pathtoPublish: '$(System.DefaultWorkingDirectory)/dist'  # Adjust this path according to your project structure
+        pathtoPublish: '$(System.DefaultWorkingDirectory)'
         artifactName: 'drop'
         publishLocation: 'Container'
 
 - stage: Deploy
+  displayName: 'Deploy to Azure App Service'
   jobs:
-  - job: Prepare
-    steps:
-    - task: PowerShell@2
-      inputs:
-        targetType: 'inline'
-        script: |
-          Write-Host "This is a job without dependencies, serving as the starting point for the Deploy stage."
-
   - job: Deploy
-    dependsOn: Prepare
+    displayName: 'Deploy'
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
-        buildType: 'current'
-        downloadType: 'single'
         artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-      displayName: 'Download Artifacts'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
 
-    - task: PowerShell@2
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy to Azure App Service'
       inputs:
-        targetType: 'inline'
-        script: |
-          # Configure TrustedHosts
-          Set-Item WSMan:\localhost\Client\TrustedHosts -Value "98.70.42.23" -Force
-
-          # Check WinRM Configuration
-          winrm get winrm/config
-
-          # If not using a domain, allow unencrypted traffic
-          winrm set winrm/config/client '@{AllowUnencrypted="true"}'
-
-          # Enable CredSSP authentication
-          winrm set winrm/config/client/auth '@{CredSSP="true"}'
-      displayName: 'Configure WinRM'
-
-    - task: IISWebAppDeploy@2
-      inputs:
-        machinesList: '98.70.42.23'
-        AdminUserName: 'IBuser'
-        AdminPassword: 'IBtesting#321'
-        WinRMProtocol: 'Http'
-        WebDeployPackage: '$(System.ArtifactsDirectory)/drop'
-        WebsiteName: 'IOTUI'
-        action: 'Run Shell Script'
-        scriptType: 'inline'
-        inlineScript: |
-          # Install IIS (if not installed)
-          Install-WindowsFeature -Name Web-Server -IncludeManagementTools
-
-          # Create a new IIS site
-          New-WebSite -Name 'IOTUI' -PhysicalPath 'C:\pipeline' -BindingInformation '*:80:'
-
-          # Restart IIS on the VM
-          Restart-Service -Name 'W3SVC' -Force
-      displayName: 'Deploy and Configure IIS'
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'IoT'
+        appType: 'webApp'
+        WebAppName: 'IoTUI'
+        packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
