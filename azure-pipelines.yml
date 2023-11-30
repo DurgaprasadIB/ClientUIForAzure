@@ -1,11 +1,14 @@
-# Azure DevOps Pipeline YAML Configuration
-
+# Define your pipeline
 trigger:
 - main
+
+pr:
+- none
 
 pool:
   vmImage: 'windows-latest'
 
+# Define stages
 stages:
 - stage: Build
   displayName: 'Build and Publish'
@@ -13,22 +16,38 @@ stages:
   - job: Build
     displayName: 'Build'
     steps:
-    - task: NodeTool@0
+    - task: UseDotNet@2
       inputs:
-        versionSpec: '12.x'
-      displayName: 'Install Node.js'
+        packageType: 'sdk'
+        version: '6.x'
+      displayName: 'Install .NET SDK'
 
     - script: |
-        npm install
-        npm run build
-      displayName: 'Install and Build'
+        dotnet restore
+        dotnet build --configuration Release
+        dotnet publish --configuration Release --output $(Build.ArtifactStagingDirectory)/IoTTesting
+      displayName: 'Build and Publish'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
       inputs:
-        pathtoPublish: '$(System.DefaultWorkingDirectory)'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/IoTTesting'
         artifactName: 'drop'
         publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: 'Deploy to IoT Devices'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        artifactName: 'drop'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+    # Add your deployment steps here using the artifacts downloaded to $(Build.ArtifactStagingDirectory)
+
 
 - stage: Deploy
   displayName: 'Deploy to IIS'
