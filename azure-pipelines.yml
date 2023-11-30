@@ -53,9 +53,3 @@ stages:
             appName: 'YourAzureWebAppName'
             package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
 
-# Add more deployment jobs for different environments if needed
-
-## 🌐 Sources
-1. [Stages in Azure Pipelines](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/stages?view=azure-devops)
-2. [Tutorial: Create a multistage pipeline with Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/create-multistage-pipeline?view=azure-devops)
-3. [Creating an Azure DevOps Multi-Stage Pipeline - MercuryWorks](https://mercuryworks.com/blog/creating-a-multi-stage-pipeline-in-azure-devops)
