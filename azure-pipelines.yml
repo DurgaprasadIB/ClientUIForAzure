@@ -49,7 +49,7 @@ stages:
         - task: AzureWebApp@1
           displayName: 'Deploy to Azure Web App'
           inputs:
-            azureSubscription: 'YourAzureSubscription'
+            azureSubscription: 'IoT'
             appName: 'YourAzureWebAppName'
             package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
 
