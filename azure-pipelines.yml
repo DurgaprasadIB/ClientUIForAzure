@@ -13,63 +13,49 @@ stages:
 - stage: Build
   displayName: 'Build and Publish'
   jobs:
-  - job: Build
-    displayName: 'Build'
-    steps:
-    - task: UseDotNet@2
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
-      displayName: 'Install .NET SDK'
+    - job: Build
+      displayName: 'Build'
+      steps:
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '6.x'
+          displayName: 'Install .NET SDK'
 
-    - script: |
-        dotnet restore
-        dotnet build --configuration Release
-        dotnet publish --configuration Release --output $(Build.ArtifactStagingDirectory)/IoTTesting
-      displayName: 'Build and Publish'
+        - script: |
+            dotnet restore
+            dotnet build --configuration Release
+            dotnet publish --configuration Release --output $(Build.ArtifactStagingDirectory)/MyApp
+          displayName: 'Build and Publish'
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact'
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/IoTTesting'
-        artifactName: 'drop'
-        publishLocation: 'Container'
-
-- stage: Deploy
-  displayName: 'Deploy to IoT Devices'
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy'
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        artifactName: 'drop'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
-
-    # Add your deployment steps here using the artifacts downloaded to $(Build.ArtifactStagingDirectory)
-
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Artifact'
+          inputs:
+            pathtoPublish: '$(Build.ArtifactStagingDirectory)/MyApp'
+            artifactName: 'drop'
+            publishLocation: 'Container'
 
 - stage: Deploy
-  displayName: 'Deploy to IIS'
+  displayName: 'Deploy to Azure'
   jobs:
-  - job: Deploy
-    displayName: 'Deploy'
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        artifactName: 'drop'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - job: Deploy
+      displayName: 'Deploy'
+      steps:
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            artifactName: 'drop'
+            downloadPath: '$(Build.ArtifactStagingDirectory)'
 
-    - task: IISWebAppDeploymentOnMachineGroup@0
-      inputs:
-        WebSiteName: 'IoTUI'
-        VirtualApplication: '/'
-        Package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-        SetParametersFile: ''
-        TakeAppOfflineFlag: 'True'
-        XmlTransformation: 'True'
-        XmlVariableSubstitution: 'True'
-        RemoveAdditionalFilesFlag: 'True'
-        ExcludeFilesFromAppDataFlag: 'False'
-        AdditionalArguments: '-UseCheckSum'
-        PowerShellVersion: 'LatestVersion'
+        - task: AzureWebApp@1
+          displayName: 'Deploy to Azure Web App'
+          inputs:
+            azureSubscription: 'YourAzureSubscription'
+            appName: 'YourAzureWebAppName'
+            package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+
+# Add more deployment jobs for different environments if needed
+
+## 🌐 Sources
+1. [Stages in Azure Pipelines](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/stages?view=azure-devops)
+2. [Tutorial: Create a multistage pipeline with Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/create-multistage-pipeline?view=azure-devops)
+3. [Creating an Azure DevOps Multi-Stage Pipeline - MercuryWorks](https://mercuryworks.com/blog/creating-a-multi-stage-pipeline-in-azure-devops)
