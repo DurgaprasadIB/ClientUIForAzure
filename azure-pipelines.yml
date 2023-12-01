@@ -12,10 +12,6 @@ stages:
     steps:
     - checkout: self
 
-    # Add your build steps here...
-    # For example, compile code, run tests, etc.
-
-    # Ensure that the output files are placed in the specified directory
     - script: |
         echo "Generating artifacts in $(Build.ArtifactStagingDirectory)"
         # Your build commands here
@@ -37,9 +33,6 @@ stages:
     steps:
     - checkout: self
 
-    # Add your deployment steps here...
-
-    # Use the published artifact from the build stage
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
@@ -54,9 +47,6 @@ stages:
     steps:
     - checkout: self
 
-    # Add deployment steps with no dependencies here...
-
-    # Use the published artifact from the build stage
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
