@@ -13,6 +13,13 @@ stages:
     - checkout: self
 
     # Add your build steps here...
+    # For example, compile code, run tests, etc.
+
+    # Ensure that the output files are placed in the specified directory
+    - script: |
+        echo "Generating artifacts in $(Build.ArtifactStagingDirectory)"
+        # Your build commands here
+      displayName: 'Generate Artifacts'
 
     - task: PublishBuildArtifacts@1
       inputs:
