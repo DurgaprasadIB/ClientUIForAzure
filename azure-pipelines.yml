@@ -23,7 +23,6 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifacts'
     inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)\C:\pipeline'  # Corrected path
       ArtifactName: 'drop'
       publishLocation: 'Container'
 
@@ -40,14 +39,14 @@ jobs:
       buildType: 'current'
       downloadType: 'single'
       artifactName: 'drop'
-      downloadPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+      downloadPath: '$(System.DefaultWorkingDirectory)'
 
   - task: IISWebAppManagementOnMachineGroup@0
     inputs:
       IISDeploymentType: 'IISWebsite'  # or 'IISWebApp'
       ActionIISWebsiteCreateOrUpdate: 'CreateOrUpdateWebsite'
       WebsiteName: 'IoTApplication'
-      PhysicalPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+      PhysicalPath: '$(System.DefaultWorkingDirectory)'
       Port: '80'  # or your desired port
       CreateOrUpdateAppPool: true
       AppPoolName: 'IoT_pool'
@@ -57,5 +56,5 @@ jobs:
     inputs:
       WebSiteName: 'IoTApplication'
       VirtualApplication: '/'  # or your virtual path
-      Package: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+      Package: '$(System.DefaultWorkingDirectory)'
       RemoveAdditionalFilesFlag: true
