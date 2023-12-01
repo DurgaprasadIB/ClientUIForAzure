@@ -1,47 +1,56 @@
 trigger:
-- main  # or the branch you want to trigger on
+- main
 
 pool:
   vmImage: 'windows-latest'
 
-jobs:
-- job: Build
-  displayName: 'Build Job'
-  steps:
-  - checkout: self
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    displayName: 'Build Job'
+    steps:
+    - checkout: self
 
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '14.x'
-    displayName: 'Install Node.js'
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.x'
+      displayName: 'Install Node.js'
 
-  - script: |
-      npm install
-      npm run build
-    displayName: 'Build Node.js App'
+    - script: |
+        npm install
+        npm run build
+      displayName: 'Build Node.js App'
 
-- job: Deploy
-  displayName: 'Deploy Job'
-  dependsOn: Build
-  environment: 'DEV'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+        artifactName: 'drop'
+        publishLocation: 'container'
 
-  steps:
-  - checkout: self
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy Job'
+    dependsOn: Build
+    environment: 'DEV'
+    steps:
+    - checkout: self
 
-  - task: IISWebAppManagementOnMachineGroup@0
-    inputs:
-      IISDeploymentType: 'IISWebsite'  # or 'IISWebApp'
-      ActionIISWebsiteCreateOrUpdate: 'CreateOrUpdateWebsite'
-      WebsiteName: 'IoTApplication'
-      PhysicalPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
-      Port: '80'  # or your desired port
-      CreateOrUpdateAppPool: true
-      AppPoolName: 'IoT_pool'
-      DotNetVersion: 'v4.0'  # or your desired .NET version
+    - task: IISWebAppManagementOnMachineGroup@0
+      inputs:
+        IISDeploymentType: 'IISWebsite'
+        ActionIISWebsiteCreateOrUpdate: 'CreateOrUpdateWebsite'
+        WebsiteName: 'IoTApplication'
+        PhysicalPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+        Port: '80'
+        CreateOrUpdateAppPool: true
+        AppPoolName: 'IoT_pool'
+        DotNetVersion: 'v4.0'
 
-  - task: IISWebAppDeploymentOnMachineGroup@0
-    inputs:
-      WebSiteName: 'IoTApplication'
-      VirtualApplication: '/'  # or your virtual path
-      Package: '$(System.DefaultWorkingDirectory)\C:\pipeline'
-      RemoveAdditionalFilesFlag: true
+    - task: IISWebAppDeploymentOnMachineGroup@0
+      inputs:
+        WebSiteName: 'IoTApplication'
+        VirtualApplication: '/'
+        Package: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+        RemoveAdditionalFilesFlag: true
