@@ -1,55 +1,78 @@
-trigger:
+trigger
 - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  webAppName: 'Ideabytes'
+  iisSiteName: '98.70.42.23'
+  serverAddress: '98.70.42.23'
+  username: 'IBuser'
+  password: 'IBtesting#321'
 
 stages:
 - stage: Build
+  displayName: 'Build and Publish'
   jobs:
-  - job: BuildJob
-    displayName: 'Build Job'
-    pool:
-      vmImage: 'windows-latest'
-
+  - job: Build
+    displayName: 'Build'
     steps:
-    - checkout: self
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
 
     - script: |
-        echo "Generating artifacts in $(Build.ArtifactStagingDirectory)"
-        # Your build commands here
-      displayName: 'Generate Artifacts'
+        npm install
+        npm run build
+      displayName: 'Install and Build'
 
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: 'MyBuildArtifacts'
+        pathtoPublish: '$(System.DefaultWorkingDirectory)'
+        artifactName: 'drop'
         publishLocation: 'Container'
 
 - stage: Deploy
+  displayName: 'Deploy to IIS'
   jobs:
-  - job: DeployJob
-    displayName: 'Deploy Job'
+  - job: Deploy
+    displayName: 'Deploy'
     pool:
       vmImage: 'windows-latest'
-
     steps:
-    - checkout: self
-
     - task: DownloadBuildArtifacts@0
+      displayName: 'Download Build Artifacts'
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'MyBuildArtifacts'
+        artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
 
-  - job: DeployIndependentJob
-    displayName: 'Deploy Independent Job'
-    dependsOn: []
-
-    steps:
-    - checkout: self
-
-    - task: DownloadBuildArtifacts@0
+    - task: IISWebAppDeploymentOnMachineGroup@0
+      displayName: 'Deploy to IIS'
       inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'MyBuildArtifacts'
-        downloadPath: '$(System.ArtifactsDirectory)'
+        WebSiteName: '$(98.70.42.23)'
+        VirtualApplication: '/C:/pipeline'
+        Package: '$(System.ArtifactsDirectory)/drop'
+        RemoveAdditionalFilesFlag: true
+
+    - task: IISWebAppManagementOnMachineGroup@0
+      displayName: 'Stop IIS App Pool'
+      inputs:
+        IISDeploymentType: '98.70.42.23'
+        ActionIISApplicationPool: 'Stop'
+        StartStopRecycleAppPoolName: '$(98.70.42.23)'
+        StartupType: 'Automatic'
+
+    - task: IISWebAppManagementOnMachineGroup@0
+      displayName: 'Start IIS App Pool'
+      inputs:
+        IISDeploymentType: '98.70.42.23'
+        ActionIISApplicationPool: 'Start'
+        StartStopRecycleAppPoolName: '$(98.70.42.23)'  # Fix the typo here
+        StartupType: 'Automatic'
+        
