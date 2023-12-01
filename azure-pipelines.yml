@@ -23,7 +23,7 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifacts'
     inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)\C:\pipeline'  # Corrected path
       ArtifactName: 'drop'
       publishLocation: 'Container'
 
