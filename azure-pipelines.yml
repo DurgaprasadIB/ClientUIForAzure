@@ -20,6 +20,13 @@ jobs:
       npm run build
     displayName: 'Build Node.js App'
 
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifacts'
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+
 - job: Deploy
   displayName: 'Deploy Job'
   dependsOn: Build
@@ -27,6 +34,14 @@ jobs:
 
   steps:
   - checkout: self
+
+  - task: DownloadBuildArtifacts@0
+    displayName: 'Download Artifacts'
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'drop'
+      downloadPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
 
   - task: IISWebAppManagementOnMachineGroup@0
     inputs:
