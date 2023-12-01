@@ -1,32 +1,44 @@
 trigger:
 - main
 
-pool:
-  vmImage: 'windows-latest'
-
 stages:
 - stage: Build
   jobs:
-  - job: Build
+  - job: BuildJob
     displayName: 'Build Job'
+    pool:
+      vmImage: 'windows-latest'
+
     steps:
     - checkout: self
 
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '14.x'
-      displayName: 'Install Node.js'
-
-    - script: |
-        npm install
-        npm run build
-      displayName: 'Build Node.js App'
+    # Add your build steps here...
 
     - task: PublishBuildArtifacts@1
       inputs:
-        pathtoPublish: '$(System.DefaultWorkingDirectory)\C:\pipeline'
-        artifactName: 'drop'
-        publishLocation: 'container'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'MyBuildArtifacts'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy Job'
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+    - checkout: self
+
+    # Add your deployment steps here...
+
+    # Use the published artifact from the build stage
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'MyBuildArtifacts'
+        downloadPath: '$(System.ArtifactsDirectory)'
 
 - stage: Deploy
   jobs:
