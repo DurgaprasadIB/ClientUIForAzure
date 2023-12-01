@@ -1,4 +1,3 @@
-User
 trigger:
 - main  # or the branch you want to trigger on
 
