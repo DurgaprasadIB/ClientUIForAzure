@@ -33,7 +33,7 @@ jobs:
       IISDeploymentType: 'IISWebsite'  # or 'IISWebApp'
       ActionIISWebsiteCreateOrUpdate: 'CreateOrUpdateWebsite'
       WebsiteName: 'IoTApplication'
-      PhysicalPath: '$(System.DefaultWorkingDirectory)/C:\pipeline'
+      PhysicalPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
       Port: '80'  # or your desired port
       CreateOrUpdateAppPool: true
       AppPoolName: 'IoT_pool'
@@ -43,5 +43,5 @@ jobs:
     inputs:
       WebSiteName: 'IoTApplication'
       VirtualApplication: '/'  # or your virtual path
-      Package: '$(System.DefaultWorkingDirectory)/C:\pipeline'
+      Package: '$(System.DefaultWorkingDirectory)\C:\pipeline'
       RemoveAdditionalFilesFlag: true
