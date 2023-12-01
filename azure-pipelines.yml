@@ -40,28 +40,19 @@ stages:
         artifactName: 'MyBuildArtifacts'
         downloadPath: '$(System.ArtifactsDirectory)'
 
-- stage: Deploy
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy Job'
-    dependsOn: Build
+  - job: DeployIndependentJob
+    displayName: 'Deploy Independent Job'
+    dependsOn: []
+
     steps:
     - checkout: self
 
-    - task: IISWebAppManagementOnMachineGroup@0
-      inputs:
-        IISDeploymentType: 'IISWebsite'
-        ActionIISWebsiteCreateOrUpdate: 'CreateOrUpdateWebsite'
-        WebsiteName: 'IoTApplication'
-        PhysicalPath: '$(System.ArtifactsDirectory)\MyBuildArtifacts' # Adjust the path to your artifacts
-        Port: '80'
-        CreateOrUpdateAppPool: true
-        AppPoolName: 'IoT_pool'
-        DotNetVersion: 'v4.0'
+    # Add deployment steps with no dependencies here...
 
-    - task: IISWebAppDeploymentOnMachineGroup@0
+    # Use the published artifact from the build stage
+    - task: DownloadBuildArtifacts@0
       inputs:
-        WebSiteName: 'IoTApplication'
-        VirtualApplication: '/'
-        Package: '$(System.ArtifactsDirectory)\MyBuildArtifacts' # Adjust the path to your artifacts
-        RemoveAdditionalFilesFlag: true
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'MyBuildArtifacts'
+        downloadPath: '$(System.ArtifactsDirectory)'
