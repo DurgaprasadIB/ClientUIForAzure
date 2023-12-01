@@ -23,7 +23,7 @@ jobs:
 - job: Deploy
   displayName: 'Deploy Job'
   dependsOn: Build
-  environment:'DEV'
+  environment: 'DEV'
 
   steps:
   - checkout: self
