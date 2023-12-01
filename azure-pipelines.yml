@@ -75,4 +75,3 @@ stages:
         ActionIISApplicationPool: 'Start'
         StartStopRecycleAppPoolName: '$(98.70.42.23)'  # Fix the typo here
         StartupType: 'Automatic'
-        
