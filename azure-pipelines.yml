@@ -53,7 +53,7 @@ stages:
         IISDeploymentType: 'IISWebsite'
         ActionIISWebsiteCreateOrUpdate: 'CreateOrUpdateWebsite'
         WebsiteName: 'IoTApplication'
-        PhysicalPath: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+        PhysicalPath: '$(System.ArtifactsDirectory)\MyBuildArtifacts' # Adjust the path to your artifacts
         Port: '80'
         CreateOrUpdateAppPool: true
         AppPoolName: 'IoT_pool'
@@ -63,5 +63,5 @@ stages:
       inputs:
         WebSiteName: 'IoTApplication'
         VirtualApplication: '/'
-        Package: '$(System.DefaultWorkingDirectory)\C:\pipeline'
+        Package: '$(System.ArtifactsDirectory)\MyBuildArtifacts' # Adjust the path to your artifacts
         RemoveAdditionalFilesFlag: true
