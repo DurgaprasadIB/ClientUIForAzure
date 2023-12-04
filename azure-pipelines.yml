@@ -18,7 +18,7 @@ jobs:
         displayName: 'Install and Build Node.js App'
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: '$(System.DefaultWorkingDirectory)/C:/IoTUI'  # Update with your actual path
+          pathtoPublish: '$(System.DefaultWorkingDirectory)/IoTUI'  # Update with your actual path
           artifactName: 'drop'
           publishLocation: 'Container'
 
