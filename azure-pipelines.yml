@@ -18,7 +18,7 @@ jobs:
     displayName: 'Install and Build Node.js App'
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: '$(System.DefaultWorkingDirectory)/C:\pipeline'  # Update with your actual path
+      pathtoPublish: '$(System.DefaultWorkingDirectory)/build-artifacts'  # Update with your actual path
       artifactName: 'drop'
       publishLocation: 'Container'
 
@@ -40,7 +40,7 @@ jobs:
       IISDeploymentType: 'IISWebsite'
       ActionIISWebsite: 'CreateOrUpdateWebsite'
       WebsiteName: 'IoTTesting'
-      PhysicalPath: '$(System.DefaultWorkingDirectory)/artifacts/C:\pipeline'
+      PhysicalPath: '$(System.DefaultWorkingDirectory)/artifacts'  # Update with your actual path
       CreateOrUpdateAppPool: true
       AppPoolName: 'IoTTesting_Pool'
       DotNetVersion: 'v5.0'
