@@ -44,3 +44,7 @@ jobs:
       CreateOrUpdateAppPool: true
       AppPoolName: 'IoTTesting_Pool'
       DotNetVersion: 'v5.0'
+      ServerName: '98.70.42.23'  # Add your server name or IP address
+      AuthenticationType: 'Basic'  # Choose the appropriate authentication type
+      Username: 'IBuser'  # Add your server username
+      Password: 'IBtesting#321'  # Add your server password
