@@ -1,77 +1,46 @@
 trigger:
 - main
 
-pool:
-  vmImage: 'windows-latest'
+jobs:
+- job: Build
+  displayName: 'Build job'
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - checkout: self
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+    displayName: 'Install Node.js'
+  - script: |
+      npm install
+      npm run build
+    displayName: 'Install and Build Node.js App'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(System.DefaultWorkingDirectory)/C:\pipeline'  # Update with your actual path
+      artifactName: 'drop'
+      publishLocation: 'Container'
 
-variables:
-  buildConfiguration: 'Release'
-  webAppName: 'Ideabytes'
-  iisSiteName: '98.70.42.23'
-  serverAddress: '98.70.42.23'
-  username: 'IBuser'
-  password: 'IBtesting#321'
-
-stages:
-- stage: Build
-  displayName: 'Build and Publish'
-  jobs:
-  - job: Build
-    displayName: 'Build'
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-      displayName: 'Install Node.js'
-
-    - script: |
-        npm install
-        npm run build
-      displayName: 'Install and Build'
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact'
-      inputs:
-        pathtoPublish: '$(System.DefaultWorkingDirectory)'
-        artifactName: 'drop'
-        publishLocation: 'Container'
-
-- stage: Deploy
-  displayName: 'Deploy to IIS'
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy'
-    pool:
-      vmImage: 'windows-latest'
-    steps:
-    - task: DownloadBuildArtifacts@0
-      displayName: 'Download Build Artifacts'
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-
-    - task: IISWebAppDeploymentOnMachineGroup@0
-      displayName: 'Deploy to IIS'
-      inputs:
-        WebSiteName: '$(98.70.42.23)'
-        VirtualApplication: '/C:/pipeline'
-        Package: '$(System.ArtifactsDirectory)/drop'
-        RemoveAdditionalFilesFlag: true
-
-    - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Stop IIS App Pool'
-      inputs:
-        IISDeploymentType: '98.70.42.23'
-        ActionIISApplicationPool: 'Stop'
-        StartStopRecycleAppPoolName: '$(98.70.42.23)'
-        StartupType: 'Automatic'
-
-    - task: IISWebAppManagementOnMachineGroup@0
-      displayName: 'Start IIS App Pool'
-      inputs:
-        IISDeploymentType: '98.70.42.23'
-        ActionIISApplicationPool: 'Start'
-        StartStopRecycleAppPoolName: '$(98.70.42.23)'  # Fix the typo here
-        StartupType: 'Automatic'
+- job: Deploy
+  displayName: 'Deploy job'
+  dependsOn: Build
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - checkout: self
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'drop'
+      downloadPath: '$(System.DefaultWorkingDirectory)/artifacts'
+  - task: IISWebAppManagementOnMachineGroup@0
+    inputs:
+      IISDeploymentType: 'IISWebsite'
+      ActionIISWebsite: 'CreateOrUpdateWebsite'
+      WebsiteName: 'IoTTesting'
+      PhysicalPath: '$(System.DefaultWorkingDirectory)/artifacts/C:\pipeline'
+      CreateOrUpdateAppPool: true
+      AppPoolName: 'IoTTesting_Pool'
+      DotNetVersion: 'v5.0'
