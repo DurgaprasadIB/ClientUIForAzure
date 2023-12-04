@@ -40,7 +40,7 @@ jobs:
       IISDeploymentType: 'IISWebsite'
       ActionIISWebsite: 'CreateOrUpdateWebsite'
       WebsiteName: 'IoTTesting'
-      PhysicalPath: '$(System.DefaultWorkingDirectory)/artifacts'  # Update with your actual path
+      PhysicalPath: 'C:\pipeline'  # Update with your actual path
       CreateOrUpdateAppPool: true
       AppPoolName: 'IoTTesting_Pool'
       DotNetVersion: 'v5.0'
