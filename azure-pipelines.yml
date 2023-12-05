@@ -18,7 +18,7 @@ jobs:
         displayName: 'Install and Build Node.js App'
       - task: PublishBuildArtifacts@1
         inputs:
-          pathtoPublish: '$(System.DefaultWorkingDirectory)'  # Update with your actual path
+          pathtoPublish: '$(C:\IoTUI)'  # Update with your actual path
           artifactName: 'drop'
           publishLocation: 'Container'
 
@@ -34,7 +34,7 @@ jobs:
           buildType: 'current'
           downloadType: 'single'
           artifactName: 'drop'
-          downloadPath: '$(System.DefaultWorkingDirectory)/artifacts'
+          downloadPath: '$(C:\IoTUI)'
       - task: IISWebAppManagementOnMachineGroup@0
         inputs:
           IISDeploymentType: 'IISWebsite'
