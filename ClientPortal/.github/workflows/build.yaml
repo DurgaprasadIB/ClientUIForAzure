@@ -1,0 +1,31 @@
+name: Build Dist File
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Dist File
+        run: npm run build
+
+      - name: Upload Dist to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: path/to/dist
