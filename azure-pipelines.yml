@@ -26,7 +26,7 @@ jobs:
     displayName: 'Deploy job'
     dependsOn: Build
     pool:
-      vmImage: 'windows-server2022-datacenter-azure-edition'
+      vmImage: 'windows-server2022'
     steps:
       - checkout: self
       - task: DownloadBuildArtifacts@0
