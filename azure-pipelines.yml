@@ -24,11 +24,10 @@ jobs:
       ng build --prod
     displayName: 'Install Dependencies and Build'
     
-    - script: |
-    echo "Contents of the directory:"
-    ls -R $(System.DefaultWorkingDirectory)/ClientPortal/dist/ClientPortal/
-  displayName: 'Debug: List Directory Contents'
-
+  - script: |
+      echo "Contents of the directory:"
+      ls -R $(System.DefaultWorkingDirectory)/ClientPortal/dist/ClientPortal/
+    displayName: 'Debug: List Directory Contents'
 
   - task: ArchiveFiles@2
     displayName: 'Archive files'
@@ -44,7 +43,7 @@ jobs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
       ArtifactName: 'drop'
       publishLocation: 'Container'
-      displayName: 'Publish Build Artifacts'
+    displayName: 'Publish Build Artifacts'
 
 # Define the deploy stage
 - job: Deploy
@@ -54,7 +53,7 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - download: current
-    artifact: 'dist'
+    artifact: 'drop'
 
   - task: IISWebAppManagementOnMachineGroup@0
     inputs:
