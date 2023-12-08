@@ -1,0 +1,77 @@
+# Define trigger and pool information
+trigger:
+- main
+pool:
+  vmImage: 'windows-latest'
+
+# Define the build stage
+jobs:
+- job: Build
+  displayName: 'Build Node.js App'
+  variables:
+    customPath: 'C:\IoTUI'  # Define the custom path variable
+
+  steps:
+  - checkout: self
+    fetchDepth: 2
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      cd '$(System.DefaultWorkingDirectory)\ClientPortal'
+      npm install -g @angular/cli
+      npm install
+      ng build --prod
+    displayName: 'Install Dependencies and Build'
+    
+  - script: |
+      echo "Contents of the directory:"
+      ls -R $(customPath)\dist\ClientPortal\
+    displayName: 'Debug: List Directory Contents'
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive files'
+    inputs:
+      rootFolderOrFile: '$(customPath)\dist\ClientPortal\'
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip
+      replaceExistingArchive: true
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+    displayName: 'Publish Build Artifacts'
+
+# Define the deploy stage
+- job: Deploy
+  displayName: 'Deploy to Azure Windows VM IIS Server'
+  dependsOn: Build
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - download: current
+    artifact: 'drop'
+
+  - task: IISWebAppManagementOnMachineGroup@0
+    inputs:
+      IISDeploymentType: 'IISWebsite'
+      ActionIISWebsite: 'CreateOrUpdateWebsite'
+      WebsiteName: 'IoTTesting'
+      WebsitePhysicalPath: '$(customPath)\dist'
+      AddBinding: true
+      CreateOrUpdateAppPoolForWebsite: true
+      AppPoolNameForWebsite: 'IoTTesting_Pool'
+      DotNetVersionForAppPool: 'v4.0'
+
+  - task: IISWebAppDeploymentOnMachineGroup@0
+    inputs:
+      WebSiteName: 'IoTTesting'
+      VirtualApplication: '/'
+      Package: '$(customPath)\dist'
+      RemoveAdditionalFilesFlag: true
