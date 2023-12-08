@@ -20,7 +20,7 @@ jobs:
   - script: |
       dotnet restore
       dotnet build --configuration Release
-      dotnet publish --configuration Release --output $(Build.ArtifactStagingDirectory)/dist
+      dotnet publish ClientPortal.package.json --configuration Release --output $(Build.ArtifactStagingDirectory)/dist
     displayName: 'Build and Publish Dist'
 
   - task: PublishBuildArtifacts@1
@@ -43,7 +43,7 @@ jobs:
       IISDeploymentType: 'IISWebsite'
       ActionIISWebsite: 'IoTTesting'
       WebsiteName: 'YourWebsiteName'
-      WebsitePhysicalPath: '$(System.ArtifactsDirectory)\dist'
+      WebsitePhysicalPath: '$(System.ArtifactsDirectory)/dist'
       AddBinding: true
       CreateOrUpdateAppPoolForWebsite: true
       AppPoolNameForWebsite: 'IoTTesting_Pool'
@@ -53,5 +53,5 @@ jobs:
     inputs:
       WebSiteName: 'IoTTesting'
       VirtualApplication: '/'
-      Package: '$(System.ArtifactsDirectory)\dist'
+      Package: '$(System.ArtifactsDirectory)/dist'
       RemoveAdditionalFilesFlag: true
