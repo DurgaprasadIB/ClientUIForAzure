@@ -8,6 +8,9 @@ pool:
 jobs:
 - job: Build
   displayName: 'Build Node.js App'
+  variables:
+    customPath: 'C:\IoTUI'  # Define the custom path variable
+
   steps:
   - checkout: self
     fetchDepth: 2
@@ -18,10 +21,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-      # Create the necessary directory if it doesn't exist
-      mkdir '$(System.DefaultWorkingDirectory)/ClientPortal/dist/ClientPortal'
-
-      cd '$(System.DefaultWorkingDirectory)/ClientPortal'
+      cd '$(System.DefaultWorkingDirectory)\ClientPortal'
       npm install -g @angular/cli
       npm install
       ng build --prod
@@ -29,21 +29,21 @@ jobs:
     
   - script: |
       echo "Contents of the directory:"
-      ls -R $(System.DefaultWorkingDirectory)/ClientPortal/dist/ClientPortal/
+      ls -R $(customPath)\dist\ClientPortal\
     displayName: 'Debug: List Directory Contents'
 
   - task: ArchiveFiles@2
     displayName: 'Archive files'
     inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/ClientPortal/dist/ClientPortal/'
+      rootFolderOrFile: '$(customPath)\dist\ClientPortal\'
       includeRootFolder: false
       archiveType: zip
-      archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      archiveFile: $(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip
       replaceExistingArchive: true
 
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip'
       ArtifactName: 'drop'
       publishLocation: 'Container'
     displayName: 'Publish Build Artifacts'
@@ -63,7 +63,7 @@ jobs:
       IISDeploymentType: 'IISWebsite'
       ActionIISWebsite: 'CreateOrUpdateWebsite'
       WebsiteName: 'IoTTesting'
-      WebsitePhysicalPath: '$(System.ArtifactsDirectory)\dist'
+      WebsitePhysicalPath: '$(customPath)\dist'
       AddBinding: true
       CreateOrUpdateAppPoolForWebsite: true
       AppPoolNameForWebsite: 'IoTTesting_Pool'
@@ -73,5 +73,5 @@ jobs:
     inputs:
       WebSiteName: 'IoTTesting'
       VirtualApplication: '/'
-      Package: '$(System.ArtifactsDirectory)\dist'
+      Package: '$(customPath)\dist'
       RemoveAdditionalFilesFlag: true
