@@ -27,7 +27,7 @@ jobs:
       artifactName: 'dist'
     displayName: 'Publish Build Artifacts'
 
-    - job: Deploy
+- job: Deploy
   displayName: 'Deploy to Azure Windows VM IIS Server'
   dependsOn: Build
   pool:
