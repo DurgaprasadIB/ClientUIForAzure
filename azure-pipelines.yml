@@ -36,9 +36,9 @@ jobs:
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-      ArtifactName: 'dist'
+      ArtifactName: 'drop'
       publishLocation: 'Container'
-    displayName: 'Publish Build Artifacts'
+      displayName: 'Publish Build Artifacts'
 
 # Define the deploy stage
 - job: Deploy
