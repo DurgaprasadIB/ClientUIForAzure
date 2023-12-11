@@ -21,7 +21,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-     '$(customPath)\ClientPortal'
+      cd '$(System.DefaultWorkingDirectory)\ClientPortal'
       npm install -g @angular/cli
       npm install
       ng build --prod
@@ -29,13 +29,13 @@ jobs:
     
   - script: |
       echo "Contents of the directory:"
-      dir -R $(customPath)
+      ls -R $(customPath)\dist\ClientPortal\
     displayName: 'Debug: List Directory Contents'
 
   - task: ArchiveFiles@2
     displayName: 'Archive files'
     inputs:
-      rootFolderOrFile: '$(customPath)\dist'
+      rootFolderOrFile: '$(customPath)\dist\ClientPortal\'
       includeRootFolder: false
       archiveType: zip
       archiveFile: $(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip
