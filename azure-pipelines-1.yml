@@ -29,13 +29,13 @@ jobs:
     
   - script: |
       echo "Contents of the directory:"
-      ls -R $(customPath)\dist\ClientPortal\
+      ls -R $(customPath)
     displayName: 'Debug: List Directory Contents'
 
   - task: ArchiveFiles@2
     displayName: 'Archive files'
     inputs:
-      rootFolderOrFile: '$(customPath)\dist\ClientPortal\'
+      rootFolderOrFile: '$(customPath)\dist'
       includeRootFolder: false
       archiveType: zip
       archiveFile: $(Build.ArtifactStagingDirectory)\$(Build.BuildId).zip
