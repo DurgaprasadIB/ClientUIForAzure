@@ -1,28 +1,25 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# Azure Pipelines YAML file
 
 trigger:
 - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '14.x'
   displayName: 'Install Node.js'
 
 - script: |
     npm install
     npm run build
-    ng build
   displayName: 'npm install and build'
 
 - task: PublishBuildArtifacts@1
   inputs:
-      PathtoPublish: 'E:\IoTUI\dist'  # Update the path to your build artifacts
-      ArtifactName: 'dist'
-      publishLocation: 'E:\IoTUI\dist'  # Change to 'Container' to publish to Azure Pipelines
+    PathtoPublish: '$(Build.SourcesDirectory)/dist' # Change this path based on your project structure
+    ArtifactName: 'my-artifact'
+    publishLocation: 'Container'
+  displayName: 'Publish Artifact'
