@@ -25,4 +25,4 @@ steps:
   inputs:
       PathtoPublish: 'E:\IoTUI\dist'  # Update the path to your build artifacts
       ArtifactName: 'dist'
-      publishLocation: 'container'  # Change to 'Container' to publish to Azure Pipelines
+      publishLocation: 'E:\IoTUI\dist'  # Change to 'Container' to publish to Azure Pipelines
