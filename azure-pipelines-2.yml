@@ -4,7 +4,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 steps:
 - task: NodeTool@0
@@ -15,6 +15,7 @@ steps:
 - script: |
     npm install
     npm run build
+    ng build
   displayName: 'npm install and build'
 
 - task: PublishBuildArtifacts@1
