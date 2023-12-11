@@ -23,6 +23,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/path/to/dist'  # Update the path to your build artifacts
+      PathtoPublish: 'E:\IoTUI\dist'  # Update the path to your build artifacts
       ArtifactName: 'dist'
-      publishLocation: 'E:\IoTUI\dist'  # Change to 'Container' to publish to Azure Pipelines
+      publishLocation: 'container'  # Change to 'Container' to publish to Azure Pipelines
