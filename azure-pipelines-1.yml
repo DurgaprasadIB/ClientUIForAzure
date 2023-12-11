@@ -9,7 +9,7 @@ jobs:
 - job: Build
   displayName: 'Build Node.js App'
   variables:
-    customPath: 'C:\IoTUI'  # Define the custom path variable
+    customPath: 'E:\IoTUI'  # Define the custom path variable
 
   steps:
   - checkout: self
@@ -29,7 +29,7 @@ jobs:
     
   - script: |
       echo "Contents of the directory:"
-      ls -R $(customPath)\dist\ClientPortal\
+      dir /s /b $(customPath)\dist\ClientPortal\
     displayName: 'Debug: List Directory Contents'
 
   - task: ArchiveFiles@2
