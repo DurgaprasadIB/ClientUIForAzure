@@ -25,5 +25,5 @@ steps:
   inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'dist'
-      publishLocation: 'FilePath'
+      publishLocation: 'E:\IoTUI'
       TargetPath: 'E:\IoTUI'
