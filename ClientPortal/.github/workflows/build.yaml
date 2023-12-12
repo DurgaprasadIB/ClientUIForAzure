@@ -1,4 +1,4 @@
-name: Build Dist File
+name: Build and Deploy
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set Up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '14'
@@ -21,11 +21,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Dist File
+      - name: Build Dist Folder
         run: npm run build
 
-      - name: Upload Dist to Artifacts
-        uses: actions/upload-artifact@v2
+      - name: Deploy Dist Folder (Example: to GitHub Releases)
+        uses: actions/upload-release-asset@v1
         with:
-          name: dist
-          path: path/to/dist
+          asset-path: ./dist
+          name: Release Assets
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
