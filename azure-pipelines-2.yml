@@ -22,5 +22,5 @@ steps:
   inputs:
     PathtoPublish: '$(Build.SourcesDirectory)/dist' # Change this path based on your project structure
     ArtifactName: 'my-artifact'
-    publishLocation: 'E:\IoTUI\dist'
+    publishLocation: 'container'
   displayName: 'Publish Artifact'
