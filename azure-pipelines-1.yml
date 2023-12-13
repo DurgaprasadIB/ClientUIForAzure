@@ -1,33 +1,32 @@
 trigger:
-- main
+  - main
 
 pool:
   vmImage: 'windows-latest'
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.13'
-    checkLatest: true
-  displayName: 'Install Node.js'
+  - task: UseNode@1
+    inputs:
+      version: '14.x'
+    displayName: 'Install Node.js'
 
-- script: |
-    npm install -g @angular/cli@latest
-    npm install
-    ng build --prod
-  displayName: 'Build Angular App'
+  - script: |
+      npm install
+    displayName: 'Install Dependencies'
 
+  - script: |
+      npm run build
+    displayName: 'Build Application'
 
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: '$(Build.SourcesDirectory)/dist'
-    contents: '**/*'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
-  displayName: 'Copy Artifacts'
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/dist'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy Files to Artifact Staging Directory'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'angular-app'
-    publishLocation: 'Container'
-  displayName: 'Publish Artifacts'
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'dist-artifact'
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Publish Artifact'
