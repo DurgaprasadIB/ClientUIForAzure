@@ -4,7 +4,6 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-# Add the caching task here
 - task: Cache@2
   inputs:
     key: 'npm | "$(Agent.OS)" | package-lock.json'
