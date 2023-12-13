@@ -2,34 +2,34 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 steps:
-- task: UseNode@1
+- task: NodeTool@0
   inputs:
-    version: '16.x'
+    versionSpec: '14.x'
+    checkLatest: true
   displayName: 'Install Node.js'
 
 - script: |
+    npm install -g @angular/cli
     npm install
-  displayName: 'npm install'
+  displayName: 'Install Angular CLI and Dependencies'
 
 - script: |
-    npm run build
-  displayName: 'npm build'
-  
+    ng build --prod
+  displayName: 'Build Angular App'
+
 - task: CopyFiles@2
   inputs:
-    sourceFolder: '$(Build.SourcesDirectory)'
-    contents: |
-       src/*
-       public/*
+    sourceFolder: '$(Build.SourcesDirectory)/dist'
+    contents: '**/*'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
-  displayName: 'Copy project files'
+  displayName: 'Copy Artifacts'
 
-- task: PublishPipelineArtifact@1
+- task: PublishBuildArtifacts@1
   inputs:
-    artifactName: e2e-server
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    publishLocation: 'pipeline'
-  displayName: 'Publish npm artifact'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'angular-app'
+    publishLocation: 'Container'
+  displayName: 'Publish Artifacts'
