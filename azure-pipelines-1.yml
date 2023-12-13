@@ -4,37 +4,41 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-tasks:
-- task: Cache@2
-  inputs:
-    key: 'npm | "$(Agent.OS)" | package-lock.json'
-    path: '$(npm_config_cache)'
-    cacheHitVar: 'npmCacheRestored'
-  displayName: 'Cache npm modules'
+stages:
+- stage: Build
+  jobs:
+  - job: BuildJob
+    displayName: 'Build Job'
+    steps:
+    - task: Cache@2
+      inputs:
+        key: 'npm | $(Agent.OS) | package-lock.json'
+        path: '$(npm_config_cache)'
+        cacheHitVar: 'npmCacheRestored'
+      displayName: 'Cache npm modules'
 
-steps:
-  - task: UseNode@1
-    inputs:
-      version: '14.x'
-    displayName: 'Install Node.js'
+    - task: UseNode@1
+      inputs:
+        version: '14.x'
+      displayName: 'Install Node.js'
 
-  - script: |
-      npm install
-    displayName: 'Install Dependencies'
+    - script: |
+        npm install
+      displayName: 'Install Dependencies'
 
-  - script: |
-      npm run build
-    displayName: 'Build Application'
+    - script: |
+        npm run build
+      displayName: 'Build Application'
 
-  - task: CopyFiles@2
-    inputs:
-      sourceFolder: '$(Build.SourcesDirectory)/dist'
-      contents: '**/*'
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
-    displayName: 'Copy Files to Artifact Staging Directory'
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)/dist'
+        contents: '**/*'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+      displayName: 'Copy Files to Artifact Staging Directory'
 
-  - task: PublishPipelineArtifact@1
-    inputs:
-      artifactName: 'dist-artifact'
-      targetPath: '$(Build.ArtifactStagingDirectory)'
-    displayName: 'Publish Artifact'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        artifactName: 'dist-artifact'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: 'Publish Artifact'
