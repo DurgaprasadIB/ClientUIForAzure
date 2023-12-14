@@ -7,7 +7,7 @@ pool:
 jobs:
 - job: Build
   steps:
-  - task: UseNode@2  # Use the UseNode task to set up Node.js on a Windows agent
+  - task: UseNode@0  # Use the UseNode task to set up Node.js on a Windows agent
     inputs:
       version: '14.x'
       checkLatest: true
