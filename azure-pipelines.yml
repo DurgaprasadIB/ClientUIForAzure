@@ -25,6 +25,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'  # Publish 'dist' directory as an artifact
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'  # Publish 'dist' directory as an artifact
     ArtifactName: 'dist'
     publishLocation: 'Container'
