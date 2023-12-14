@@ -2,22 +2,30 @@ trigger:
 - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-latest'  # Change to Windows-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js'
+jobs:
+- job: Build
+  steps:
+  - task: UseNode@2  # Use the UseNode task to set up Node.js on a Windows agent
+    inputs:
+      version: '14.x'
+      checkLatest: true
 
-- script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+  - script: |
+      # Your build commands here
+      npm install
+      npm run build
+      ng build --prod
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
-    ArtifactName: 'dist'
-    publishLocation: 'Container'
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/path/to/dist'
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
+      ArtifactName: 'dist'
+      publishLocation: 'Container'
