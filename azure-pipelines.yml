@@ -19,10 +19,12 @@ steps:
     npm install -g @angular/cli
     npm install
     ng build --prod
-  displayName: 'npm install and build'
+    mkdir $(Build.ArtifactStagingDirectory)/dist  # Create 'dist' directory in staging directory
+    Copy-Item -Path $(System.DefaultWorkingDirectory)\dist\* -Destination $(Build.ArtifactStagingDirectory)\dist -Recurse  # Copy files to 'dist' directory in staging directory
+  displayName: 'npm install, build, and create artifact'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'  # Publish 'dist' directory as an artifact
     ArtifactName: 'dist'
     publishLocation: 'Container'
