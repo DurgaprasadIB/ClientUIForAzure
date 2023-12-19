@@ -1,45 +1,49 @@
 trigger:
 - main
 
-pool:
-  vmImage: 'windows-latest'
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
 
-jobs:
-- job: Build
-  displayName: 'Build and Package'
-  steps:
-  - checkout: self
+    - script: |
+        npm install
+        npm run build
+      displayName: 'Build Node.js Application'
 
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '14.x'
-    displayName: 'Install Node.js'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: 'dist'
+        artifactName: 'NodeApp'
+      displayName: 'Publish Artifact'
 
-  - script: |
-      npm install -g @angular/cli
-      npm install
-      ng build --prod
-    displayName: 'Build Angular App'
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'specific'
+        project: 'IoT'
+        pipeline: '<Your_CI_Pipeline_ID>'
+        buildVersionToDownload: 'latest'
+        downloadType: 'single'
+        artifactName: 'NodeApp'
+        downloadPath: '$(System.ArtifactsDirectory)'
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.SourcesDirectory)/dist'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
-    displayName: 'Publish Artifacts'
-
-- job: Deploy
-  displayName: 'Deploy to IIS'
-  dependsOn: Build
-  condition: succeeded()
-  steps:
-  - checkout: self
-
-  - task: DownloadBuildArtifacts@0
-    inputs:
-      buildType: 'current'
-      downloadType: 'single'
-      artifactName: 'drop'
-      downloadPath: '$(System.ArtifactsDirectory)'
-
-  # Add your IIS deployment steps here based on the downloaded artifacts
+    - task: IISWebAppManagementOnMachineGroup@0
+      inputs:
+        IISDeploymentType: 'IISWebsite'
+        ActionIISWebsite: 'CreateOrUpdateWebsite'
+        WebsiteName: 'IoTUI'
+        PhysicalPath: '$(System.ArtifactsDirectory)\NodeApp'
+        Port: 80
