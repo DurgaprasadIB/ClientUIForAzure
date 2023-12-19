@@ -34,7 +34,6 @@ stages:
       inputs:
         buildType: 'specific'
         project: 'IoT'
-        pipeline: '<Your_CI_Pipeline_ID>'
         buildVersionToDownload: 'latest'
         downloadType: 'single'
         artifactName: 'NodeApp'
