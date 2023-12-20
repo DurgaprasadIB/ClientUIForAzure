@@ -1,48 +1,67 @@
 trigger:
-- main
+- main  # Specify the branch you want to trigger the pipeline
+
+pool:
+  vmImage: 'windows-latest'
 
 stages:
 - stage: Build
   jobs:
-  - job: Build
-    pool:
-      vmImage: 'windows-latest'
+  - job: BuildJob
     steps:
+    - checkout: self
     - task: NodeTool@0
       inputs:
-        versionSpec: '12.x'
+        versionSpec: '14.x'  # Specify the Node.js version
       displayName: 'Install Node.js'
-
     - script: |
         npm install
-        npm run build
-      displayName: 'Build Node.js Application'
-
-    - task: PublishBuildArtifacts@1
+        npm run build  # Execute your build command here
+      displayName: 'Build Node.js App'
+    - task: CopyFiles@2
       inputs:
-        pathtoPublish: 'dist'
-        artifactName: 'NodeApp'
-      displayName: 'Publish Artifact'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/*.js'  # Adjust the pattern based on your project structure
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
+      displayName: 'Copy Dist Files'
 
 - stage: Deploy
   jobs:
-  - job: Deploy
+  - deployment: DeployJob
+    environment: 'DEV'  # Replace with your environment name
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Pipeline.Workspace)/dist'
+              Contents: '**'
+              TargetFolder: '$(System.ArtifactsDirectory)/dist'
+            displayName: 'Copy Dist to Artifact Staging'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(System.ArtifactsDirectory)/dist'
+              ArtifactName: 'dist'
+              publishLocation: 'Container'
+            displayName: 'Publish Artifact'
+
+- stage: IISSetup
+  jobs:
+  - job: IISSetupJob
     pool:
       vmImage: 'windows-latest'
     steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'specific'
-        project: 'IoT'
-        buildVersionToDownload: 'latest'
-        downloadType: 'single'
-        artifactName: 'NodeApp'
-        downloadPath: '$(System.ArtifactsDirectory)'
-
+    - checkout: self
     - task: IISWebAppManagementOnMachineGroup@0
       inputs:
-        IISDeploymentType: 'IISWebsite'
-        ActionIISWebsite: 'CreateOrUpdateWebsite'
-        WebsiteName: 'IoTUI'
-        PhysicalPath: '$(System.ArtifactsDirectory)\NodeApp'
-        Port: 80
+        ActionIIS: 'CreateOrUpdateWebsite'
+        WebsiteName: 'IoTUI'  # Replace with your desired website name
+        PhysicalPath: '$(System.ArtifactsDirectory)/dist'  # Replace with the artifact path
+        Bindings: 'localhost:80'  # Adjust the port and hostname
+        StartWebsite: true
+      displayName: 'Create or Update Website'
+
+# Add more steps for additional IIS setup parameters if needed
+
