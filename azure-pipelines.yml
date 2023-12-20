@@ -25,7 +25,6 @@ stages:
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Copy Dist Files'
 
-stages :
 - stage: Package
   jobs:
   - job: PackageJob
