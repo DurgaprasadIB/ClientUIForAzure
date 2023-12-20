@@ -1,45 +1,67 @@
 trigger:
 - main
 
+pr:
+- main
+
 pool:
   vmImage: 'windows-latest'
 
 stages:
 - stage: Build
   jobs:
-  - job: BuildJob
+  - job: Build
+    displayName: 'Build and Publish Artifact'
     steps:
     - checkout: self
-    - task: NodeTool@0
+    - task: UseNode@1
       inputs:
         versionSpec: '14.x'
-        checkLatest: true
-      displayName: 'Install Node.js'
+        addToPath: true
     - script: |
         npm install
         npm run build
+        # Assuming 'npm run build' generates the 'dist' folder
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/src/dist'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/path/to/dist'
+        Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
-      displayName: 'Copy Dist Files'
-
-    - task: PublishBuildArtifacts@1
+      displayName: 'Copy Files to Artifact Staging Directory'
+    - task: PublishPipelineArtifact@1
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
-        artifactName: 'dist'
-        publishLocation: 'Container'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'nodejs_artifact'
       displayName: 'Publish Artifact'
 
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(Pipeline.Workspace)/dist'
-        TargetFolder: '$(System.DefaultWorkingDirectory)/dist'
-    - task: IISWebAppManagementOnMachineGroup@0
-      inputs:
-        Action: 'CreateOrUpdateWebsite'
-        WebsiteName: 'YourWebsiteName'
-        PhysicalPath: '$(System.DefaultWorkingDirectory)/dist'
-        Port: '80'
-      displayName: 'Create or Update IIS Website'
+- stage: Deploy
+  jobs:
+  - deployment: Deploy
+    displayName: 'Deploy to IIS'
+    environment: 'YourIISEnvironment'
+    pool:
+      vmImage: 'windows-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: 'nodejs_artifact'
+            path: $(System.DefaultWorkingDirectory)/dist
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
+              WebsiteName: 'YourWebsiteName'
+              PhysicalPath: '$(System.DefaultWorkingDirectory)/dist'
+              Port: '80'
+              AddBinding: true
+              AppPoolName: 'YourAppPoolName'
+              AppPoolIdentity: 'NetworkService'
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            inputs:
+              WebSiteName: 'YourWebsiteName'
+              VirtualPath: '/'
+              Package: '$(System.DefaultWorkingDirectory)/dist'
+              XmlVariableSubstitution: true
