@@ -53,7 +53,7 @@ stages:
             inputs:
               IISDeploymentType: 'IISWebsite'
               ActionIISWebsite: 'CreateOrUpdateWebsite'
-              WebsiteName: 'YourWebsiteName'
+              WebsiteName: 'IoTUI'
               PhysicalPath: '$(System.DefaultWorkingDirectory)/dist'
               Port: '80'
               AddBinding: true
