@@ -24,11 +24,7 @@ stages:
         SourceFolder: '$(System.DefaultWorkingDirectory)/path/to/dist'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Copy Dist Files'
-- stage: Package
-  jobs:
-  - job: PackageJob
-    dependsOn: Build
-    steps:
+
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
