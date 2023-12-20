@@ -25,8 +25,8 @@ stages:
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/path/to/dist'
-        Contents: '**'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: 'dist/**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
@@ -48,7 +48,7 @@ stages:
           steps:
           - download: current
             artifact: 'nodejs_artifact'
-           
+            path: $(System.DefaultWorkingDirectory)/dist
           - task: IISWebAppManagementOnMachineGroup@0
             inputs:
               IISDeploymentType: 'IISWebsite'
@@ -61,7 +61,7 @@ stages:
               AppPoolIdentity: 'NetworkService'
           - task: IISWebAppDeploymentOnMachineGroup@0
             inputs:
-              WebSiteName: 'YourWebsiteName'
+              WebSiteName: 'IoTUI'
               VirtualPath: '/'
               Package: '$(System.DefaultWorkingDirectory)/dist'
               XmlVariableSubstitution: true
