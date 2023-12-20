@@ -32,14 +32,6 @@ stages:
         publishLocation: 'Container'
       displayName: 'Publish Artifact'
 
-- stage: Deploy
-  jobs:
-  - job: DeployJob
-    dependsOn: Package
-    steps:
-    - download: current
-      artifact: dist
-      displayName: 'Download Artifact'
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(Pipeline.Workspace)/dist'
