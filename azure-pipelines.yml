@@ -13,6 +13,10 @@ steps:
 - script: |
     npm install
     npm run build
+    IF NOT EXIST D:\a\1\s\dist (
+        echo "Error: 'dist' folder not found."
+        exit 1
+    )
   displayName: 'Install dependencies and build'
 
 - task: PublishBuildArtifacts@1
