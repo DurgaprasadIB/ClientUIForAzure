@@ -22,7 +22,7 @@ stages:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/*.js'  # Adjust the pattern based on your project structure
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
+        TargetFolder: '$(Build.ArtifactStagingDirectory).dist'
       displayName: 'Copy Dist Files'
 
 - stage: Deploy
@@ -36,15 +36,15 @@ stages:
           - checkout: self
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: '$(System.ArtifactsDirectory)/dist'
+              PathtoPublish: '$(System.ArtifactsDirectory).dist'
               ArtifactName: 'dist'
               publishLocation: 'Container'
             displayName: 'Publish Artifact'
           - task: CopyFiles@2  # [2](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/copy-files-v2?view=azure-pipelines)
             inputs:
-              SourceFolder: '$(Pipeline.Workspace)/dist'
+              SourceFolder: '$(Pipeline.Workspace).dist'
               Contents: '**'
-              TargetFolder: '$(System.ArtifactsDirectory)/dist'
+              TargetFolder: '$(System.ArtifactsDirectory).dist'
             displayName: 'Copy Dist to Artifact Staging'
 
 - stage: IISSetup
@@ -58,7 +58,7 @@ stages:
       inputs:
         ActionIIS: 'CreateOrUpdateWebsite'
         WebsiteName: 'IoTUI'  # Replace with your desired website name
-        PhysicalPath: '$(System.ArtifactsDirectory)/dist'  # Replace with the artifact path
+        PhysicalPath: '$(System.ArtifactsDirectory).dist'  # Replace with the artifact path
         Bindings: 'localhost:80'  # Adjust the port and hostname
         StartWebsite: true
       displayName: 'Create or Update Website'
