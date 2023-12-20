@@ -47,7 +47,7 @@ stages:
           steps:
           - download: current
             artifact: 'nodejs_artifact'
-            path: $(System.DefaultWorkingDirectory)/dist
+            
           - script: 'C:\Windows\system32\inetsrv\appcmd.exe delete site "default web site"'
             displayName: 'Remove Default Web Site'
           - task: IISWebAppManagementOnMachineGroup@0
