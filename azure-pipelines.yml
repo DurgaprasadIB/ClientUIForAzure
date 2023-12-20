@@ -1,4 +1,5 @@
-trigger:
+<response>
+# trigger:
 - main  # Specify the branch you want to trigger the pipeline
 
 pool:
@@ -34,18 +35,18 @@ stages:
         deploy:
           steps:
           - checkout: self
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: '$(Pipeline.Workspace)/dist'
-              Contents: '**'
-              TargetFolder: '$(System.ArtifactsDirectory)/dist'
-            displayName: 'Copy Dist to Artifact Staging'
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: '$(System.ArtifactsDirectory)/dist'
               ArtifactName: 'dist'
               publishLocation: 'Container'
             displayName: 'Publish Artifact'
+          - task: CopyFiles@2  # [2](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/copy-files-v2?view=azure-pipelines)
+            inputs:
+              SourceFolder: '$(Pipeline.Workspace)/dist'
+              Contents: '**'
+              TargetFolder: '$(System.ArtifactsDirectory)/dist'
+            displayName: 'Copy Dist to Artifact Staging'
 
 - stage: IISSetup
   jobs:
@@ -62,6 +63,4 @@ stages:
         Bindings: 'localhost:80'  # Adjust the port and hostname
         StartWebsite: true
       displayName: 'Create or Update Website'
-
-# Add more steps for additional IIS setup parameters if needed
 
