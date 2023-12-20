@@ -1,6 +1,5 @@
-<response>
-# trigger:
-- main  # Specify the branch you want to trigger the pipeline
+trigger:
+- main  
 
 pool:
   vmImage: 'windows-latest'
