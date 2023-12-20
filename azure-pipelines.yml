@@ -26,7 +26,7 @@ stages:
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: 'dist/**'
+        Contents: 'dist/**/*.js'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
@@ -39,7 +39,6 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: 'Deploy to IIS'
-    environment: 'YourIISEnvironment'
     pool:
       vmImage: 'windows-latest'
     strategy:
@@ -48,20 +47,22 @@ stages:
           steps:
           - download: current
             artifact: 'nodejs_artifact'
-
+            path: $(System.DefaultWorkingDirectory)/dist
+          - script: 'C:\Windows\system32\inetsrv\appcmd.exe delete site "default web site"'
+            displayName: 'Remove Default Web Site'
           - task: IISWebAppManagementOnMachineGroup@0
             inputs:
               IISDeploymentType: 'IISWebsite'
               ActionIISWebsite: 'CreateOrUpdateWebsite'
-              WebsiteName: 'IoTUI'
+              WebsiteName: 'IoTTesting'
               PhysicalPath: '$(System.DefaultWorkingDirectory)/dist'
               Port: '80'
               AddBinding: true
-              AppPoolName: 'YourAppPoolName'
+              AppPoolName: 'IoTTesting_Pool'
               AppPoolIdentity: 'NetworkService'
           - task: IISWebAppDeploymentOnMachineGroup@0
             inputs:
-              WebSiteName: 'IoTUI'
+              WebSiteName: 'IoTTesting'
               VirtualPath: '/'
               Package: '$(System.DefaultWorkingDirectory)/dist'
               XmlVariableSubstitution: true
