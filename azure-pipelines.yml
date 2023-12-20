@@ -20,8 +20,7 @@ stages:
         addToPath: true
     - script: |
         npm install
-        npm run build
-        # Assuming 'npm run build' generates the 'dist' folder
+        ng build
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
