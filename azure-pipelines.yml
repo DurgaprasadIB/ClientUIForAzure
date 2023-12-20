@@ -25,7 +25,7 @@ stages:
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: '**/dist/**'
+        Contents: '**/*.js'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
@@ -64,5 +64,5 @@ stages:
             inputs:
               WebSiteName: 'IoTTesting'
               VirtualPath: '/'
-              Package: '$(System.DefaultWorkingDirectory)/**/dist/**'  # Adjust the pattern based on your package format
+              Package: '$(System.DefaultWorkingDirectory)**/*.js'  # Adjust the pattern based on your package format
               XmlVariableSubstitution: true
