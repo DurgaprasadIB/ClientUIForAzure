@@ -48,7 +48,7 @@ stages:
           steps:
           - download: current
             artifact: 'nodejs_artifact'
-            path: $(System.DefaultWorkingDirectory)/dist
+
           - task: IISWebAppManagementOnMachineGroup@0
             inputs:
               IISDeploymentType: 'IISWebsite'
