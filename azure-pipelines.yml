@@ -21,7 +21,7 @@ stages:
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/path/to/dist'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/src/dist'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Copy Dist Files'
 
