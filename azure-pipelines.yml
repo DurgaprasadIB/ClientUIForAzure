@@ -26,7 +26,7 @@ stages:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/*.js'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
       inputs:
