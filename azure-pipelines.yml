@@ -24,9 +24,9 @@ stages:
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: '**/*.js'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/dist/Ibsmart'  # Update the path if needed
+        Contents: '**/*'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/dist/Ibsmart'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
       inputs:
