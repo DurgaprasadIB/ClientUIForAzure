@@ -64,5 +64,5 @@ stages:
             inputs:
               WebSiteName: 'IoTTesting'
               VirtualPath: '/'
-              Package: '$(System.DefaultWorkingDirectory)**/*.js'  # Adjust the pattern based on your package format
+              Package: '$(System.DefaultWorkingDirectory)'  # Adjust the pattern based on your package format
               XmlVariableSubstitution: true
