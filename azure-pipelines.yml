@@ -24,9 +24,9 @@ stages:
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/dist/Ibsmart'  # Update the path if needed
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/*'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/dist/Ibsmart'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
       inputs:
@@ -56,7 +56,7 @@ stages:
               ActionIISWebsite: 'CreateOrUpdateWebsite'
               WebsiteName: 'IoTTesting'
               PhysicalPath: '$(System.DefaultWorkingDirectory)/dist'
-              Port: '80'
+              Port: '443'
               AddBinding: true
               AppPoolName: 'IoTTesting_Pool'
               AppPoolIdentity: 'NetworkService'
@@ -64,5 +64,5 @@ stages:
             inputs:
               WebSiteName: 'IoTTesting'
               VirtualPath: '/'
-              Package: '$(System.DefaultWorkingDirectory)'  # Adjust the pattern based on your package format
+              Package: '$(System.DefaultWorkingDirectory)/dist'
               XmlVariableSubstitution: true
