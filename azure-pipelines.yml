@@ -20,5 +20,6 @@ jobs:
           npm install
 
       - script:    
-          ng build --configuration test
+          ng build  
         displayName: 'npm install and build'
+      
