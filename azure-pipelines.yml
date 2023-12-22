@@ -26,6 +26,7 @@ jobs:
 #      targetType: 'inline'
 #      script: 'find -name node_modules -prune -o -print'
 
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourceDirectory)'
