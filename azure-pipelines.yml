@@ -26,16 +26,13 @@ jobs:
 #      targetType: 'inline'
 #      script: 'find -name node_modules -prune -o -print'
 
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Build.SourceDirectory)'
-    Contents: '''**dist/Ibsmart*'''
-    TargetFolder: '''$(Build.ArtifactStagingDirectory)'''
-    displayName: 'Copy Files to Artifact Staging Directory'
-
-
-- task: PublishPipelineArtifact@1
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourceDirectory)'
+        Contents: '''**dist/Ibsmart*'''
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/'
+      displayName: 'Copy Files to Artifact Staging Directory'
+    - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifact' 
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
