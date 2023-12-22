@@ -1,28 +1,31 @@
 trigger:
 - main
-
-pr:
-- main
+- dev
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
-stages:
-- stage: Build
-  jobs:
-  - job: Build
-    displayName: 'Build and Publish Artifact'
-    steps:
-    - checkout: self
+jobs:
+  - job: 'Dev_build'
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+    steps :
     - task: UseNode@1
       inputs:
-        versionSpec: '14.x'
-        addToPath: true
+        versionSpec: '16.x'
+        displayname: 'Insatll Node.js'
+
     - script: |
+        npm install -g @angular cli
         npm install
-        npm run 
-        ng build
-      displayName: 'Build Node.js App'
+        ng build --congfiguration test
+      displayName: 'npm install and build'
+
+# Used to diagnostic the file structure
+#   - task: Bash@3
+#     inputs:
+#      targetType: 'inline'
+#      script: 'find -name node_modules -prune -o -print'
+
     - task: CopyFiles@2
       inputs:
         SourceFolder: './dist'
@@ -30,40 +33,9 @@ stages:
         TargetFolder: '$(Build.ArtifactStagingDirectory)/'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifact' 
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
-        artifact: 'artifact'
-      displayName: 'Publish Artifact'
+        artifact: 'www'
+ 
 
-- stage: Deploy
-  jobs:
-  - deployment: Deploy
-    displayName: 'Deploy to IIS'
-    environment: 'DEV'
-    pool:
-      vmImage: 'windows-latest'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: 'nodejs_artifact'
-            
-          - script: 'C:\Windows\system32\inetsrv\appcmd.exe delete site "default web site"'
-            displayName: 'Remove Default Web Site'
-          - task: IISWebAppManagementOnMachineGroup@0
-            inputs:
-              IISDeploymentType: 'IISWebsite'
-              ActionIISWebsite: 'CreateOrUpdateWebsite'
-              WebsiteName: 'IoTTesting'
-              PhysicalPath: '$(System.DefaultWorkingDirectory)/dist'
-              Port: '443'
-              AddBinding: true
-              AppPoolName: 'IoTTesting_Pool'
-              AppPoolIdentity: 'NetworkService'
-          - task: IISWebAppDeploymentOnMachineGroup@0
-            inputs:
-              WebSiteName: 'IoTTesting'
-              VirtualPath: '/'
-              Package: '$(System.DefaultWorkingDirectory)/dist'
-              XmlVariableSubstitution: true
