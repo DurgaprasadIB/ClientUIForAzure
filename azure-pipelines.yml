@@ -1,18 +1,23 @@
 trigger:
 - main
-- dev
+#- dev
 
 pool:
   vmImage: 'windows-latest'
 
 jobs:
   - job: 'Dev_build'
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+    #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
     steps :
-    - task: UseNode@1
-      inputs:
-        versionSpec: '18.x'
-        displayname: 'Insatll Node.js'
+   # - task: UseNode@1
+      #inputs:
+    #    versionSpec: '18.x'
+     #   displayname: 'Insatll Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSource: 'spec'
+      versionSpec: '18.X'
+      checkLatest: true
 
     - script: |
         npm install -g @angular/cli
