@@ -17,6 +17,8 @@ jobs:
     - script: |
         npm install -g @angular/cli
         npm install
+
+    - script:    
         ng build --congfiguration test
       displayName: 'npm install and build'
 
