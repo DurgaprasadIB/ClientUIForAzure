@@ -20,13 +20,14 @@ stages:
         addToPath: true
     - script: |
         npm install
-        npm run copy-custom-files  # Run the custom copy command
+        npm run 
+    - script:    
         ng build
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: '**/*.js'
+        SourceFolder: './dist'
+        Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/'
       displayName: 'Copy Files to Artifact Staging Directory'
     - task: PublishPipelineArtifact@1
