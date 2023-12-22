@@ -11,7 +11,7 @@ jobs:
     steps :
     - task: UseNode@1
       inputs:
-        versionSpec: '16.x'
+        versionSpec: '18.x'
         displayname: 'Insatll Node.js'
 
     - script: |
