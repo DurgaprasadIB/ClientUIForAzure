@@ -34,7 +34,7 @@ jobs:
     displayName: 'Copy Files to Artifact Staging Directory'
 
 
-    - task: PublishPipelineArtifact@1
+- task: PublishPipelineArtifact@1
       displayName: 'Publish Artifact' 
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)'
