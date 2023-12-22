@@ -18,8 +18,9 @@ jobs:
       - script: |
           npm install -g @angular/cli
           npm install
-
-      - script:    
+    
+      - script:   
+          ng serve -o  
           ng build  
         displayName: 'npm install and build'
       
