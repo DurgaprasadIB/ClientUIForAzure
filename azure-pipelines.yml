@@ -21,7 +21,6 @@ stages:
     - script: |
         npm install
         npm run 
-    - script:    
         ng build
       displayName: 'Build Node.js App'
     - task: CopyFiles@2
