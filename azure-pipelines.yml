@@ -10,13 +10,13 @@ jobs:
     #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
     steps :
    
-  - task: NodeTool@0
-     inputs:
-      versionSource: 'spec'
-      versionSpec: '18.X'
-      checkLatest: true
+     - task: NodeTool@0
+       inputs:
+       versionSource: 'spec'
+       versionSpec: '18.X'
+       checkLatest: true
 
-    - script: |
+     - script: |
         npm install -g @angular/cli
         npm install
 
