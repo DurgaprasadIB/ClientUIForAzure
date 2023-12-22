@@ -22,7 +22,7 @@ jobs:
 
      - script:    
         ng build --congfiguration test
-        displayName: 'npm install and build'
+        displayName:'npm install and build'
 
 # Used to diagnostic the file structure
 #   - task: Bash@3
@@ -32,14 +32,14 @@ jobs:
 
       - task: CopyFiles@2
          inputs:
-         SourceFolder: '$(System.DefaultWorkingDirectory)'
+         SourceFolder:'$(System.DefaultWorkingDirectory)'
          Contents: '''**dist/Ibsmart*'''
-         TargetFolder: '$(Build.ArtifactStagingDirectory)/'
+         TargetFolder:'$(Build.ArtifactStagingDirectory)/'
        displayName: 'Copy Files to Artifact Staging Directory'
       - task: PublishPipelineArtifact@1
-         displayName: 'Publish Artifact' 
+         displayName:'Publish Artifact' 
          inputs:
-         targetPath: '$(Build.ArtifactStagingDirectory)'
+         targetPath:'$(Build.ArtifactStagingDirectory)'
          artifact: 'www'
  
 
