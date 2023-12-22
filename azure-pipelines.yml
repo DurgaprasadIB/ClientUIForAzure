@@ -9,12 +9,9 @@ jobs:
   - job: 'Dev_build'
     #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
     steps :
-   # - task: UseNode@1
-      #inputs:
-    #    versionSpec: '18.x'
-     #   displayname: 'Insatll Node.js'
+   
   - task: NodeTool@0
-    inputs:
+     inputs:
       versionSource: 'spec'
       versionSpec: '18.X'
       checkLatest: true
