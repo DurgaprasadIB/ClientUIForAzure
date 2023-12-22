@@ -28,7 +28,7 @@ jobs:
 
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(Build.SourceDirectory)'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '''**dist/Ibsmart*'''
         TargetFolder: '$(Build.ArtifactStagingDirectory)/'
       displayName: 'Copy Files to Artifact Staging Directory'
