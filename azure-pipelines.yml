@@ -22,7 +22,7 @@ jobs:
 
      - script:    
         ng build --congfiguration test
-      displayName: 'npm install and build'
+        displayName: 'npm install and build'
 
 # Used to diagnostic the file structure
 #   - task: Bash@3
