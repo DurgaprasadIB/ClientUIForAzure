@@ -7,7 +7,7 @@ pool:
 
 jobs:
   - job: 'Dev_build'
-    #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
     steps :
    
      - task: NodeTool@0
@@ -23,24 +23,4 @@ jobs:
      - script:    
         ng build --congfiguration test
         displayName:'npm install and build'
-
-# Used to diagnostic the file structure
-#   - task: Bash@3
-#     inputs:
-#      targetType: 'inline'
-#      script: 'find -name node_modules -prune -o -print'
-
-    
-     - task: CopyFiles@2
-         inputs:
-         SourceFolder:'$(System.DefaultWorkingDirectory)'
-         Contents: '''**dist/Ibsmart*'''
-         TargetFolder:'$(Build.ArtifactStagingDirectory)/'
-       displayName: 'Copy Files to Artifact Staging Directory'
-      - task: PublishPipelineArtifact@1
-         displayName:'Publish Artifact' 
-         inputs:
-         targetPath:'$(Build.ArtifactStagingDirectory)'
-         artifact: 'www'
- 
 
