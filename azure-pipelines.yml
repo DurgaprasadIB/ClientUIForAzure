@@ -15,7 +15,7 @@ jobs:
         displayname: 'Insatll Node.js'
 
     - script: |
-        npm install -g @angular cli
+        npm install -g @angular/cli
         npm install
         ng build --congfiguration test
       displayName: 'npm install and build'
