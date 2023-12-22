@@ -1,6 +1,6 @@
 trigger:
-- main
-#- dev
+  - main
+  # - dev
 
 pool:
   vmImage: 'windows-latest'
@@ -8,19 +8,17 @@ pool:
 jobs:
   - job: 'Dev_build'
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
-    steps :
-   
-     - task: NodeTool@0
-       inputs:
-       versionSource: 'spec'
-       versionSpec: '18.X'
-       checkLatest: true
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSource: 'spec'
+          versionSpec: '18.X'
+          checkLatest: true
 
-     - script: |
-        npm install -g @angular/cli
-        npm install
+      - script: |
+          npm install -g @angular/cli
+          npm install
 
-     - script:    
-        ng build --congfiguration test
-        displayName:'npm install and build'
-
+      - script:    
+          ng build --configuration test
+        displayName: 'npm install and build'
