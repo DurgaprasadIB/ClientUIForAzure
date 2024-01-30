@@ -1,3 +1,4 @@
+
 trigger:
 - main  
 
@@ -14,7 +15,8 @@ stages:
       inputs:
         versionSpec: '18.x'
       displayName: 'Install Node.js'
-    - script: | 
+    - script: 
+        npm install -g @angular/cli
         ng build
       displayName: 'BuildFiles'
 
