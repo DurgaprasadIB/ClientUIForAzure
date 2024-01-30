@@ -18,21 +18,21 @@ stages:
 
     - script: 
         npm install -g @angular/cli
-        ng build --configuration=production
+        ng build --output-path=custom-dist
       displayName: 'BuildFiles'
 
 
     - task: ArchiveFiles@2  
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(Build.SourcesDirectory)/custom-dist'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$.zip'  
+        archiveFile: '$(Build.ArtifactStagingDirectory)/build-artifact.zip'  
         replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
       inputs:
        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       ArtifactName: 'drop'
+       ArtifactName: 'custom-build-artifact'
        publishLocation: 'container'
        
