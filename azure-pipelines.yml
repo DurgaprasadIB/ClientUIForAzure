@@ -16,6 +16,7 @@ stages:
       displayName: 'Install Node.js'
     - script: |
         npm run build 
+        ng build
       displayName: 'Build Node.js App'
 
 
