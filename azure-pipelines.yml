@@ -1,9 +1,6 @@
 trigger:
 - main  
 
-variables:
-  uiname: 'IoT'
-  uibuild: '$(uisource)/build'
 
 pool:
   name: 'Azure-DevOps'
@@ -21,7 +18,7 @@ stages:
 
     - script: 
         npm install -g @angular/cli
-        ng build
+        ng build --configuration=production
       displayName: 'BuildFiles'
 
 
@@ -30,7 +27,7 @@ stages:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(uiname).zip'  
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$.zip'  
         replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
