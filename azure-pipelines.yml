@@ -1,6 +1,9 @@
-
 trigger:
 - main  
+
+variables:
+  uiname: 'IoT'
+  uibuild: '$(uisource)/build'
 
 pool:
   name: 'Azure-DevOps'
@@ -15,18 +18,19 @@ stages:
       inputs:
         versionSpec: '18.x'
       displayName: 'Install Node.js'
+
     - script: 
         npm install -g @angular/cli
         ng build
       displayName: 'BuildFiles'
 
 
-    - task: ArchiveFiles@2  # Corrected task name
+    - task: ArchiveFiles@2  
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
         includeRootFolder: false
-        archiveType: 'wim'  # Changed archiveType to 'zip' for Windows
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$.wim'  
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(uiname).zip'  
         replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
