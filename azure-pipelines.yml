@@ -14,10 +14,9 @@ stages:
       inputs:
         versionSpec: '18.x'
       displayName: 'Install Node.js'
-    - script: |
-        npm run build 
+    - script: | 
         ng build
-      displayName: 'Build Node.js App'
+      displayName: 'BuildFiles'
 
 
     - task: ArchiveFiles@2  # Corrected task name
