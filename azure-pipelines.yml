@@ -25,8 +25,8 @@ stages:
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
-        archiveType: 'zip'  # Changed archiveType to 'zip' for Windows
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$.zip'  
+        archiveType: 'dist'  # Changed archiveType to 'zip' for Windows
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$.dist'  
         replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
