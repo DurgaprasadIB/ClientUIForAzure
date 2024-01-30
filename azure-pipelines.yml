@@ -27,7 +27,7 @@ stages:
 
     - task: ArchiveFiles@2  
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(uiname).zip'  
