@@ -21,6 +21,9 @@ stages:
         ng build --output-path=custom-dist
       displayName: 'BuildFiles'
 
+    - script: |
+         mkdir $(Build.SourcesDirectory)/custom-dist
+      displayName: 'Create custom-dist Directory'
 
     - task: ArchiveFiles@2  
       inputs:
