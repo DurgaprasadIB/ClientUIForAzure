@@ -2,7 +2,7 @@ trigger:
 - main  
 
 pool:
-  vmImage: 'Azure-DevOps'
+  name: 'Azure-DevOps'
 
 stages:
 - stage: Build
