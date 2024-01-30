@@ -23,7 +23,7 @@ stages:
 
     - task: ArchiveFiles@2  # Corrected task name
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'  # Changed archiveType to 'zip' for Windows
         archiveFile: '$(Build.ArtifactStagingDirectory)/$.zip'  
