@@ -21,17 +21,3 @@ stages:
        script: 'ng build'
 
 
-    - task: ArchiveFiles@2  
-      inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory).zip'  
-        replaceExistingArchive: true
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       ArtifactName: 'custom-build-artifact'
-       publishLocation: 'container'
-       
