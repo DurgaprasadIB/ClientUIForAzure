@@ -17,23 +17,16 @@ stages:
       displayName: 'Install Node.js'
 
     - script: 
-        npm install -g @angular/cli
         ng build 
       displayName: 'BuildFiles'
-
-    - task: CopyFiles@2
-      inputs:
-          SourceFolder: 'dist'
-          Contents: '**'
-          TargetFolder: 'deploy'
 
 
     - task: ArchiveFiles@2  
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+        rootFolderOrFile: '$(Build.SourcesDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/build-artifact.zip'  
+        archiveFile: '$(Build.ArtifactStagingDirectory).zip'  
         replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
