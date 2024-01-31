@@ -18,16 +18,19 @@ stages:
 
     - script: 
         npm install -g @angular/cli
-        ng build --output-path=custom-dist
+        ng build 
       displayName: 'BuildFiles'
 
-    - script: |
-         mkdir $(Build.SourcesDirectory)/custom-dist
-      displayName: 'Create custom-dist Directory'
+    - task: CopyFiles@2
+      inputs:
+          SourceFolder: 'dist'
+          Contents: '**'
+          TargetFolder: 'deploy'
+
 
     - task: ArchiveFiles@2  
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/custom-dist'
+        rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/build-artifact.zip'  
