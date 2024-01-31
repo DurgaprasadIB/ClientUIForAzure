@@ -1,7 +1,6 @@
 trigger:
 - main  
 
-
 pool:
   name: 'Azure-DevOps'
 
@@ -19,21 +18,15 @@ stages:
     - script: 
         ng build
         displayName:'npm build'
-
        
-    - task: ArchiveFiles@2  
+ 
+    - task: Npm@1
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory).zip'  
-        replaceExistingArchive: true
+       command: 'publish'
+       workingDir: 'C:\Users\AdminDev\agent\_work\1\s'
+       publishRegistry: 'useFeed'
+       publishFeed: '2e63c992-f234-4837-a06f-535a8f6036c9'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       ArtifactName: 'custom-build-artifact'
-       publishLocation: 'container'
-       
+    
 
 
