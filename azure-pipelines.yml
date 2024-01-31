@@ -16,8 +16,24 @@ stages:
         versionSpec: '18.x'
       displayName: 'Install Node.js'
 
-    - task: CmdLine@2
+    - script: 
+        ng build
+        displayName:'npm build'
+
+       
+    - task: ArchiveFiles@2  
       inputs:
-       script: 'ng build'
+        rootFolderOrFile: '$(Build.SourcesDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory).zip'  
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+       ArtifactName: 'custom-build-artifact'
+       publishLocation: 'container'
+       
 
 
