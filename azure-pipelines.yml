@@ -16,9 +16,9 @@ stages:
         versionSpec: '18.x'
       displayName: 'Install Node.js'
 
-    - script: 
-        ng build 
-      displayName: 'BuildFiles'
+    - task: CmdLine@2
+      inputs:
+       script: 'ng build'
 
 
     - task: ArchiveFiles@2  
