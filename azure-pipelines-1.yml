@@ -1,0 +1,30 @@
+trigger:
+- main
+
+pool:
+  name: :Azure-Local
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+    - task:ArchieveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+    includeRootFolder: false
+    archieveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(uiName).zip'
+    replaceExistingArchieve: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'container'
