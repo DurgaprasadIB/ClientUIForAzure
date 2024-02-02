@@ -2,7 +2,7 @@ trigger:
 - main  
 
 pool:
-  name: 'Azure-DevOps'
+  name: 'Azure-local'
 
 stages:
 - stage: Build
