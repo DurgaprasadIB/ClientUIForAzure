@@ -10,23 +10,11 @@ stages:
   - job: BuildJob
     steps:
     - checkout: self
-    - task: NodeTool@0
+    - task: Npm@1
       inputs:
-        versionSpec: '18.x'
-      displayName: 'Install Node.js'
-
-    - script: 
-        ng build
-        displayName:'npm build'
-       
- 
+       command: 'install'
+    
     - task: Npm@1
       inputs:
        command: 'publish'
-       workingDir: 'C:\Users\AdminDev\agent\_work\1\s'
-       publishRegistry: 'useFeed'
-       publishFeed: '2e63c992-f234-4837-a06f-535a8f6036c9'
-
-    
-
 
