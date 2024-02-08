@@ -10,11 +10,11 @@ stages:
   - job: BuildJob
     steps:
     - checkout: self
-    - task: Npm@1
+    - task: NodeTool@0
       inputs:
-       command: 'install'
-    
-    - task: Npm@1
-      inputs:
-       command: 'publish'
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
 
+    - script: 
+        ng build
+        displayName:'npm build'
