@@ -5,16 +5,16 @@ pool:
   name: 'windows-agent'
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install Node.js'
+- script: |
+    node --version  # Check installed Node.js version
+    ng --version    # Check installed Angular version
+  displayName: 'Check Node.js and Angular versions'
 
 - script: |
-   npm install
-   npm run build
+    npm install    # Install project dependencies
+    npm run build  # Build the Angular project
   displayName: 'npm install and build'
-
+  
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
