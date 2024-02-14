@@ -6,8 +6,8 @@ pool:
 
 steps:
 - script: |
-    node --version  # Check installed Node.js version
-    ng --version    # Check installed Angular version
+    node --version  # Check installed Node.js version (customized to match installed version)
+    ng --version    # Check installed Angular version (customized to match installed version)
   displayName: 'Check Node.js and Angular versions'
 
 - script: |
