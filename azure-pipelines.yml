@@ -1,20 +1,30 @@
 trigger:
-- main  
+- main
 
 pool:
-  name: 'Azure-local'
+  name: :windows-agent
 
-stages:
-- stage: Build
-  jobs:
-  - job: BuildJob
-    steps:
-    - checkout: self
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '18.x'
-      displayName: 'Install Node.js'
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
 
-    - script: 
-        ng build
-        displayName:'npm build'
+- script: |
+   npm install
+   npm run build
+  displayName: 'npm install and build'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(uiName).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'container'
