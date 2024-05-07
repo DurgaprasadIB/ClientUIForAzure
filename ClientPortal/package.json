@@ -32,7 +32,6 @@
     "angular-tabs-component": "^1.0.6",
     "angular-user-idle": "^2.0.0",
     "browser-fingerprint": "^0.1.0",
-    "crypto-js": "^3.3.0",
     "domsanitizer": "^0.2.3",
     "exceljs": "^1.7.0",
     "export-to-csv": "^0.2.1",
